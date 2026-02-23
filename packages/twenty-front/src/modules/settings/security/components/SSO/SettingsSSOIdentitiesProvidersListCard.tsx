@@ -52,11 +52,11 @@ export const SettingsSSOIdentitiesProvidersListCard = () => {
   return loading || !SSOIdentitiesProviders.length ? (
     <StyledLink
       to={getSettingsPath(SettingsPath.NewSSOIdentityProvider)}
-      isDisabled={currentWorkspace?.hasValidEnterpriseKey !== true}
+      isDisabled={false}
     >
       <SettingsCard
         title={t`Add SSO Identity Provider`}
-        disabled={currentWorkspace?.hasValidEnterpriseKey !== true}
+        disabled={false}
         Icon={<IconKey />}
       />
     </StyledLink>
