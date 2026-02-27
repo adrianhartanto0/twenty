@@ -1,12 +1,14 @@
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-
 import { useGetBrowsingContext } from '@/ai/hooks/useBrowsingContext';
 import { agentChatSelectedFilesState } from '@/ai/states/agentChatSelectedFilesState';
 import { agentChatUploadedFilesState } from '@/ai/states/agentChatUploadedFilesState';
 import { agentChatUsageState } from '@/ai/states/agentChatUsageState';
 import { currentAIChatThreadState } from '@/ai/states/currentAIChatThreadState';
+import { currentAIChatThreadTitleState } from '@/ai/states/currentAIChatThreadTitleState';
 
 import { agentChatInputState } from '@/ai/states/agentChatInputState';
+import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
+import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { REST_API_BASE_URL } from '@/apollo/constant/rest-api-base-url';
 import { getTokenPair } from '@/apollo/utils/getTokenPair';
 import { renewToken } from '@/auth/services/AuthService';
@@ -19,21 +21,23 @@ import { REACT_APP_SERVER_BASE_URL } from '~/config';
 import { cookieStorage } from '~/utils/cookie-storage';
 
 export const useAgentChat = (uiMessages: ExtendedUIMessage[]) => {
-  const setTokenPair = useSetRecoilState(tokenPairState);
-  const setAgentChatUsage = useSetRecoilState(agentChatUsageState);
+  const setTokenPair = useSetAtomState(tokenPairState);
+  const setAgentChatUsage = useSetAtomState(agentChatUsageState);
 
   const { getBrowsingContext } = useGetBrowsingContext();
+  const setCurrentAIChatThreadTitle = useSetAtomState(
+    currentAIChatThreadTitleState,
+  );
 
-  const agentChatSelectedFiles = useRecoilValue(agentChatSelectedFilesState);
+  const agentChatSelectedFiles = useAtomStateValue(agentChatSelectedFilesState);
 
-  const currentAIChatThread = useRecoilValue(currentAIChatThreadState);
+  const currentAIChatThread = useAtomStateValue(currentAIChatThreadState);
 
-  const [agentChatUploadedFiles, setAgentChatUploadedFiles] = useRecoilState(
+  const [agentChatUploadedFiles, setAgentChatUploadedFiles] = useAtomState(
     agentChatUploadedFilesState,
   );
 
-  const [agentChatInput, setAgentChatInput] =
-    useRecoilState(agentChatInputState);
+  const [agentChatInput, setAgentChatInput] = useAtomState(agentChatInputState);
 
   const retryFetchWithRenewedToken = async (
     input: RequestInfo | URL,
@@ -149,6 +153,14 @@ export const useAgentChat = (uiMessages: ExtendedUIMessage[]) => {
           inputCredits: (prev?.inputCredits ?? 0) + usage.inputCredits,
           outputCredits: (prev?.outputCredits ?? 0) + usage.outputCredits,
         }));
+      }
+
+      const titlePart = message.parts.find(
+        (part) => part.type === 'data-thread-title',
+      );
+
+      if (isDefined(titlePart) && titlePart.type === 'data-thread-title') {
+        setCurrentAIChatThreadTitle(titlePart.data.title);
       }
     },
   });

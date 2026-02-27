@@ -11,6 +11,7 @@ import { PermissionFlagType } from 'twenty-shared/constants';
 import { MetadataResolver } from 'src/engine/api/graphql/graphql-config/decorators/metadata-resolver.decorator';
 import { UUIDScalarType } from 'src/engine/api/graphql/workspace-schema-builder/graphql-types/scalars';
 import { ApplicationExceptionFilter } from 'src/engine/core-modules/application/application-exception-filter';
+import { AuthGraphqlApiExceptionFilter } from 'src/engine/core-modules/auth/filters/auth-graphql-api-exception.filter';
 import {
   ApplicationException,
   ApplicationExceptionCode,
@@ -37,7 +38,7 @@ import { WorkspaceMigrationRunnerService } from 'src/engine/workspace-manager/wo
 @UsePipes(ResolverValidationPipe)
 @MetadataResolver()
 @UseInterceptors(WorkspaceMigrationGraphqlApiExceptionInterceptor)
-@UseFilters(ApplicationExceptionFilter)
+@UseFilters(ApplicationExceptionFilter, AuthGraphqlApiExceptionFilter)
 @UseGuards(WorkspaceAuthGuard)
 export class ApplicationResolver {
   constructor(
@@ -55,22 +56,6 @@ export class ApplicationResolver {
     @AuthWorkspace() { id: workspaceId }: WorkspaceEntity,
   ) {
     return this.applicationService.findManyApplications(workspaceId);
-  }
-
-  @Query(() => Boolean)
-  @UseGuards(SettingsPermissionGuard(PermissionFlagType.APPLICATIONS))
-  @RequireFeatureFlag(FeatureFlagKey.IS_APPLICATION_ENABLED)
-  async checkApplicationExist(
-    @AuthWorkspace() { id: workspaceId }: WorkspaceEntity,
-    @Args('id', { type: () => UUIDScalarType, nullable: true }) id?: string,
-    @Args('universalIdentifier', { type: () => UUIDScalarType, nullable: true })
-    universalIdentifier?: string,
-  ) {
-    return await this.applicationService.checkApplicationExist({
-      id,
-      universalIdentifier,
-      workspaceId,
-    });
   }
 
   @Query(() => ApplicationDTO)
@@ -144,10 +129,12 @@ export class ApplicationResolver {
       );
 
     await this.workspaceMigrationRunnerService.run({
-      actions,
+      workspaceMigration: {
+        actions,
+        applicationUniversalIdentifier:
+          workspaceCustomFlatApplication.universalIdentifier,
+      },
       workspaceId,
-      applicationUniversalIdentifier:
-        workspaceCustomFlatApplication.universalIdentifier,
     });
 
     return true;
