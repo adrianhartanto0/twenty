@@ -34,7 +34,7 @@ services:
     environment:
       - CF_DNS_API_TOKEN=
     depends_on:
-      backend:
+      backendch:
         condition: service_healthy
 
   # ─── Frontend ───────────────────────────────────────────────
@@ -133,7 +133,7 @@ services:
       POSTGRES_PASSWORD: postgres
       ALLOW_NOSSL: "true"
     volumes:
-      - twenty_db_data:/var/lib/postgresql/data
+      - twenty_db_data_new:/var/lib/postgresql/data
       - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
     networks:
       - db_net
@@ -173,6 +173,6 @@ services:
       retries: 10
 
 volumes:
-  twenty_db_data:
+  twenty_db_data_new:
   traefik_acme:
   server-local-data:
