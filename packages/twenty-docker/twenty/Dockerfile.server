@@ -56,5 +56,7 @@ RUN mkdir -p /app/.local-storage /app/packages/twenty-server/.local-storage && \
 
 USER 1000
 
+EXPOSE 3000
+
 CMD ["node", "dist/main"]
 ENTRYPOINT ["/app/entrypoint.sh"]
