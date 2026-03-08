@@ -1,7 +1,9 @@
 networks:
   public_net:
+    name: public_net
     driver: bridge
   db_net:
+    name: db_net
     driver: bridge
     internal: true
 
