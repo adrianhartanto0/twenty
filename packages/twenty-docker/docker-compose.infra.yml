@@ -38,21 +38,21 @@ services:
         condition: service_healthy
 
   # ─── Frontend ───────────────────────────────────────────────
-  frontend:
-    build:
-      context: ../..
-      dockerfile: ./packages/twenty-docker/twenty/Dockerfile.front
-    networks:
-      - public_net
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`crm.alvindocs.com`)"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
-      - "traefik.http.services.frontend.loadbalancer.server.port=5000"
-    depends_on:
-      backend:
-        condition: service_healthy
+  # frontend:
+  #   build:
+  #     context: ../..
+  #     dockerfile: ./packages/twenty-docker/twenty/Dockerfile.front
+  #   networks:
+  #     - public_net
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.frontend.rule=Host(`crm.alvindocs.com`)"
+  #     - "traefik.http.routers.frontend.entrypoints=websecure"
+  #     - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+  #     - "traefik.http.services.frontend.loadbalancer.server.port=5000"
+  #   depends_on:
+  #     backend:
+  #       condition: service_healthy
 
   # ─── Backend ────────────────────────────────────────────────
   # worker:
@@ -146,6 +146,7 @@ services:
       CLICKHOUSE_URL: http://default:devPassword@localhost:8123/twenty
       FRONTEND_URL: http://localhost:3001
       ANALYTICS_ENABLED: true
+      SERVER_URL:
       # MESSAGING_PROVIDER_GMAIL_ENABLED: ${MESSAGING_PROVIDER_GMAIL_ENABLED}
       # CALENDAR_PROVIDER_GOOGLE_ENABLED: ${CALENDAR_PROVIDER_GOOGLE_ENABLED}
       # AUTH_GOOGLE_CLIENT_ID: ${AUTH_GOOGLE_CLIENT_ID}
