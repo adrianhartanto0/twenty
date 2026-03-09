@@ -6,11 +6,9 @@ import {
 } from 'typeorm';
 import { type QueryDeepPartialEntity } from 'typeorm/query-builder/QueryPartialEntity';
 
-import { type FeatureFlagMap } from 'src/engine/core-modules/feature-flag/interfaces/feature-flag-map.interface';
-import { type WorkspaceInternalContext } from 'src/engine/twenty-orm/interfaces/workspace-internal-context.interface';
-
 import { type AuthContext } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { FeatureFlagKey } from 'src/engine/core-modules/feature-flag/enums/feature-flag-key.enum';
+import { type FeatureFlagMap } from 'src/engine/core-modules/feature-flag/interfaces/feature-flag-map.interface';
 import {
   PermissionsException,
   PermissionsExceptionCode,
@@ -20,6 +18,7 @@ import {
   TwentyORMException,
   TwentyORMExceptionCode,
 } from 'src/engine/twenty-orm/exceptions/twenty-orm.exception';
+import { type WorkspaceInternalContext } from 'src/engine/twenty-orm/interfaces/workspace-internal-context.interface';
 import { validateQueryIsPermittedOrThrow } from 'src/engine/twenty-orm/repository/permissions.utils';
 import { WorkspaceDeleteQueryBuilder } from 'src/engine/twenty-orm/repository/workspace-delete-query-builder';
 import { WorkspaceInsertQueryBuilder } from 'src/engine/twenty-orm/repository/workspace-insert-query-builder';
@@ -28,6 +27,7 @@ import { WorkspaceUpdateQueryBuilder } from 'src/engine/twenty-orm/repository/wo
 import { applyRowLevelPermissionPredicates } from 'src/engine/twenty-orm/utils/apply-row-level-permission-predicates.util';
 import { formatResult } from 'src/engine/twenty-orm/utils/format-result.util';
 import { getObjectMetadataFromEntityTarget } from 'src/engine/twenty-orm/utils/get-object-metadata-from-entity-target.util';
+
 
 export class WorkspaceSelectQueryBuilder<
   T extends ObjectLiteral,
@@ -143,7 +143,8 @@ export class WorkspaceSelectQueryBuilder<
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   override async getRawMany<U = any>(): Promise<U[]> {
     try {
-      this.validatePermissions();
+      // console.trace("getRawMany")
+      // this.validatePermissions();
 
       return super.getRawMany();
     } catch (error) {
