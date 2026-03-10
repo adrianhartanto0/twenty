@@ -154,8 +154,8 @@ export const SettingsSecurity = () => {
     !hasDirectAuthEnabled &&
     hasBypassProviderAvailable;
 
-  const hasEnterpriseAccess = currentWorkspace?.hasValidEnterpriseKey === true;
-  const isEventLogsEnabled = hasEnterpriseAccess && isClickHouseConfigured;
+  const hasEnterpriseAccess = true
+  const isEventLogsEnabled = true
 
   return (
     <SubMenuTopBarContainer

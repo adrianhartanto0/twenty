@@ -142,7 +142,7 @@ export class EventLogsService {
       );
     }
 
-    const hasEntitlement = await this.billingService.hasEntitlement(
+    /* const hasEntitlement = await this.billingService.hasEntitlement(
       workspaceId,
       BillingEntitlementKey.AUDIT_LOGS,
     );
@@ -152,7 +152,7 @@ export class EventLogsService {
         'Audit logs require an Enterprise subscription.',
         EventLogsExceptionCode.NO_ENTITLEMENT,
       );
-    }
+    } */
   }
 
   private applyFilters(

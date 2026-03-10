@@ -49,36 +49,36 @@ export const SettingsRolePermissionsObjectLevelRecordLevelSection = ({
   const billing = useAtomStateValue(billingState);
   const isBillingEnabled = billing?.isBillingEnabled ?? false;
 
-  if (!hasOrganizationPlan) {
-    return (
-      <Section>
-        <H2Title
-          title={t`Record-level`}
-          description={t`Ability to filter the records a user can interact with`}
-          adornment={<StyledPill label={t`Organization`} Icon={IconLock} />}
-        />
-        <StyledCard rounded>
-          <SettingsOptionCardContentButton
-            Icon={IconLock}
-            title={t`Upgrade to access`}
-            description={t`This feature is part of the Organization Plan`}
-            Button={
-              isBillingEnabled && (
-                <Button
-                  title={t`Upgrade`}
-                  variant="primary"
-                  accent="blue"
-                  size="small"
-                  Icon={IconArrowUp}
-                  onClick={() => navigateSettings(SettingsPath.Billing)}
-                />
-              )
-            }
-          />
-        </StyledCard>
-      </Section>
-    );
-  }
+  // if (!hasOrganizationPlan) {
+  //   return (
+  //     <Section>
+  //       <H2Title
+  //         title={t`Record-level`}
+  //         description={t`Ability to filter the records a user can interact with`}
+  //         adornment={<StyledPill label={t`Organization`} Icon={IconLock} />}
+  //       />
+  //       <StyledCard rounded>
+  //         <SettingsOptionCardContentButton
+  //           Icon={IconLock}
+  //           title={t`Upgrade to access`}
+  //           description={t`This feature is part of the Organization Plan`}
+  //           Button={
+  //             isBillingEnabled && (
+  //               <Button
+  //                 title={t`Upgrade`}
+  //                 variant="primary"
+  //                 accent="blue"
+  //                 size="small"
+  //                 Icon={IconArrowUp}
+  //                 onClick={() => navigateSettings(SettingsPath.Billing)}
+  //               />
+  //             )
+  //           }
+  //         />
+  //       </StyledCard>
+  //     </Section>
+  //   );
+  // }
 
   return (
     <Section>

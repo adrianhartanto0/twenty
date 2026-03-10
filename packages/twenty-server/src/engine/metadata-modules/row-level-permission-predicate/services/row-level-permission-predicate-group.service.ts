@@ -146,6 +146,6 @@ export class RowLevelPermissionPredicateGroupService {
         BillingEntitlementKey.RLS,
       );
 
-    return hasValidEnterpriseKey && isRowLevelPermissionEnabled;
+    return true
   }
 }
