@@ -255,20 +255,20 @@ services:
       retries: 10
 
   # ─── ClickHouse ─────────────────────────────────────────────
-  # clickhouse:
-  #   image: clickhouse/clickhouse-server:latest
-  #   container_name: twenty_clickhouse
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
-  #   networks:
-  #     - db_net
-  #   healthcheck:
-  #     test: ["CMD", "wget", "--spider", "-q", "http://localhost:8123/ping"]
-  #     interval: 5s
-  #     timeout: 5s
-  #     retries: 10
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: twenty_clickhouse
+    env_file:
+      - .env
+    environment:
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+    networks:
+      - db_net
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8123/ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   twenty_db_data_test:
