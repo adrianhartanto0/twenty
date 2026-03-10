@@ -1,0 +1,274 @@
+networks:
+  public_net:
+    name: public_net
+    driver: bridge
+  db_net:
+    name: db_net
+    driver: bridge
+    internal: true
+
+services:
+
+  # ─── Traefik ────────────────────────────────────────────────
+  traefik:
+    image: traefik:v3.6
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+      - "--certificatesresolvers.letsencrypt.acme.email=test@alvindocs.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/acme/acme.json"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.letsencrypt.acme.dnschallenge.resolvers=1.1.1.1:53,8.8.8.8:53"
+      # --- Access Logs ---
+      - "--accesslog=true"
+      - "--accesslog.filepath=/logs/access.log"
+      - "--accesslog.format=json"
+      - "--accesslog.bufferingsize=100"
+      - "--accesslog.fields.defaultmode=keep"
+      - "--accesslog.fields.names.StartUTC=drop"
+      - "--accesslog.fields.headers.defaultmode=drop"
+      - "--accesslog.fields.headers.names.User-Agent=keep"
+      - "--accesslog.fields.headers.names.Authorization=drop"
+      - "--accesslog.fields.headers.names.Content-Type=keep"
+
+      # --- Traefik App Logs ---
+      - "--log.level=INFO"
+      - "--log.filepath=/logs/traefik.log"
+      - "--log.format=json"
+
+      # --- Other required flags ---
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "traefik_acme:/acme"
+      - "./logs:/logs"
+    networks:
+      - public_net
+    environment:
+      - CF_DNS_API_TOKEN=
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  # ─── Frontend ───────────────────────────────────────────────
+  frontend:
+    build:
+      context: ../..
+      dockerfile: ./packages/twenty-docker/twenty/Dockerfile.front
+    networks:
+      - public_net
+    environment:
+      - REACT_APP_SERVER_BASE_URL=
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`crm-test.alvindocs.com`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.frontend.loadbalancer.server.port=4300"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  # ─── Backend ────────────────────────────────────────────────
+  worker:
+    build:
+      context: ../..
+      dockerfile: ./packages/twenty-docker/twenty/Dockerfile.server
+    networks:
+      - db_net
+    command: ["yarn", "worker:prod"]
+    volumes:
+      - server-local-data:/app/packages/twenty-server/.local-storage
+    environment:
+      PG_DATABASE_URL: postgres://${PG_DATABASE_USER:-postgres}:${PG_DATABASE_PASSWORD:-postgres}@${PG_DATABASE_HOST:-postgres}:${PG_DATABASE_PORT:-5432}/default
+      SERVER_URL:
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      DISABLE_DB_MIGRATIONS: true
+      DISABLE_CRON_JOBS_REGISTRATION: true
+
+      STORAGE_TYPE: ${STORAGE_TYPE}
+      STORAGE_S3_REGION: ${STORAGE_S3_REGION}
+      STORAGE_S3_NAME: ${STORAGE_S3_NAME}
+      STORAGE_S3_ENDPOINT: ${STORAGE_S3_ENDPOINT}
+
+      APP_SECRET: ${APP_SECRET:-replace_me_with_a_random_string}
+      # MESSAGING_PROVIDER_GMAIL_ENABLED: ${MESSAGING_PROVIDER_GMAIL_ENABLED}
+      # CALENDAR_PROVIDER_GOOGLE_ENABLED: ${CALENDAR_PROVIDER_GOOGLE_ENABLED}
+      # AUTH_GOOGLE_CLIENT_ID: ${AUTH_GOOGLE_CLIENT_ID}
+      # AUTH_GOOGLE_CLIENT_SECRET: ${AUTH_GOOGLE_CLIENT_SECRET}
+      # AUTH_GOOGLE_CALLBACK_URL: ${AUTH_GOOGLE_CALLBACK_URL}
+      # AUTH_GOOGLE_APIS_CALLBACK_URL: ${AUTH_GOOGLE_APIS_CALLBACK_URL}
+
+      # CALENDAR_PROVIDER_MICROSOFT_ENABLED: ${CALENDAR_PROVIDER_MICROSOFT_ENABLED}
+      # MESSAGING_PROVIDER_MICROSOFT_ENABLED: ${MESSAGING_PROVIDER_MICROSOFT_ENABLED}
+      # AUTH_MICROSOFT_ENABLED: ${AUTH_MICROSOFT_ENABLED}
+      # AUTH_MICROSOFT_CLIENT_ID: ${AUTH_MICROSOFT_CLIENT_ID}
+      # AUTH_MICROSOFT_CLIENT_SECRET: ${AUTH_MICROSOFT_CLIENT_SECRET}
+      # AUTH_MICROSOFT_CALLBACK_URL: ${AUTH_MICROSOFT_CALLBACK_URL}
+      # AUTH_MICROSOFT_APIS_CALLBACK_URL: ${AUTH_MICROSOFT_APIS_CALLBACK_URL}
+
+      # EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS:-contact@yourdomain.com}
+      # EMAIL_FROM_NAME: ${EMAIL_FROM_NAME:-"John from YourDomain"}
+      # EMAIL_SYSTEM_ADDRESS: ${EMAIL_SYSTEM_ADDRESS:-system@yourdomain.com}
+      # EMAIL_DRIVER: ${EMAIL_DRIVER:-smtp}
+      # EMAIL_SMTP_HOST: ${EMAIL_SMTP_HOST:-smtp.gmail.com}
+      # EMAIL_SMTP_PORT: ${EMAIL_SMTP_PORT:-465}
+      # EMAIL_SMTP_USER: ${EMAIL_SMTP_USER:-}
+      # EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD:-}
+
+    healthcheck:
+      test: curl --fail http://localhost:3000/healthz
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: always
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+
+  backend:
+    build:
+      context: ../..
+      dockerfile: ./packages/twenty-docker/twenty/Dockerfile.server
+    networks:
+      - public_net
+      - db_net
+
+    volumes:
+      - server-local-data:/app/packages/twenty-server/.local-storage
+    environment:
+      NODE_PORT: 3000
+      PG_DATABASE_URL: postgres://${PG_DATABASE_USER:-postgres}:${PG_DATABASE_PASSWORD:-postgres}@${PG_DATABASE_HOST:-postgres}:${PG_DATABASE_PORT:-5432}/default
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      DISABLE_DB_MIGRATIONS: true
+      DISABLE_CRON_JOBS_REGISTRATION: ${DISABLE_CRON_JOBS_REGISTRATION}
+
+      STORAGE_TYPE: ${STORAGE_TYPE}
+      STORAGE_S3_REGION: ${STORAGE_S3_REGION}
+      STORAGE_S3_NAME: ${STORAGE_S3_NAME}
+      STORAGE_S3_ENDPOINT: ${STORAGE_S3_ENDPOINT}
+
+      IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMIN: true
+
+      APP_SECRET: ${APP_SECRET:-replace_me_with_a_random_string}
+      CLICKHOUSE_URL: http://default:devPassword@localhost:8123/twenty
+      FRONTEND_URL: http://localhost:3001
+      ANALYTICS_ENABLED: true
+      SERVER_URL:
+      # MESSAGING_PROVIDER_GMAIL_ENABLED: ${MESSAGING_PROVIDER_GMAIL_ENABLED}
+      # CALENDAR_PROVIDER_GOOGLE_ENABLED: ${CALENDAR_PROVIDER_GOOGLE_ENABLED}
+      # AUTH_GOOGLE_CLIENT_ID: ${AUTH_GOOGLE_CLIENT_ID}
+      # AUTH_GOOGLE_CLIENT_SECRET: ${AUTH_GOOGLE_CLIENT_SECRET}
+      # AUTH_GOOGLE_CALLBACK_URL: ${AUTH_GOOGLE_CALLBACK_URL}
+      # AUTH_GOOGLE_APIS_CALLBACK_URL: ${AUTH_GOOGLE_APIS_CALLBACK_URL}
+
+      # CALENDAR_PROVIDER_MICROSOFT_ENABLED: ${CALENDAR_PROVIDER_MICROSOFT_ENABLED}
+      # MESSAGING_PROVIDER_MICROSOFT_ENABLED: ${MESSAGING_PROVIDER_MICROSOFT_ENABLED}
+      # AUTH_MICROSOFT_ENABLED: ${AUTH_MICROSOFT_ENABLED}
+      # AUTH_MICROSOFT_CLIENT_ID: ${AUTH_MICROSOFT_CLIENT_ID}
+      # AUTH_MICROSOFT_CLIENT_SECRET: ${AUTH_MICROSOFT_CLIENT_SECRET}
+      # AUTH_MICROSOFT_CALLBACK_URL: ${AUTH_MICROSOFT_CALLBACK_URL}
+      # AUTH_MICROSOFT_APIS_CALLBACK_URL: ${AUTH_MICROSOFT_APIS_CALLBACK_URL}
+
+      # EMAIL_FROM_ADDRESS: ${EMAIL_FROM_ADDRESS:-contact@yourdomain.com}
+      # EMAIL_FROM_NAME: ${EMAIL_FROM_NAME:-"John from YourDomain"}
+      # EMAIL_SYSTEM_ADDRESS: ${EMAIL_SYSTEM_ADDRESS:-system@yourdomain.com}
+      # EMAIL_DRIVER: ${EMAIL_DRIVER:-smtp}
+      # EMAIL_SMTP_HOST: ${EMAIL_SMTP_HOST:-smtp.gmail.com}
+      # EMAIL_SMTP_PORT: ${EMAIL_SMTP_PORT:-465}
+      # EMAIL_SMTP_USER: ${EMAIL_SMTP_USER:-}
+      # EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD:-}
+
+    healthcheck:
+      test: curl --fail http://localhost:3000/healthz
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: always
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`crm-api-test.alvindocs.com`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.backend.loadbalancer.server.port=3001"
+      - "traefik.docker.network=public_net"
+
+  # ─── PostgreSQL ─────────────────────────────────────────────
+  postgres:
+    image: postgres:16
+    container_name: twenty_pg
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      ALLOW_NOSSL: "true"
+    volumes:
+      - twenty_db_data_test:/var/lib/postgresql/data
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+    networks:
+      - db_net
+    healthcheck:
+      test: ["CMD-SHELL", "psql -U postgres -d postgres -c 'SELECT pg_is_in_recovery();' | grep -q 'f'"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  # ─── Redis ──────────────────────────────────────────────────
+  redis:
+    image: redis/redis-stack-server:latest
+    container_name: twenty_redis
+    networks:
+      - db_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ─── ClickHouse ─────────────────────────────────────────────
+  # clickhouse:
+  #   image: clickhouse/clickhouse-server:latest
+  #   container_name: twenty_clickhouse
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+  #   networks:
+  #     - db_net
+  #   healthcheck:
+  #     test: ["CMD", "wget", "--spider", "-q", "http://localhost:8123/ping"]
+  #     interval: 5s
+  #     timeout: 5s
+  #     retries: 10
+
+volumes:
+  twenty_db_data_test:
+  traefik_acme:
+  server-local-data:
