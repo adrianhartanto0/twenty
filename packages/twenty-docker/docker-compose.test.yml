@@ -66,11 +66,13 @@ services:
   frontend:
     build:
       context: ../..
-      dockerfile: ./packages/twenty-docker/twenty/Dockerfile.front
+      dockerfile: ./packages/twenty-docker/twenty/Dockerfile.fronttest
     networks:
       - public_net
     environment:
-      - REACT_APP_SERVER_BASE_URL=
+      REACT_APP_SERVER_BASE_URL:
+      VITE_BUILD_SOURCEMAP: false
+      VITE_DISABLE_TYPESCRIPT_CHECKER: true
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`crm-test.alvindocs.com`)"
@@ -217,7 +219,7 @@ services:
       - "traefik.http.routers.backend.rule=Host(`crm-api-test.alvindocs.com`)"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
-      - "traefik.http.services.backend.loadbalancer.server.port=3001"
+      - "traefik.http.services.backend.loadbalancer.server.port=3000"
       - "traefik.docker.network=public_net"
 
   # ─── PostgreSQL ─────────────────────────────────────────────
