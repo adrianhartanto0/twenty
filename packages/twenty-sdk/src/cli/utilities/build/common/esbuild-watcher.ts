@@ -8,9 +8,14 @@ import {
   type RestartableWatcher,
   type RestartableWatcherOptions,
 } from '@/cli/utilities/build/common/restartable-watcher-interface';
+import { createTypecheckPlugin } from '@/cli/utilities/build/common/typecheck-plugin';
 import * as esbuild from 'esbuild';
 import path from 'path';
-import { OUTPUT_DIR, NODE_ESM_CJS_BANNER } from 'twenty-shared/application';
+import {
+  OUTPUT_DIR,
+  NODE_ESM_CJS_BANNER,
+  GENERATED_DIR,
+} from 'twenty-shared/application';
 import { FileFolder } from 'twenty-shared/types';
 
 export const LOGIC_FUNCTION_EXTERNAL_MODULES: string[] = [
@@ -188,18 +193,29 @@ export class EsbuildWatcher implements RestartableWatcher {
   }
 }
 
-const externalPatternsPlugin: esbuild.Plugin = {
-  name: 'external-patterns',
+// Resolves twenty-sdk/generated to the actual file path so esbuild
+// bundles it instead of treating it as external (via twenty-sdk/*)
+const createSdkGeneratedResolverPlugin = (appPath: string): esbuild.Plugin => ({
+  name: 'sdk-generated-resolver',
   setup: (build) => {
-    build.onResolve({ filter: /(?:^|\/)generated(?:\/|$)/ }, (args) => ({
-      path: args.path,
-      external: true,
+    build.onResolve({ filter: /^twenty-sdk\/generated/ }, () => ({
+      path: path.join(
+        appPath,
+        'node_modules',
+        'twenty-sdk',
+        GENERATED_DIR,
+        'index.ts',
+      ),
     }));
   },
+});
+
+export type EsbuildWatcherFactoryOptions = RestartableWatcherOptions & {
+  shouldSkipTypecheck: () => boolean;
 };
 
 export const createLogicFunctionsWatcher = (
-  options: RestartableWatcherOptions,
+  options: EsbuildWatcherFactoryOptions,
 ): EsbuildWatcher =>
   new EsbuildWatcher({
     ...options,
@@ -207,13 +223,16 @@ export const createLogicFunctionsWatcher = (
       externalModules: LOGIC_FUNCTION_EXTERNAL_MODULES,
       fileFolder: FileFolder.BuiltLogicFunction,
       platform: 'node',
-      extraPlugins: [externalPatternsPlugin],
+      extraPlugins: [
+        createTypecheckPlugin(options.appPath, options.shouldSkipTypecheck),
+        createSdkGeneratedResolverPlugin(options.appPath),
+      ],
       banner: NODE_ESM_CJS_BANNER,
     },
   });
 
 export const createFrontComponentsWatcher = (
-  options: RestartableWatcherOptions,
+  options: EsbuildWatcherFactoryOptions,
 ): EsbuildWatcher =>
   new EsbuildWatcher({
     ...options,
@@ -221,6 +240,10 @@ export const createFrontComponentsWatcher = (
       externalModules: FRONT_COMPONENT_EXTERNAL_MODULES,
       fileFolder: FileFolder.BuiltFrontComponent,
       jsx: 'automatic',
-      extraPlugins: getFrontComponentBuildPlugins(),
+      extraPlugins: [
+        createTypecheckPlugin(options.appPath, options.shouldSkipTypecheck),
+        createSdkGeneratedResolverPlugin(options.appPath),
+        ...getFrontComponentBuildPlugins(),
+      ],
     },
   });

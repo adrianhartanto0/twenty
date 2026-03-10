@@ -1,7 +1,7 @@
 import { useLingui } from '@lingui/react/macro';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 
 import { type CalendarChannel } from '@/accounts/types/CalendarChannel';
 import { type MessageChannel } from '@/accounts/types/MessageChannel';
@@ -30,7 +30,7 @@ export const SettingsAccountsConfiguration = () => {
   const { enqueueSuccessSnackBar, enqueueErrorSnackBar } = useSnackBar();
   const [startChannelSyncMutation, { loading: isSubmitting }] =
     useStartChannelSyncMutation();
-  const setSelectedMessageChannel = useSetRecoilState(
+  const setSettingsAccountsSelectedMessageChannel = useSetAtomState(
     settingsAccountsSelectedMessageChannelState,
   );
 
@@ -55,7 +55,7 @@ export const SettingsAccountsConfiguration = () => {
     recordGqlFields,
     onCompleted: (data) => {
       if (isDefined(data[0])) {
-        setSelectedMessageChannel(data[0]);
+        setSettingsAccountsSelectedMessageChannel(data[0]);
       }
     },
     skip: !connectedAccountId,

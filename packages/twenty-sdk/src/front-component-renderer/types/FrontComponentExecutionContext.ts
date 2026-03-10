@@ -1,4 +1,4 @@
-// Serializable execution context that can be passed via postMessage (no functions)
 export type FrontComponentExecutionContext = {
+  frontComponentId: string;
   userId: string | null;
 };
