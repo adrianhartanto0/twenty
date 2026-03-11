@@ -209,7 +209,7 @@ export class ProcessNestedRelationsV2Helper {
         column:
           relationType === RelationType.ONE_TO_MANY
             ? `"${fieldMetadataTargetRelationColumnName}"`
-            : 'id',
+            : `"${targetObjectNameSingular}"."id"`,
         ids: relationIds,
         limit: limit * parentObjectRecords.length,
         aggregate,
@@ -377,16 +377,23 @@ export class ProcessNestedRelationsV2Helper {
     const queryBuilderOptions = referenceQueryBuilder.getFindOptions();
     const columnWithoutQuotes = column.replace(/["']/g, '');
 
+    const splittedColumnNames = column.split(".")
+    let columnSelect = columnWithoutQuotes
+
+    if (splittedColumnNames.length > 1) {
+      columnSelect = splittedColumnNames[1].replace(/["']/g, '');
+    }
+
     const result = await referenceQueryBuilder
       .setFindOptions({
         ...queryBuilderOptions,
-        select: { ...queryBuilderOptions.select, [columnWithoutQuotes]: true },
+        select: { ...queryBuilderOptions.select, [columnSelect]: true },
       })
       .where(`${column} IN (:...ids)`, {
         ids,
       })
       .take(limit)
-      .getMany();
+      .getMany()
 
     return { relationResults: result, relationAggregatedFieldsResult };
   }

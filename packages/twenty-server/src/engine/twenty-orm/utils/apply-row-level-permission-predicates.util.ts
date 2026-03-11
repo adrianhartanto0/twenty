@@ -1,9 +1,7 @@
 /* @license Enterprise */
 
 import { type FeatureFlagMap } from 'src/engine/core-modules/feature-flag/interfaces/feature-flag-map.interface';
-import { findFlatEntityByIdInFlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-id-in-flat-entity-maps.util';
 import { type WorkspaceInternalContext } from 'src/engine/twenty-orm/interfaces/workspace-internal-context.interface';
-import { isDefined } from 'twenty-shared/utils';
 import {
   Brackets,
   NotBrackets,
@@ -11,13 +9,14 @@ import {
   type WhereExpressionBuilder,
 } from 'typeorm';
 
+import { isDefined } from 'class-validator';
 import { GraphqlQueryFilterFieldParser } from 'src/engine/api/graphql/graphql-query-runner/graphql-query-parsers/graphql-query-filter/graphql-query-filter-field.parser';
 import { type AuthContext } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { FeatureFlagKey } from 'src/engine/core-modules/feature-flag/enums/feature-flag-key.enum';
+import { findFlatEntityByIdInFlatEntityMaps } from 'src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-id-in-flat-entity-maps.util';
 import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
 import { type WorkspaceSelectQueryBuilder } from 'src/engine/twenty-orm/repository/workspace-select-query-builder';
 import { buildRowLevelPermissionRecordFilter } from 'src/engine/twenty-orm/utils/build-row-level-permission-record-filter.util';
-import { RelationType } from 'twenty-shared/types';
 
 type ApplyRowLevelPermissionPredicatesArgs<T extends ObjectLiteral> = {
   queryBuilder: WorkspaceSelectQueryBuilder<T>;
@@ -46,7 +45,7 @@ const applyObjectRecordFilterToQueryBuilder = <T extends ObjectLiteral>({
     return;
   }
 
-  console.log(recordFilter)
+  // console.log(recordFilter)
 
   const whereCondition = new Brackets((qb) => {
     Object.entries(recordFilter).forEach(([key, value], index) => {
@@ -216,7 +215,7 @@ export const applyRowLevelPermissionPredicates = <T extends ObjectLiteral>({
 
   const rowLevelPredicates = { ...internalContext.flatRowLevelPermissionPredicateMaps.byUniversalIdentifier }
 
-  let connectedObjects = []
+  let uniqueRelationFilters = {}
 
   if (objectMetadata.nameSingular === "company") {
     const predicates = Object.values(rowLevelPredicates)
@@ -228,55 +227,35 @@ export const applyRowLevelPermissionPredicates = <T extends ObjectLiteral>({
         );
 
     if (predicates.length != 0) {
-      connectedObjects = Object.values(rowLevelPredicates)
+      const relationFilters = Object.values(rowLevelPredicates)
         .filter(item => isDefined(item?.objectMetadataId))
-        .reduce((acc, item) => {
-          const rowLevelObjectMetadata = findFlatEntityByIdInFlatEntityMaps({
-            flatEntityId: item.objectMetadataId as string,
-            flatEntityMaps: internalContext.flatObjectMetadataMaps,
+        .map((item) => {
+          const fieldMetadata = findFlatEntityByIdInFlatEntityMaps({
+            flatEntityId: item.fieldMetadataId,
+            flatEntityMaps: internalContext.flatFieldMetadataMaps,
           });
 
-          if (!isDefined(rowLevelObjectMetadata)) return acc;
-
-          const relationalFieldMetadata = rowLevelObjectMetadata.fieldIds
-            .map(fieldId => {
-              const fieldMetadata = findFlatEntityByIdInFlatEntityMaps({
-                flatEntityId: fieldId,
-                flatEntityMaps: internalContext.flatFieldMetadataMaps,
-              });
-
-              if (
-                isDefined(fieldMetadata) &&
-                fieldMetadata.name === objectMetadata?.nameSingular &&
-                isDefined(fieldMetadata?.settings) && fieldMetadata?.settings.relationType === RelationType.MANY_TO_ONE
-              ) {
-                return fieldMetadata?.settings.joinColumnName
+          if (isDefined(fieldMetadata)) {
+            if (fieldMetadata.name.search(/assignment/i) > 0) {
+              return {
+                name: fieldMetadata.name,
+                value: item.value || authContext.workspaceMember?.id
               }
-            }).filter(isDefined)
-
-          if (relationalFieldMetadata.length > 0) {
-            const fieldMetadataObject = findFlatEntityByIdInFlatEntityMaps({
-              flatEntityId: item?.fieldMetadataId as string,
-              flatEntityMaps: internalContext.flatFieldMetadataMaps,
-            })
-
-            acc.push({
-              fieldMetadataObject: {
-                name: fieldMetadataObject?.settings.joinColumnName
-              },
-              rowLevelObjectMetadata: {
-                name: rowLevelObjectMetadata?.nameSingular
-              },
-              relationalFieldMetadataName: relationalFieldMetadata[0],
-              value: item.value || authContext.workspaceMember?.id
-            });
+            }
           }
+        });
 
-          return acc;
-        }, []);
+      relationFilters.forEach((item) => {
+        if (isDefined(item)) {
+          if (isDefined(uniqueRelationFilters[item.name])) {
+            uniqueRelationFilters[item.name] = [ item.value, ...uniqueRelationFilters[item.name]]
+          } else {
+            uniqueRelationFilters[item.name] = [ item.value ]
+          }
+        }
+      })
 
-      console.log(connectedObjects)
-      console.log("fgh")
+      // console.log(uniqueRelationFilters)
     }
   }
 
@@ -312,43 +291,31 @@ export const applyRowLevelPermissionPredicates = <T extends ObjectLiteral>({
     });
   }
 
-  if (connectedObjects.length > 0) {
-    const maps = {}
+  Object.keys(uniqueRelationFilters).forEach((key) => {
+    const rowLevelObjectMetadata = findFlatEntityByIdInFlatEntityMaps({
+      flatEntityId: internalContext.objectIdByNameSingular[key] as string,
+      flatEntityMaps: internalContext.flatObjectMetadataMaps
+    })
 
-    connectedObjects.forEach((item, index) => {
-      const {
-        fieldMetadataObject,
-        rowLevelObjectMetadata,
-        relationalFieldMetadataName,
-        value
-      } = item
+    if (rowLevelObjectMetadata?.fieldIds) {
+      const userFields = rowLevelObjectMetadata?.fieldIds.map(fieldId => {
+        const fieldMetadata = findFlatEntityByIdInFlatEntityMaps({
+          flatEntityId: fieldId,
+          flatEntityMaps: internalContext.flatFieldMetadataMaps,
+        });
 
-      const metadataName = rowLevelObjectMetadata.name
-      const columnName = fieldMetadataObject.name
+        if (fieldMetadata.name !== objectMetadata.nameSingular && fieldMetadata.type === "RELATION") {
+          return fieldMetadata
+        }
+      }).filter(isDefined)
 
-      const objectKey = `${metadataName}:${relationalFieldMetadataName}:${columnName}`
+      if (userFields.length == 1){
+        const userField = userFields.pop()
 
-      if (maps[objectKey]) {
-        maps[objectKey] = [ value, ...maps[objectKey]]
-      } else {
-        maps[objectKey] = [value]
+        queryBuilder
+          .innerJoin(key, key, `${objectMetadata.nameSingular}.id = ${key}.${objectMetadata.nameSingular}Id`)
+          .orWhere(`${key}.${userField.name}Id IN (:...userIds)`, { userIds: uniqueRelationFilters[key] })
       }
-    })
-
-    Object.keys(maps).forEach(key => {
-      const splittedKey = key.split(":")
-
-      queryBuilder
-        .leftJoin(
-          splittedKey[0], splittedKey[0].toLowerCase(),
-          `${objectMetadata.nameSingular}.id = ${splittedKey[0].toLowerCase()}.${splittedKey[1]}`
-        )
-
-        const condition = `${splittedKey[0].toLowerCase()}.${splittedKey[2]} IN (:...userIds)`;
-        queryBuilder.orWhere(condition, { userIds: maps[key] })
-
-        console.log(queryBuilder.getQuery())
-    })
-  }
-
+    }
+  })
 };
