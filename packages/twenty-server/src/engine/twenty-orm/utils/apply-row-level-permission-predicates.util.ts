@@ -291,11 +291,15 @@ export const applyRowLevelPermissionPredicates = <T extends ObjectLiteral>({
     });
   }
 
+  console.log(uniqueRelationFilters)
+
   Object.keys(uniqueRelationFilters).forEach((key) => {
     const rowLevelObjectMetadata = findFlatEntityByIdInFlatEntityMaps({
       flatEntityId: internalContext.objectIdByNameSingular[key] as string,
       flatEntityMaps: internalContext.flatObjectMetadataMaps
     })
+
+    console.log(rowLevelObjectMetadata)
 
     if (rowLevelObjectMetadata?.fieldIds) {
       const userFields = rowLevelObjectMetadata?.fieldIds.map(fieldId => {
@@ -309,12 +313,28 @@ export const applyRowLevelPermissionPredicates = <T extends ObjectLiteral>({
         }
       }).filter(isDefined)
 
+      console.log(userFields)
+
       if (userFields.length == 1){
         const userField = userFields.pop()
 
         queryBuilder
-          .innerJoin(key, key, `${objectMetadata.nameSingular}.id = ${key}.${objectMetadata.nameSingular}Id`)
-          .orWhere(`${key}.${userField.name}Id IN (:...userIds)`, { userIds: uniqueRelationFilters[key] })
+          .orWhere(qb => {
+            const subQuery = qb
+              .subQuery()
+              .select(`${key}.${objectMetadata.nameSingular}Id`)
+              .from(key, key)
+              .where(`${key}.${userField.name}Id IN (:...userIds)`,  { userIds: uniqueRelationFilters[key] })
+              .andWhere('observerassignment.deletedAt IS NULL')
+              .getQuery();
+
+            return `${objectMetadata.nameSingular}.id IN ` + subQuery;
+          })
+
+          // .leftJoin(key, key, `${objectMetadata.nameSingular}.id = ${key}.${objectMetadata.nameSingular}Id`)
+          // .orWhere(`${key}.${userField.name}Id IN (:...userIds)`, { userIds: uniqueRelationFilters[key] })
+
+        console.log(queryBuilder.getQuery())
       }
     }
   })
