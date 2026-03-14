@@ -270,7 +270,7 @@ export const applyRowLevelPermissionPredicates = <T extends ObjectLiteral>({
     authContext,
   });
 
-
+  // console.log(recordFilter)
   const hasOtherFilters = recordFilter && Object.keys(recordFilter).length > 0
 
   if (hasOtherFilters) {
@@ -291,15 +291,11 @@ export const applyRowLevelPermissionPredicates = <T extends ObjectLiteral>({
     });
   }
 
-  console.log(uniqueRelationFilters)
-
   Object.keys(uniqueRelationFilters).forEach((key) => {
     const rowLevelObjectMetadata = findFlatEntityByIdInFlatEntityMaps({
       flatEntityId: internalContext.objectIdByNameSingular[key] as string,
       flatEntityMaps: internalContext.flatObjectMetadataMaps
     })
-
-    console.log(rowLevelObjectMetadata)
 
     if (rowLevelObjectMetadata?.fieldIds) {
       const userFields = rowLevelObjectMetadata?.fieldIds.map(fieldId => {
@@ -313,9 +309,26 @@ export const applyRowLevelPermissionPredicates = <T extends ObjectLiteral>({
         }
       }).filter(isDefined)
 
-      console.log(userFields)
+      const matchesObjectMetadataId = (condition: string): boolean =>
+        typeof condition === 'string' &&
+        condition.includes(`"${objectMetadata.nameSingular}"."id"`);
 
-      if (userFields.length == 1){
+      const objectMetadataIdFilters = queryBuilder.expressionMap.wheres.filter(whereItem => {
+        if (
+          whereItem.condition &&
+          whereItem.condition.operator &&
+          whereItem.condition.operator === "brackets")
+        {
+          return whereItem.condition.condition.some(
+            whereItemInner => matchesObjectMetadataId(whereItemInner.condition as string)
+          )
+        }
+
+        return matchesObjectMetadataId(whereItem.condition as string)
+      })
+
+
+      if (userFields.length == 1 && objectMetadataIdFilters.length < 1){
         const userField = userFields.pop()
 
         queryBuilder
@@ -325,16 +338,13 @@ export const applyRowLevelPermissionPredicates = <T extends ObjectLiteral>({
               .select(`${key}.${objectMetadata.nameSingular}Id`)
               .from(key, key)
               .where(`${key}.${userField.name}Id IN (:...userIds)`,  { userIds: uniqueRelationFilters[key] })
-              .andWhere('observerassignment.deletedAt IS NULL')
+              // .andWhere(`${key}.${objectMetadata.nameSingular}Id = :id`, {id: })
               .getQuery();
 
             return `${objectMetadata.nameSingular}.id IN ` + subQuery;
           })
 
-          // .leftJoin(key, key, `${objectMetadata.nameSingular}.id = ${key}.${objectMetadata.nameSingular}Id`)
-          // .orWhere(`${key}.${userField.name}Id IN (:...userIds)`, { userIds: uniqueRelationFilters[key] })
-
-        console.log(queryBuilder.getQuery())
+        console.log(queryBuilder.getQueryAndParameters())
       }
     }
   })
