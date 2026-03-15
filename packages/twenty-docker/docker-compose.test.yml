@@ -66,15 +66,15 @@ services:
   frontend:
     build:
       context: ../..
-      dockerfile: ./packages/twenty-docker/twenty/Dockerfile.front
+      dockerfile: ./packages/twenty-docker/twenty/Dockerfile.fronttest
     networks:
       - public_net
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`crm.alvindocs.com`)"
+      - "traefik.http.routers.frontend.rule=Host(`crm-test.alvindocs.com`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
-      - "traefik.http.services.frontend.loadbalancer.server.port=5000"
+      - "traefik.http.services.frontend.loadbalancer.server.port=4300"
     depends_on:
       backend:
         condition: service_healthy
@@ -210,7 +210,7 @@ services:
         condition: service_healthy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`crm-api.alvindocs.com`)"
+      - "traefik.http.routers.backend.rule=Host(`crm-api-test.alvindocs.com`)"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
       - "traefik.http.services.backend.loadbalancer.server.port=3000"
@@ -225,7 +225,7 @@ services:
       POSTGRES_PASSWORD: postgres
       ALLOW_NOSSL: "true"
     volumes:
-      - twenty_db_data_new:/var/lib/postgresql/data
+      - twenty_db_data_test:/var/lib/postgresql/data
       - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
     networks:
       - db_net
@@ -264,6 +264,6 @@ services:
       retries: 10
 
 volumes:
-  twenty_db_data_new:
+  twenty_db_data_test:
   traefik_acme:
   server-local-data:
