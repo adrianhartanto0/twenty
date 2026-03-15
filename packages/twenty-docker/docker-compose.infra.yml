@@ -96,7 +96,8 @@ services:
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       DISABLE_DB_MIGRATIONS: true
       DISABLE_CRON_JOBS_REGISTRATION: true
-
+      ANALYTICS_ENABLED: true
+      CLICKHOUSE_URL: http://default:devPassword@clickhouse:8123/twenty
       STORAGE_TYPE: ${STORAGE_TYPE}
       STORAGE_S3_REGION: ${STORAGE_S3_REGION}
       STORAGE_S3_NAME: ${STORAGE_S3_NAME}

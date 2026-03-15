@@ -93,6 +93,8 @@ services:
     environment:
       PG_DATABASE_URL: postgres://${PG_DATABASE_USER:-postgres}:${PG_DATABASE_PASSWORD:-postgres}@${PG_DATABASE_HOST:-postgres}:${PG_DATABASE_PORT:-5432}/default
       SERVER_URL:
+      ANALYTICS_ENABLED: true
+      CLICKHOUSE_URL: http://default:devPassword@clickhouse:8123/twenty
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       DISABLE_DB_MIGRATIONS: true
       DISABLE_CRON_JOBS_REGISTRATION: true
@@ -164,7 +166,7 @@ services:
       IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMIN: true
 
       APP_SECRET: ${APP_SECRET:-replace_me_with_a_random_string}
-      CLICKHOUSE_URL: http://default:devPassword@localhost:8123/twenty
+      CLICKHOUSE_URL: http://default:devPassword@clickhouse:8123/twenty
       FRONTEND_URL: http://localhost:3001
       ANALYTICS_ENABLED: true
       SERVER_URL:
