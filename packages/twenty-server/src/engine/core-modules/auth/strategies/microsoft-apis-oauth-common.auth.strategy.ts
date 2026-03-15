@@ -1,7 +1,7 @@
 import { PassportStrategy } from '@nestjs/passport';
 
-import { Strategy } from 'passport-microsoft';
 import { type VerifyCallback } from 'passport-google-oauth20';
+import { Strategy } from 'passport-microsoft';
 
 import { getMicrosoftApisOauthScopes } from 'src/engine/core-modules/auth/utils/get-microsoft-apis-oauth-scopes';
 import { type TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -21,7 +21,7 @@ export abstract class MicrosoftAPIsOauthCommonStrategy extends PassportStrategy(
     super({
       clientID: twentyConfigService.get('AUTH_MICROSOFT_CLIENT_ID'),
       clientSecret: twentyConfigService.get('AUTH_MICROSOFT_CLIENT_SECRET'),
-      tenant: 'common',
+      tenant: twentyConfigService.get("AUTH_MICROSOFT_TENANT_ID") || "common",
       callbackURL: twentyConfigService.get('AUTH_MICROSOFT_APIS_CALLBACK_URL'),
       scope: scopes,
       passReqToCallback: true,
