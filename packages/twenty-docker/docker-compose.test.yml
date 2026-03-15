@@ -69,10 +69,6 @@ services:
       dockerfile: ./packages/twenty-docker/twenty/Dockerfile.fronttest
     networks:
       - public_net
-    environment:
-      REACT_APP_SERVER_BASE_URL:
-      VITE_BUILD_SOURCEMAP: false
-      VITE_DISABLE_TYPESCRIPT_CHECKER: true
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`crm-test.alvindocs.com`)"
@@ -90,12 +86,15 @@ services:
       dockerfile: ./packages/twenty-docker/twenty/Dockerfile.server
     networks:
       - db_net
+      - public_net
     command: ["yarn", "worker:prod"]
     volumes:
       - server-local-data:/app/packages/twenty-server/.local-storage
     environment:
       PG_DATABASE_URL: postgres://${PG_DATABASE_USER:-postgres}:${PG_DATABASE_PASSWORD:-postgres}@${PG_DATABASE_HOST:-postgres}:${PG_DATABASE_PORT:-5432}/default
       SERVER_URL:
+      ANALYTICS_ENABLED: true
+      CLICKHOUSE_URL: http://default:devPassword@clickhouse:8123/twenty
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       DISABLE_DB_MIGRATIONS: true
       DISABLE_CRON_JOBS_REGISTRATION: true
@@ -130,11 +129,6 @@ services:
       # EMAIL_SMTP_USER: ${EMAIL_SMTP_USER:-}
       # EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD:-}
 
-    healthcheck:
-      test: curl --fail http://localhost:3000/healthz
-      interval: 5s
-      timeout: 5s
-      retries: 20
     restart: always
 
     depends_on:
@@ -172,7 +166,7 @@ services:
       IS_WORKSPACE_CREATION_LIMITED_TO_SERVER_ADMIN: true
 
       APP_SECRET: ${APP_SECRET:-replace_me_with_a_random_string}
-      CLICKHOUSE_URL: http://default:devPassword@localhost:8123/twenty
+      CLICKHOUSE_URL: http://default:devPassword@clickhouse:8123/twenty
       FRONTEND_URL: http://localhost:3001
       ANALYTICS_ENABLED: true
       SERVER_URL:
@@ -258,10 +252,9 @@ services:
   clickhouse:
     image: clickhouse/clickhouse-server:latest
     container_name: twenty_clickhouse
-    env_file:
-      - .env
     environment:
-      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_USER:
+      CLICKHOUSE_PASSWORD:
     networks:
       - db_net
     healthcheck:
