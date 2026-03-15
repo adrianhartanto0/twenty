@@ -3,23 +3,26 @@ import { Injectable } from '@nestjs/common';
 import { ConfidentialClientApplication } from '@azure/msal-node';
 
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
+import { parseMsalError } from 'src/modules/connected-account/refresh-tokens-manager/drivers/microsoft/utils/parse-msal-error.util';
 import {
   ConnectedAccountRefreshAccessTokenException,
   ConnectedAccountRefreshAccessTokenExceptionCode,
 } from 'src/modules/connected-account/refresh-tokens-manager/exceptions/connected-account-refresh-tokens.exception';
 import type { ConnectedAccountTokens } from 'src/modules/connected-account/refresh-tokens-manager/services/connected-account-refresh-tokens.service';
-import { parseMsalError } from 'src/modules/connected-account/refresh-tokens-manager/drivers/microsoft/utils/parse-msal-error.util';
 
 @Injectable()
 export class MicrosoftAPIRefreshAccessTokenService {
   constructor(private readonly config: TwentyConfigService) {}
 
   async refreshTokens(refreshToken: string): Promise<ConnectedAccountTokens> {
+
+    const tenantId = this.config.get("AUTH_MICROSOFT_TENANT_ID") || "common"
+
     const msalClient = new ConfidentialClientApplication({
       auth: {
         clientId: this.config.get('AUTH_MICROSOFT_CLIENT_ID'),
         clientSecret: this.config.get('AUTH_MICROSOFT_CLIENT_SECRET'),
-        authority: 'https://login.microsoftonline.com/common',
+        authority: `https://login.microsoftonline.com/${tenantId}`,
       },
     });
 

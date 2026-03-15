@@ -86,6 +86,7 @@ services:
       dockerfile: ./packages/twenty-docker/twenty/Dockerfile.server
     networks:
       - db_net
+      - public_net
     command: ["yarn", "worker:prod"]
     volumes:
       - server-local-data:/app/packages/twenty-server/.local-storage
@@ -95,7 +96,8 @@ services:
       REDIS_URL: ${REDIS_URL:-redis://redis:6379}
       DISABLE_DB_MIGRATIONS: true
       DISABLE_CRON_JOBS_REGISTRATION: true
-
+      ANALYTICS_ENABLED: true
+      CLICKHOUSE_URL: http://default:devPassword@clickhouse:8123/twenty
       STORAGE_TYPE: ${STORAGE_TYPE}
       STORAGE_S3_REGION: ${STORAGE_S3_REGION}
       STORAGE_S3_NAME: ${STORAGE_S3_NAME}
@@ -126,11 +128,6 @@ services:
       # EMAIL_SMTP_USER: ${EMAIL_SMTP_USER:-}
       # EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD:-}
 
-    healthcheck:
-      test: curl --fail http://localhost:3000/healthz
-      interval: 5s
-      timeout: 5s
-      retries: 20
     restart: always
 
     depends_on:
@@ -183,6 +180,7 @@ services:
       # MESSAGING_PROVIDER_MICROSOFT_ENABLED: ${MESSAGING_PROVIDER_MICROSOFT_ENABLED}
       # AUTH_MICROSOFT_ENABLED: ${AUTH_MICROSOFT_ENABLED}
       # AUTH_MICROSOFT_CLIENT_ID: ${AUTH_MICROSOFT_CLIENT_ID}
+      # AUTH_MICROSOFT_TENANT_ID: ${AUTH_MICROSOFT_CLIENT_ID}
       # AUTH_MICROSOFT_CLIENT_SECRET: ${AUTH_MICROSOFT_CLIENT_SECRET}
       # AUTH_MICROSOFT_CALLBACK_URL: ${AUTH_MICROSOFT_CALLBACK_URL}
       # AUTH_MICROSOFT_APIS_CALLBACK_URL: ${AUTH_MICROSOFT_APIS_CALLBACK_URL}
@@ -254,10 +252,9 @@ services:
   clickhouse:
     image: clickhouse/clickhouse-server:latest
     container_name: twenty_clickhouse
-    env_file:
-      - .env
     environment:
-      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_USER:
+      CLICKHOUSE_PASSWORD:
     networks:
       - db_net
     healthcheck:
