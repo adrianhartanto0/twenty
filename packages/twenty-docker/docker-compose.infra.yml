@@ -86,6 +86,7 @@ services:
       dockerfile: ./packages/twenty-docker/twenty/Dockerfile.server
     networks:
       - db_net
+      - public_net
     command: ["yarn", "worker:prod"]
     volumes:
       - server-local-data:/app/packages/twenty-server/.local-storage
@@ -126,11 +127,6 @@ services:
       # EMAIL_SMTP_USER: ${EMAIL_SMTP_USER:-}
       # EMAIL_SMTP_PASSWORD: ${EMAIL_SMTP_PASSWORD:-}
 
-    healthcheck:
-      test: curl --fail http://localhost:3000/healthz
-      interval: 5s
-      timeout: 5s
-      retries: 20
     restart: always
 
     depends_on:
@@ -254,10 +250,9 @@ services:
   clickhouse:
     image: clickhouse/clickhouse-server:latest
     container_name: twenty_clickhouse
-    env_file:
-      - .env
     environment:
-      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      CLICKHOUSE_USER:
+      CLICKHOUSE_PASSWORD:
     networks:
       - db_net
     healthcheck:
