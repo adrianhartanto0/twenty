@@ -143,15 +143,15 @@ export const useActionRolePermissionFlagConfig = ({
         isRelevantForUsers: true,
       },
       {
-          key: PermissionFlagType.PERSONAL_VIEWS,
-          name: t`Edit Personal Views`,
-          description: t`Create and edit own personal views`,
-          Icon: IconTable,
-          isToolPermission: true,
-          isRelevantForAgents: false,
-          isRelevantForApiKeys: false,
-          isRelevantForUsers: true,
-        },
+        key: PermissionFlagType.PERSONAL_VIEWS,
+        name: t`Edit Personal Views`,
+        description: t`Create and edit own personal views`,
+        Icon: IconTable,
+        isToolPermission: true,
+        isRelevantForAgents: false,
+        isRelevantForApiKeys: false,
+        isRelevantForUsers: true,
+      },
     ];
 
     const canBeAssignedOnlyToAgents =

@@ -218,13 +218,13 @@ export const ViewPickerListContent = () => {
           />
         </StyledBoldDropdownMenuItemsContainer>
       )}
-      <StyledBoldDropdownMenuItemsContainer scrollable={false}>
+      {/* <StyledBoldDropdownMenuItemsContainer scrollable={false}>
         <MenuItem
           onClick={handleAddViewButtonClick}
           LeftIcon={IconPlus}
           text={t`Add view`}
         />
-      </StyledBoldDropdownMenuItemsContainer>
+      </StyledBoldDropdownMenuItemsContainer> */}
     </DropdownContent>
   );
 };

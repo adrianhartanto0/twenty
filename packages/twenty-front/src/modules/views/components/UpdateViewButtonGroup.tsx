@@ -113,8 +113,7 @@ export const UpdateViewButtonGroup = () => {
       viewSortsAreDifferentFromRecordSorts ||
       viewFilterGroupsAreDifferentFromRecordFilterGroups ||
       viewAnyFieldFilterDifferentFromCurrentAnyFieldFilter) &&
-    !hasFiltersQueryParams &&
-    !(isPersonalView && !canEditPersonalViews);
+    !hasFiltersQueryParams && canEditPersonalViews;
 
   if (!canShowButton) {
     return <></>;
