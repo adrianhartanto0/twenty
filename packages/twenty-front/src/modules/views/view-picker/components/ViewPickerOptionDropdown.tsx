@@ -24,8 +24,8 @@ import {
 import { MenuItem } from 'twenty-ui/navigation';
 import {
   FeatureFlagKey,
-  ViewVisibility,
   PermissionFlagType,
+  ViewVisibility,
 } from '~/generated-metadata/graphql';
 
 type ViewPickerOptionDropdownProps = {
@@ -39,7 +39,7 @@ type ViewPickerOptionDropdownProps = {
     | 'visibility'
     | 'createdByUserWorkspaceId'
   >;
-  onEdit: (event: React.MouseEvent<HTMLElement>, viewId: string) => void;
+  onEdit?: (event: React.MouseEvent<HTMLElement>, viewId: string) => void;
   handleViewSelect: (viewId: string) => void;
 };
 
@@ -73,7 +73,8 @@ export const ViewPickerOptionDropdown = ({
   // Users with VIEWS permission can edit all views
   // Users without VIEWS permission can only edit unlisted views (which are always their own, filtered by backend)
   const canEditView =
-    hasViewsPermission || view.visibility === ViewVisibility.UNLISTED;
+    (hasViewsPermission || view.visibility === ViewVisibility.UNLISTED) &&
+    onEdit !== undefined;
 
   const isFavorite = isNavigationMenuItemEnabled
     ? navigationMenuItems.some(

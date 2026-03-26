@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 import { contextStoreCurrentViewIdComponentState } from '@/context-store/states/contextStoreCurrentViewIdComponentState';
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { Dropdown } from '@/ui/layout/dropdown/components/Dropdown';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownMenuItemsContainer } from '@/ui/layout/dropdown/components/DropdownMenuItemsContainer';
@@ -26,6 +27,7 @@ import { t } from '@lingui/core/macro';
 import { IconChevronDown, IconPlus } from 'twenty-ui/display';
 import { Button, ButtonGroup, IconButton } from 'twenty-ui/input';
 import { MenuItem } from 'twenty-ui/navigation';
+import { PermissionFlagType, ViewVisibility } from '~/generated-metadata/graphql';
 
 const StyledContainer = styled.div`
   border-radius: ${({ theme }) => theme.border.radius.md};
@@ -40,6 +42,10 @@ export const UpdateViewButtonGroup = () => {
 
   const { refreshCoreViewsByObjectMetadataId } =
     useRefreshCoreViewsByObjectMetadataId();
+
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
+  );
 
   const { objectMetadataItem } = useRecordIndexContextOrThrow();
 
@@ -99,12 +105,15 @@ export const UpdateViewButtonGroup = () => {
   const { viewAnyFieldFilterDifferentFromCurrentAnyFieldFilter } =
     useIsViewAnyFieldFilterDifferentFromCurrentAnyFieldFilter();
 
+  const isPersonalView =
+    currentView?.visibility === ViewVisibility.UNLISTED;
+
   const canShowButton =
     (viewFiltersAreDifferentFromRecordFilters ||
       viewSortsAreDifferentFromRecordSorts ||
       viewFilterGroupsAreDifferentFromRecordFilterGroups ||
       viewAnyFieldFilterDifferentFromCurrentAnyFieldFilter) &&
-    !hasFiltersQueryParams;
+    !hasFiltersQueryParams && canEditPersonalViews;
 
   if (!canShowButton) {
     return <></>;
