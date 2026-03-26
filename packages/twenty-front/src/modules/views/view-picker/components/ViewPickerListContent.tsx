@@ -3,6 +3,7 @@ import { type DropResult } from '@hello-pangea/dnd';
 import { type MouseEvent, useCallback } from 'react';
 
 import { useContextStoreObjectMetadataItemOrThrow } from '@/context-store/hooks/useContextStoreObjectMetadataItemOrThrow';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { DraggableItem } from '@/ui/layout/draggable-list/components/DraggableItem';
 import { DraggableList } from '@/ui/layout/draggable-list/components/DraggableList';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
@@ -24,7 +25,7 @@ import { useLingui } from '@lingui/react/macro';
 import { useRecoilValue } from 'recoil';
 import { IconPlus } from 'twenty-ui/display';
 import { MenuItem } from 'twenty-ui/navigation';
-import { ViewVisibility } from '~/generated-metadata/graphql';
+import { PermissionFlagType, ViewVisibility } from '~/generated-metadata/graphql';
 import { moveArrayItem } from '~/utils/array/moveArrayItem';
 
 const StyledBoldDropdownMenuItemsContainer = styled(DropdownMenuItemsContainer)`
@@ -40,6 +41,10 @@ export const ViewPickerListContent = () => {
     coreViewsFromObjectMetadataItemFamilySelector({
       objectMetadataItemId: objectMetadataItem.id,
     }),
+  );
+
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
   );
 
   const workspaceViews = viewsOnCurrentObject.filter(
@@ -181,13 +186,19 @@ export const ViewPickerListContent = () => {
                     key={view.id}
                     draggableId={view.id}
                     index={index}
-                    isDragDisabled={unlistedViews.length === 1}
+                    isDragDisabled={
+                      unlistedViews.length === 1 || !canEditPersonalViews
+                    }
                     itemComponent={
                       <ViewPickerOptionDropdown
                         view={{ ...view, __typename: 'View' }}
                         handleViewSelect={handleViewSelect}
                         isIndexView={isIndexView}
-                        onEdit={handleEditViewButtonClick}
+                        onEdit={
+                          canEditPersonalViews
+                            ? handleEditViewButtonClick
+                            : undefined
+                        }
                       />
                     }
                   />
@@ -198,6 +209,15 @@ export const ViewPickerListContent = () => {
         </>
       )}
       <DropdownMenuSeparator />
+      {canEditPersonalViews && (
+        <StyledBoldDropdownMenuItemsContainer scrollable={false}>
+          <MenuItem
+            onClick={handleAddViewButtonClick}
+            LeftIcon={IconPlus}
+            text={t`Add view`}
+          />
+        </StyledBoldDropdownMenuItemsContainer>
+      )}
       <StyledBoldDropdownMenuItemsContainer scrollable={false}>
         <MenuItem
           onClick={handleAddViewButtonClick}
