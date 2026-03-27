@@ -3,15 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Command } from 'nest-commander';
 import { STANDARD_OBJECTS } from 'twenty-shared/metadata';
-import { FieldMetadataType } from 'twenty-shared/types';
+import { FieldMetadataType, FeatureFlagKey } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { In, IsNull, Not, Or, Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
 import { ActiveOrSuspendedWorkspacesMigrationCommandRunner } from 'src/database/commands/command-runners/active-or-suspended-workspaces-migration.command-runner';
 import { RunOnWorkspaceArgs } from 'src/database/commands/command-runners/workspaces-migration.command-runner';
-import { ApplicationService } from 'src/engine/core-modules/application/services/application.service';
-import { FeatureFlagKey } from 'src/engine/core-modules/feature-flag/enums/feature-flag-key.enum';
+import { ApplicationService } from 'src/engine/core-modules/application/application.service';
 import { FeatureFlagService } from 'src/engine/core-modules/feature-flag/services/feature-flag.service';
 import { UserWorkspaceService } from 'src/engine/core-modules/user-workspace/user-workspace.service';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
@@ -25,6 +24,7 @@ import { FlatFieldMetadata } from 'src/engine/metadata-modules/flat-field-metada
 import { isFlatFieldMetadataOfType } from 'src/engine/metadata-modules/flat-field-metadata/utils/is-flat-field-metadata-of-type.util';
 import { FlatNavigationMenuItemMaps } from 'src/engine/metadata-modules/flat-navigation-menu-item/types/flat-navigation-menu-item-maps.type';
 import { FlatNavigationMenuItem } from 'src/engine/metadata-modules/flat-navigation-menu-item/types/flat-navigation-menu-item.type';
+import { NavigationMenuItemType } from 'src/engine/metadata-modules/navigation-menu-item/enums/navigation-menu-item-type.enum';
 import { FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
 import { FlatView } from 'src/engine/metadata-modules/flat-view/types/flat-view.type';
 import { ObjectMetadataEntity } from 'src/engine/metadata-modules/object-metadata/object-metadata.entity';
@@ -274,6 +274,7 @@ export class MigrateFavoritesToNavigationMenuItemsCommand extends ActiveOrSuspen
 
         const folderToCreate = {
           id: navigationMenuItemId,
+          type: NavigationMenuItemType.FOLDER,
           universalIdentifier: navigationMenuItemId,
           userWorkspaceId,
           targetRecordId: null,
@@ -286,6 +287,7 @@ export class MigrateFavoritesToNavigationMenuItemsCommand extends ActiveOrSuspen
           name: favoriteFolder.name,
           link: null,
           icon: null,
+          color: null,
           position: favoriteFolder.position,
           workspaceId,
           applicationId: workspaceCustomApplicationId,
@@ -308,6 +310,7 @@ export class MigrateFavoritesToNavigationMenuItemsCommand extends ActiveOrSuspen
 
         const workspaceLevelFolderToCreate = {
           id: workspaceLevelNavigationMenuItemId,
+          type: NavigationMenuItemType.FOLDER,
           universalIdentifier: workspaceLevelNavigationMenuItemId,
           userWorkspaceId: null,
           targetRecordId: null,
@@ -320,6 +323,7 @@ export class MigrateFavoritesToNavigationMenuItemsCommand extends ActiveOrSuspen
           name: favoriteFolder.name,
           link: null,
           icon: null,
+          color: null,
           position: favoriteFolder.position,
           workspaceId,
           applicationId: workspaceCustomApplicationId,
@@ -515,6 +519,7 @@ export class MigrateFavoritesToNavigationMenuItemsCommand extends ActiveOrSuspen
 
           flatNavigationMenuItemsToCreate.push({
             id: favorite.id,
+            type: NavigationMenuItemType.VIEW,
             universalIdentifier,
             userWorkspaceId,
             targetRecordId: null,
@@ -528,6 +533,7 @@ export class MigrateFavoritesToNavigationMenuItemsCommand extends ActiveOrSuspen
             name: null,
             link: null,
             icon: null,
+            color: null,
             position: favorite.position,
             workspaceId,
             applicationId,
@@ -567,6 +573,7 @@ export class MigrateFavoritesToNavigationMenuItemsCommand extends ActiveOrSuspen
 
       flatNavigationMenuItemsToCreate.push({
         id: favorite.id,
+        type: NavigationMenuItemType.RECORD,
         universalIdentifier: favorite.id,
         userWorkspaceId,
         targetRecordId,
@@ -582,6 +589,7 @@ export class MigrateFavoritesToNavigationMenuItemsCommand extends ActiveOrSuspen
         name: null,
         link: null,
         icon: null,
+        color: null,
         position: favorite.position,
         workspaceId,
         applicationId: workspaceCustomApplicationId,

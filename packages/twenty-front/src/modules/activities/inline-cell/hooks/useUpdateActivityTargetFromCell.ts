@@ -3,8 +3,8 @@ import { type NoteTarget } from '@/activities/types/NoteTarget';
 import { type TaskTarget } from '@/activities/types/TaskTarget';
 import { getActivityTargetFieldNameForObject } from '@/activities/utils/getActivityTargetFieldNameForObject';
 import { getJoinObjectNameSingular } from '@/activities/utils/getJoinObjectNameSingular';
-import { objectMetadataItemsState } from '@/object-metadata/states/objectMetadataItemsState';
-import { CoreObjectNameSingular } from '@/object-metadata/types/CoreObjectNameSingular';
+import { objectMetadataItemsSelector } from '@/object-metadata/states/objectMetadataItemsSelector';
+import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { useCreateOneRecord } from '@/object-record/hooks/useCreateOneRecord';
 import { useDeleteOneRecord } from '@/object-record/hooks/useDeleteOneRecord';
 import { searchRecordStoreFamilyState } from '@/object-record/record-picker/multiple-record-picker/states/searchRecordStoreComponentFamilyState';
@@ -81,7 +81,7 @@ export const useUpdateActivityTargetFromCell = ({
           ? 'task'
           : 'note';
 
-      const objectMetadataItems = store.get(objectMetadataItemsState.atom);
+      const objectMetadataItems = store.get(objectMetadataItemsSelector.atom);
 
       const pickedObjectMetadataItem = objectMetadataItems.find(
         (objectMetadataItem) =>
@@ -113,18 +113,18 @@ export const useUpdateActivityTargetFromCell = ({
       );
 
       if (isDefined(existingActivityTarget)) {
-        activityTargetsAfterUpdate = activityTargetWithTargetRecords
-          .map((activityTarget) => {
+        activityTargetsAfterUpdate = activityTargetWithTargetRecords.flatMap(
+          (activityTarget) => {
             if (
               activityTarget.targetObject.id === morphItem.recordId &&
               !morphItem.isSelected
             ) {
-              return undefined;
+              return [];
             }
 
-            return activityTarget.activityTarget;
-          })
-          .filter(isDefined);
+            return [activityTarget.activityTarget];
+          },
+        );
 
         if (!morphItem.isSelected) {
           await deleteOneActivityTarget(

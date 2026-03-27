@@ -1,5 +1,5 @@
-import { ApolloError } from '@apollo/client';
-import styled from '@emotion/styled';
+import { CombinedGraphQLErrors } from '@apollo/client/errors';
+import { styled } from '@linaria/react';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
@@ -14,26 +14,29 @@ import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath, isDefined } from 'twenty-shared/utils';
+import { formatNumber } from '~/utils/format/formatNumber';
 import { H2Title } from 'twenty-ui/display';
 import { Section } from 'twenty-ui/layout';
+import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { useQuery, useMutation } from '@apollo/client/react';
 import {
-  useGetAiSystemPromptPreviewQuery,
-  useUpdateWorkspaceMutation,
+  GetAiSystemPromptPreviewDocument,
+  UpdateWorkspaceDocument,
 } from '~/generated-metadata/graphql';
 
 const StyledFormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing(4)};
+  gap: ${themeCssVariables.spacing[4]};
 `;
 
 const StyledTokenBadge = styled.span`
-  background: ${({ theme }) => theme.background.transparent.light};
-  border-radius: ${({ theme }) => theme.border.radius.sm};
-  color: ${({ theme }) => theme.font.color.tertiary};
-  font-size: ${({ theme }) => theme.font.size.xs};
-  padding: ${({ theme }) => theme.spacing(0.5)}
-    ${({ theme }) => theme.spacing(1.5)};
+  background: ${themeCssVariables.background.transparent.light};
+  border-radius: ${themeCssVariables.border.radius.sm};
+  color: ${themeCssVariables.font.color.tertiary};
+  font-size: ${themeCssVariables.font.size.xs};
+  padding: ${themeCssVariables.spacing['0.5']}
+    ${themeCssVariables.spacing['1.5']};
   white-space: nowrap;
 `;
 
@@ -43,10 +46,11 @@ export const SettingsAIPrompts = () => {
     currentWorkspaceState,
   );
   const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
-  const [updateWorkspace] = useUpdateWorkspaceMutation();
+  const [updateWorkspace] = useMutation(UpdateWorkspaceDocument);
 
-  const { data: previewData, loading: previewLoading } =
-    useGetAiSystemPromptPreviewQuery();
+  const { data: previewData, loading: previewLoading } = useQuery(
+    GetAiSystemPromptPreviewDocument,
+  );
 
   const [workspaceInstructions, setWorkspaceInstructions] = useState(
     currentWorkspace?.aiAdditionalInstructions ?? '',
@@ -97,7 +101,7 @@ export const SettingsAIPrompts = () => {
         aiAdditionalInstructions: originalInstructions || null,
       });
 
-      if (error instanceof ApolloError) {
+      if (CombinedGraphQLErrors.is(error)) {
         enqueueErrorSnackBar({
           apolloError: error,
         });
@@ -142,18 +146,11 @@ export const SettingsAIPrompts = () => {
       section.title !== 'User Context',
   );
 
-  const formatTokenCount = (count: number): string => {
-    if (count >= 1000) {
-      const kTokens = (count / 1000).toFixed(1);
-
-      return t`~${kTokens}k tokens`;
-    }
-
-    return t`~${count} tokens`;
-  };
-
   const totalTokenCount = isDefined(preview)
-    ? formatTokenCount(preview.estimatedTokenCount)
+    ? t`~${formatNumber(preview.estimatedTokenCount, {
+        abbreviate: true,
+        decimals: 1,
+      })} tokens`
     : '';
   const pageTitle = isDefined(preview)
     ? t`System Prompt (${totalTokenCount})`
@@ -179,7 +176,10 @@ export const SettingsAIPrompts = () => {
               description={t`Read-only — managed by Twenty`}
               adornment={
                 <StyledTokenBadge>
-                  {formatTokenCount(section.estimatedTokenCount)}
+                  {formatNumber(section.estimatedTokenCount, {
+                    abbreviate: true,
+                    decimals: 1,
+                  })}
                 </StyledTokenBadge>
               }
             />

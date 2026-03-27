@@ -13,6 +13,7 @@ exports[`getMetadataRelatedMetadataNames should return related metadata names fo
 [
   "objectMetadata",
   "fieldMetadata",
+  "viewSort",
   "viewField",
   "viewFilter",
   "view",
@@ -41,7 +42,15 @@ exports[`getMetadataRelatedMetadataNames should return related metadata names fo
 [
   "fieldMetadata",
   "index",
+  "objectPermission",
   "view",
+]
+`;
+
+exports[`getMetadataRelatedMetadataNames should return related metadata names for objectPermission 1`] = `
+[
+  "role",
+  "objectMetadata",
 ]
 `;
 
@@ -66,9 +75,17 @@ exports[`getMetadataRelatedMetadataNames should return related metadata names fo
 ]
 `;
 
+exports[`getMetadataRelatedMetadataNames should return related metadata names for permissionFlag 1`] = `
+[
+  "role",
+]
+`;
+
 exports[`getMetadataRelatedMetadataNames should return related metadata names for role 1`] = `
 [
   "roleTarget",
+  "objectPermission",
+  "permissionFlag",
   "rowLevelPermissionPredicate",
   "rowLevelPermissionPredicateGroup",
 ]
@@ -145,6 +162,13 @@ exports[`getMetadataRelatedMetadataNames should return related metadata names fo
 
 exports[`getMetadataRelatedMetadataNames should return related metadata names for viewGroup 1`] = `
 [
+  "view",
+]
+`;
+
+exports[`getMetadataRelatedMetadataNames should return related metadata names for viewSort 1`] = `
+[
+  "fieldMetadata",
   "view",
 ]
 `;

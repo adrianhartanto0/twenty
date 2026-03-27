@@ -37,6 +37,11 @@ export const ALL_ONE_TO_MANY_METADATA_RELATIONS = {
   commandMenuItem: {},
   navigationMenuItem: {},
   fieldMetadata: {
+    viewSorts: {
+      flatEntityForeignKeyAggregator: 'viewSortIds',
+      metadataName: 'viewSort',
+      universalFlatEntityForeignKeyAggregator: 'viewSortUniversalIdentifiers',
+    },
     fieldPermissions: null,
     indexFieldMetadatas: null,
     viewFields: {
@@ -80,7 +85,12 @@ export const ALL_ONE_TO_MANY_METADATA_RELATIONS = {
       universalFlatEntityForeignKeyAggregator:
         'indexMetadataUniversalIdentifiers',
     },
-    objectPermissions: null,
+    objectPermissions: {
+      metadataName: 'objectPermission',
+      flatEntityForeignKeyAggregator: 'objectPermissionIds',
+      universalFlatEntityForeignKeyAggregator:
+        'objectPermissionUniversalIdentifiers',
+    },
     fieldPermissions: null,
     views: {
       metadataName: 'view',
@@ -139,8 +149,18 @@ export const ALL_ONE_TO_MANY_METADATA_RELATIONS = {
       flatEntityForeignKeyAggregator: 'roleTargetIds',
       universalFlatEntityForeignKeyAggregator: 'roleTargetUniversalIdentifiers',
     },
-    objectPermissions: null,
-    permissionFlags: null,
+    objectPermissions: {
+      metadataName: 'objectPermission',
+      flatEntityForeignKeyAggregator: 'objectPermissionIds',
+      universalFlatEntityForeignKeyAggregator:
+        'objectPermissionUniversalIdentifiers',
+    },
+    permissionFlags: {
+      metadataName: 'permissionFlag',
+      flatEntityForeignKeyAggregator: 'permissionFlagIds',
+      universalFlatEntityForeignKeyAggregator:
+        'permissionFlagUniversalIdentifiers',
+    },
     fieldPermissions: null,
     rowLevelPermissionPredicates: {
       metadataName: 'rowLevelPermissionPredicate',
@@ -156,6 +176,8 @@ export const ALL_ONE_TO_MANY_METADATA_RELATIONS = {
     },
   },
   roleTarget: {},
+  permissionFlag: {},
+  objectPermission: {},
   pageLayout: {
     tabs: {
       metadataName: 'pageLayoutTab',
@@ -202,10 +224,11 @@ export const ALL_ONE_TO_MANY_METADATA_RELATIONS = {
   },
   frontComponent: {},
   webhook: {},
+  viewSort: {},
 } as const satisfies OneToManyMetadataRelationsProperties;
 
 // satisfies with complex mapped types involving nested generics doesn't always catch missing required keys
-// eslint-disable-next-line unused-imports/no-unused-vars
+// oxlint-disable-next-line unused-imports/no-unused-vars
 type Assertions = [
   Expect<
     AllMetadataName extends keyof typeof ALL_ONE_TO_MANY_METADATA_RELATIONS

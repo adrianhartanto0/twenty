@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import { styled } from '@linaria/react';
 import { Link } from 'react-router-dom';
 
 import { SettingsOptionCardContentButton } from '@/settings/components/SettingsOptions/SettingsOptionCardContentButton';
@@ -23,12 +23,14 @@ import { Button } from 'twenty-ui/input';
 import { Card, Section } from 'twenty-ui/layout';
 import { SettingsAIMCP } from './components/SettingsAIMCP';
 import { SettingsAIModelsTab } from './components/SettingsAIModelsTab';
-import { SettingsSkillsTable } from './components/SettingsSkillsTable';
+import { SettingsAgentSkills } from './components/SettingsAgentSkills';
 import { SettingsToolsTable } from './components/SettingsToolsTable';
 import { SETTINGS_AI_TABS } from './constants/SettingsAiTabs';
 
-const StyledLink = styled(Link)`
-  text-decoration: none;
+const StyledLinkContainer = styled.div`
+  > a {
+    text-decoration: none;
+  }
 `;
 
 export const SettingsAI = () => {
@@ -82,7 +84,7 @@ export const SettingsAI = () => {
           componentInstanceId={SETTINGS_AI_TABS.COMPONENT_INSTANCE_ID}
         />
         {isModelsTab && <SettingsAIModelsTab />}
-        {isSkillsTab && <SettingsSkillsTable />}
+        {isSkillsTab && <SettingsAgentSkills />}
         {isToolsTab && <SettingsToolsTable />}
         {isMoreTab && (
           <>
@@ -97,13 +99,15 @@ export const SettingsAI = () => {
                   title={t`System Prompt`}
                   description={t`View the AI system prompt and add custom instructions`}
                   Button={
-                    <StyledLink to={getSettingsPath(SettingsPath.AIPrompts)}>
-                      <Button
-                        title={t`Configure`}
-                        variant="secondary"
-                        size="small"
-                      />
-                    </StyledLink>
+                    <StyledLinkContainer>
+                      <Link to={getSettingsPath(SettingsPath.AIPrompts)}>
+                        <Button
+                          title={t`Configure`}
+                          variant="secondary"
+                          size="small"
+                        />
+                      </Link>
+                    </StyledLinkContainer>
                   }
                 />
               </Card>

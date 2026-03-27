@@ -19,56 +19,64 @@ Create Twenty App is the official scaffolding CLI for building apps on top of [T
 - Strong TypeScript support and typed client generation
 
 ## Documentation
+
 See Twenty application documentation https://docs.twenty.com/developers/extend/capabilities/apps
 
 ## Prerequisites
+
 - Node.js 24+ (recommended) and Yarn 4
-- A Twenty workspace and an API key (create one at https://app.twenty.com/settings/api-webhooks)
+- Docker (for the local Twenty dev server)
 
 ## Quick start
 
 ```bash
+# Scaffold a new app — the CLI will offer to start a local Twenty server
 npx create-twenty-app@latest my-twenty-app
 cd my-twenty-app
 
-# Get help and list all available commands
-yarn twenty help
+# The scaffolder can automatically:
+# 1. Start a local Twenty server (Docker)
+# 2. Open the browser to log in (tim@apple.dev / tim@apple.dev)
+# 3. Authenticate your app via OAuth
 
-# Authenticate using your API key (you'll be prompted)
-yarn twenty auth:login
-
-# Add a new entity to your application (guided)
-yarn twenty entity:add
+# Or do it manually:
+yarn twenty server start          # Start local Twenty server
+yarn twenty remote add http://localhost:2020 --as local  # Authenticate via OAuth
 
 # Start dev mode: watches, builds, and syncs local changes to your workspace
-# (also auto-generates typed API clients — CoreApiClient and MetadataApiClient — in node_modules/twenty-sdk/generated)
-yarn twenty app:dev
+# (also auto-generates typed CoreApiClient — MetadataApiClient ships pre-built — both available via `twenty-client-sdk`)
+yarn twenty dev
 
 # Watch your application's function logs
-yarn twenty function:logs
+yarn twenty logs
 
 # Execute a function with a JSON payload
-yarn twenty function:execute -n my-function -p '{"key": "value"}'
+yarn twenty exec -n my-function -p '{"key": "value"}'
 
 # Execute the pre-install function
-yarn twenty function:execute --preInstall
+yarn twenty exec --preInstall
 
 # Execute the post-install function
-yarn twenty function:execute --postInstall
+yarn twenty exec --postInstall
+
+# Build the app for distribution
+yarn twenty build
+
+# Publish the app to npm or directly to a Twenty server
+yarn twenty publish
 
 # Uninstall the application from the current workspace
-yarn twenty app:uninstall
+yarn twenty uninstall
 ```
 
 ## Scaffolding modes
 
 Control which example files are included when creating a new app:
 
-| Flag | Behavior |
-|------|----------|
-| `-e, --exhaustive` | **(default)** Creates all example files without prompting |
-| `-m, --minimal` | Creates only core files (`application-config.ts` and `default-role.ts`) |
-| `-i, --interactive` | Prompts you to select which examples to include |
+| Flag               | Behavior                                                                |
+| ------------------ | ----------------------------------------------------------------------- |
+| `-e, --exhaustive` | **(default)** Creates all example files                                 |
+| `-m, --minimal`    | Creates only core files (`application-config.ts` and `default-role.ts`) |
 
 ```bash
 # Default: all examples included
@@ -76,31 +84,21 @@ npx create-twenty-app@latest my-app
 
 # Minimal: only core files
 npx create-twenty-app@latest my-app -m
-
-# Interactive: choose which examples to include
-npx create-twenty-app@latest my-app -i
 ```
-
-In interactive mode, you can pick from:
-- **Example object** — a custom CRM object definition (`objects/example-object.ts`)
-- **Example field** — a custom field on the example object (`fields/example-field.ts`)
-- **Example logic function** — a server-side handler with HTTP trigger (`logic-functions/hello-world.ts`)
-- **Example front component** — a React UI component (`front-components/hello-world.tsx`)
-- **Example view** — a saved view for the example object (`views/example-view.ts`)
-- **Example navigation menu item** — a sidebar link (`navigation-menu-items/example-navigation-menu-item.ts`)
-- **Example skill** — an AI agent skill definition (`skills/example-skill.ts`)
 
 ## What gets scaffolded
 
 **Core files (always created):**
+
 - `application-config.ts` — Application metadata configuration
 - `roles/default-role.ts` — Default role for logic functions
 - `logic-functions/pre-install.ts` — Pre-install logic function (runs before app installation)
 - `logic-functions/post-install.ts` — Post-install logic function (runs after app installation)
-- TypeScript configuration, ESLint, package.json, .gitignore
+- TypeScript configuration, Oxlint, package.json, .gitignore
 - A prewired `twenty` script that delegates to the `twenty` CLI from twenty-sdk
 
 **Example files (controlled by scaffolding mode):**
+
 - `objects/example-object.ts` — Example custom object with a text field
 - `fields/example-field.ts` — Example standalone field extending the example object
 - `logic-functions/hello-world.ts` — Example logic function with HTTP trigger
@@ -108,43 +106,73 @@ In interactive mode, you can pick from:
 - `views/example-view.ts` — Example saved view for the example object
 - `navigation-menu-items/example-navigation-menu-item.ts` — Example sidebar navigation link
 - `skills/example-skill.ts` — Example AI agent skill definition
+- `__tests__/app-install.integration-test.ts` — Integration test that builds, installs, and verifies the app (includes `vitest.config.ts`, `tsconfig.spec.json`, and a setup file)
 
-## Next steps
-- Run `yarn twenty help` to see all available commands.
-- Use `yarn twenty auth:login` to authenticate with your Twenty workspace.
-- Explore the generated project and add your first entity with `yarn twenty entity:add` (logic functions, front components, objects, roles, views, navigation menu items, skills).
-- Use `yarn twenty app:dev` while you iterate — it watches, builds, and syncs changes to your workspace in real time.
-- Two typed API clients are auto‑generated by `yarn twenty app:dev` and stored in `node_modules/twenty-sdk/generated`: `CoreApiClient` (for workspace data via `/graphql`) and `MetadataApiClient` (for workspace configuration and file uploads via `/metadata`).
+## Local server
 
-
-## Publish your application
-Applications are currently stored in `twenty/packages/twenty-apps`.
-
-You can share your application with all Twenty users:
+The scaffolder can start a local Twenty dev server for you (all-in-one Docker image with PostgreSQL, Redis, server, and worker). You can also manage it manually:
 
 ```bash
-# pull the Twenty project
+yarn twenty server start     # Start (pulls image if needed)
+yarn twenty server status    # Check if it's healthy
+yarn twenty server logs      # Stream logs
+yarn twenty server stop      # Stop (data is preserved)
+yarn twenty server reset     # Wipe all data and start fresh
+```
+
+The server is pre-seeded with a workspace and user (`tim@apple.dev` / `tim@apple.dev`).
+
+## Next steps
+
+- Run `yarn twenty help` to see all available commands.
+- Use `yarn twenty remote add <url>` to authenticate with your Twenty workspace via OAuth.
+- Explore the generated project and add your first entity with `yarn twenty add` (logic functions, front components, objects, roles, views, navigation menu items, skills).
+- Use `yarn twenty dev` while you iterate — it watches, builds, and syncs changes to your workspace in real time.
+- `CoreApiClient` is auto-generated by `yarn twenty dev`. `MetadataApiClient` (for workspace configuration and file uploads via `/metadata`) ships pre-built with the SDK. Both are available via `import { CoreApiClient } from 'twenty-client-sdk/core'` and `import { MetadataApiClient } from 'twenty-client-sdk/metadata'`.
+
+## Build and publish your application
+
+Once your app is ready, build and publish it using the CLI:
+
+```bash
+# Build the app (output goes to .twenty/output/)
+yarn twenty build
+
+# Build and create a tarball (.tgz) for distribution
+yarn twenty build --tarball
+
+# Publish to npm (requires npm login)
+yarn twenty publish
+
+# Publish with a dist-tag (e.g. beta, next)
+yarn twenty publish --tag beta
+
+# Deploy directly to a Twenty server (builds, uploads, and installs in one step)
+yarn twenty deploy
+```
+
+### Publish to the Twenty marketplace
+
+You can also contribute your application to the curated marketplace:
+
+```bash
 git clone https://github.com/twentyhq/twenty.git
 cd twenty
-
-# create a new branch
 git checkout -b feature/my-awesome-app
 ```
 
 - Copy your app folder into `twenty/packages/twenty-apps`.
 - Commit your changes and open a pull request on https://github.com/twentyhq/twenty
 
-```bash
-git commit -m "Add new application"
-git push
-```
-
 Our team reviews contributions for quality, security, and reusability before merging.
 
 ## Troubleshooting
-- Auth prompts not appearing: run `yarn twenty auth:login` again and verify the API key permissions.
-- Types not generated: ensure `yarn twenty app:dev` is running — it auto‑generates the typed client.
+
+- Server not starting: check Docker is running (`docker info`), then try `yarn twenty server logs`.
+- Auth not working: make sure you're logged in to Twenty in the browser first, then run `yarn twenty remote add <url>`.
+- Types not generated: ensure `yarn twenty dev` is running — it auto-generates the typed client.
 
 ## Contributing
+
 - See our [GitHub](https://github.com/twentyhq/twenty)
 - Join our [Discord](https://discord.gg/cx5n4Jzs57)

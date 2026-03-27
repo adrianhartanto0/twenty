@@ -23,6 +23,7 @@ export const optimisticallyApplyDeleteActionOnAllFlatEntityMaps = ({
     case 'viewField':
     case 'viewGroup':
     case 'viewFieldGroup':
+    case 'viewSort':
     case 'rowLevelPermissionPredicate':
     case 'rowLevelPermissionPredicateGroup':
     case 'viewFilterGroup':
@@ -39,6 +40,8 @@ export const optimisticallyApplyDeleteActionOnAllFlatEntityMaps = ({
     case 'commandMenuItem':
     case 'frontComponent':
     case 'navigationMenuItem':
+    case 'permissionFlag':
+    case 'objectPermission':
     case 'webhook': {
       const flatEntityToDelete = findFlatEntityByIdInFlatEntityMapsOrThrow<
         MetadataFlatEntity<typeof flatAction.metadataName>

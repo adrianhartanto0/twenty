@@ -29,6 +29,7 @@ import { MessageQueueService } from 'src/engine/core-modules/message-queue/servi
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { UserWorkspaceService } from 'src/engine/core-modules/user-workspace/user-workspace.service';
+import { type AuthContextUser } from 'src/engine/core-modules/auth/types/auth-context.type';
 import { UserEntity } from 'src/engine/core-modules/user/user.entity';
 import { type ActivateWorkspaceInput } from 'src/engine/core-modules/workspace/dtos/activate-workspace-input';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
@@ -56,13 +57,14 @@ import { prefillCompanies } from 'src/engine/workspace-manager/standard-objects-
 import { prefillDashboards } from 'src/engine/workspace-manager/standard-objects-prefill-data/prefill-dashboards';
 import { prefillOpportunities } from 'src/engine/workspace-manager/standard-objects-prefill-data/prefill-opportunities';
 import { prefillPeople } from 'src/engine/workspace-manager/standard-objects-prefill-data/prefill-people';
+import { prefillWorkflowCommandMenuItems } from 'src/engine/workspace-manager/standard-objects-prefill-data/prefill-workflow-command-menu-items';
 import { prefillWorkflows } from 'src/engine/workspace-manager/standard-objects-prefill-data/prefill-workflows';
 import { WorkspaceManagerService } from 'src/engine/workspace-manager/workspace-manager.service';
 import { DEFAULT_FEATURE_FLAGS } from 'src/engine/workspace-manager/workspace-migration/constant/default-feature-flags';
 import { extractVersionMajorMinorPatch } from 'src/utils/version/extract-version-major-minor-patch';
 
 @Injectable()
-// eslint-disable-next-line twenty/inject-workspace-repository
+// oxlint-disable-next-line twenty/inject-workspace-repository
 export class WorkspaceService extends TypeOrmQueryService<WorkspaceEntity> {
   protected readonly logger = new Logger(WorkspaceService.name);
 
@@ -88,8 +90,6 @@ export class WorkspaceService extends TypeOrmQueryService<WorkspaceEntity> {
     fastModel: PermissionFlagType.WORKSPACE,
     smartModel: PermissionFlagType.WORKSPACE,
     aiAdditionalInstructions: PermissionFlagType.WORKSPACE,
-    autoEnableNewAiModels: PermissionFlagType.AI_SETTINGS,
-    disabledAiModelIds: PermissionFlagType.AI_SETTINGS,
     enabledAiModelIds: PermissionFlagType.AI_SETTINGS,
     useRecommendedModels: PermissionFlagType.AI_SETTINGS,
   };
@@ -148,7 +148,10 @@ export class WorkspaceService extends TypeOrmQueryService<WorkspaceEntity> {
       workspaceActivationStatus: workspace.activationStatus,
     });
 
-    if (payload.subdomain && workspace.subdomain !== payload.subdomain) {
+    if (
+      isDefined(payload.subdomain) &&
+      workspace.subdomain !== payload.subdomain
+    ) {
       await this.subdomainManagerService.validateSubdomainOrThrow(
         payload.subdomain,
       );
@@ -227,18 +230,12 @@ export class WorkspaceService extends TypeOrmQueryService<WorkspaceEntity> {
       isDefined(payload.smartModel) || isDefined(payload.fastModel);
     const isChangingAvailability =
       payload.useRecommendedModels !== undefined ||
-      payload.autoEnableNewAiModels !== undefined ||
-      payload.disabledAiModelIds !== undefined ||
       payload.enabledAiModelIds !== undefined;
 
     if (isChangingModels || isChangingAvailability) {
       const effectiveWorkspace = {
         useRecommendedModels:
           payload.useRecommendedModels ?? workspace.useRecommendedModels,
-        autoEnableNewAiModels:
-          payload.autoEnableNewAiModels ?? workspace.autoEnableNewAiModels,
-        disabledAiModelIds:
-          payload.disabledAiModelIds ?? workspace.disabledAiModelIds,
         enabledAiModelIds:
           payload.enabledAiModelIds ?? workspace.enabledAiModelIds,
       };
@@ -256,7 +253,13 @@ export class WorkspaceService extends TypeOrmQueryService<WorkspaceEntity> {
           );
         }
 
-        if (!isModelAllowedByWorkspace(modelId, effectiveWorkspace)) {
+        if (
+          !isModelAllowedByWorkspace(
+            modelId,
+            effectiveWorkspace,
+            this.aiModelRegistryService.getRecommendedModelIds(),
+          )
+        ) {
           throw new WorkspaceException(
             'Selected model is not available in this workspace',
             WorkspaceExceptionCode.ENVIRONMENT_VAR_NOT_ENABLED,
@@ -295,7 +298,7 @@ export class WorkspaceService extends TypeOrmQueryService<WorkspaceEntity> {
   }
 
   async activateWorkspace(
-    user: UserEntity,
+    user: AuthContextUser,
     workspace: WorkspaceEntity,
     data: ActivateWorkspaceInput,
   ) {
@@ -695,6 +698,8 @@ export class WorkspaceService extends TypeOrmQueryService<WorkspaceEntity> {
         flatObjectMetadataMaps,
         flatFieldMetadataMaps,
       );
+
+      await prefillWorkflowCommandMenuItems(queryRunner.manager, workspaceId);
 
       await prefillOpportunities(queryRunner.manager, schemaName);
 

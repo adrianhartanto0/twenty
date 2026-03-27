@@ -15,63 +15,110 @@ description: Создавайте и управляйте настройками
 
 * Определяйте пользовательские объекты и поля в виде кода (управляемая модель данных)
 * Создавайте логические функции с пользовательскими триггерами
-* Определите навыки для ИИ-агентов
+* Определите навыки и агентов для ИИ
 * Развёртывайте одно и то же приложение в нескольких рабочих пространствах
 
 ## Требования
 
 * Node.js 24+ и Yarn 4
-* Рабочее пространство Twenty и ключ API (создайте его на https://app.twenty.com/settings/api-webhooks)
+* Docker (для локального сервера разработки Twenty)
 
 ## Начало работы
 
-Создайте новое приложение с помощью официального генератора, затем выполните аутентификацию и начните разработку:
+Создайте новое приложение с помощью официального генератора каркаса. Он может автоматически запустить локальный экземпляр Twenty:
 
 ```bash filename="Terminal"
-# Создать каркас нового приложения (по умолчанию включает все примеры)
+# Создать каркас нового приложения — CLI предложит запустить локальный сервер Twenty
 npx create-twenty-app@latest my-twenty-app
 cd my-twenty-app
 
 # Запустить режим разработки: автоматически синхронизирует локальные изменения с вашим рабочим пространством
-yarn twenty app:dev
+yarn twenty dev
 ```
 
-Генератор каркаса поддерживает три режима для управления тем, какие примерные файлы включаются:
+### Управление локальным сервером
+
+SDK включает команды для управления локальным сервером разработки Twenty (универсальный образ Docker с PostgreSQL, Redis, сервером и воркером):
 
 ```bash filename="Terminal"
-# По умолчанию (полный набор): все примеры (объект, поле, логическая функция, фронтенд-компонент, представление, пункт меню навигации, навык)
+# Запустить локальный сервер (при необходимости будет загружен образ)
+yarn twenty server start
+
+# Проверить статус сервера
+yarn twenty server status
+
+# Просмотр логов сервера в реальном времени
+yarn twenty server logs
+
+# Остановить сервер
+yarn twenty server stop
+
+# Сбросить все данные и начать с нуля
+yarn twenty server reset
+```
+
+Локальный сервер уже содержит рабочее пространство и пользователя (`tim@apple.dev` / `tim@apple.dev`), так что вы можете сразу начать разработку без какой-либо ручной настройки.
+
+### Аутентификация
+
+Подключите своё приложение к локальному серверу с помощью OAuth:
+
+```bash filename="Terminal"
+# Authenticate via OAuth (opens browser)
+yarn twenty remote add --local
+```
+
+Генератор каркаса поддерживает два режима для управления тем, какие файлы-примеры включаются:
+
+```bash filename="Terminal"
+# По умолчанию (полный набор): все примеры (объект, поле, логическая функция, фронтенд-компонент, представление, пункт меню навигации, навык, агент)
 npx create-twenty-app@latest my-app
 
 # Минимальный: только основные файлы (application-config.ts и default-role.ts)
 npx create-twenty-app@latest my-app --minimal
+```
 
-# Интерактивный: выбрать, какие примеры включить
-npx create-twenty-app@latest my-app --interactive
+### Как использовать локальный экземпляр Twenty
+
+Если у вас уже запущен локальный экземпляр Twenty, вы можете подключиться к нему вместо использования Docker. Укажите порт, который слушает ваш локальный сервер (по умолчанию: `3000`):
+
+```bash filename="Terminal"
+# During scaffolding
+npx create-twenty-app@latest my-app --port 3000
+
+# Or after scaffolding
+yarn twenty remote add --local --port 3000
 ```
 
 Отсюда вы можете:
 
 ```bash filename="Terminal"
-# Add a new entity to your application (guided)
+# Добавить новую сущность в ваше приложение (с мастером)
 yarn twenty entity:add
 
-# Watch your application's function logs
+# Просматривать логи функций вашего приложения
 yarn twenty function:logs
 
-# Execute a function by name
+# Выполнить функцию по имени
 yarn twenty function:execute -n my-function -p '{"name": "test"}'
 
-# Execute the pre-install function
+# Выполнить предустановочную функцию
 yarn twenty function:execute --preInstall
 
-# Execute the post-install function
+# Выполнить послеустановочную функцию
 yarn twenty function:execute --postInstall
 
-# Uninstall the application from the current workspace
-yarn twenty app:uninstall
+# Собрать приложение для распространения
+yarn twenty build
 
-# Display commands' help
-yarn twenty help
+# Опубликовать приложение в npm или на сервер Twenty
+yarn twenty publish
+
+# Удалить приложение из текущего рабочего пространства
+yarn twenty uninstall
+
+# Показать справку по командам
+yarn twenty help},{
 ```
 
 Смотрите также: страницы справки CLI для [create-twenty-app](https://www.npmjs.com/package/create-twenty-app) и [twenty-sdk CLI](https://www.npmjs.com/package/twenty-sdk).
@@ -83,7 +130,7 @@ yarn twenty help
 * Копирует минимальное базовое приложение в `my-twenty-app/`
 * Добавляет локальную зависимость `twenty-sdk` и конфигурацию Yarn 4
 * Создаёт файлы конфигурации и скрипты, подключённые к CLI `twenty`
-* Generates core files (application config, default function role, pre-install and post-install functions) plus example files based on the scaffolding mode
+* Генерирует основные файлы (конфигурацию приложения, роль функций по умолчанию, предустановочную и послеустановочную функции), а также примерные файлы в зависимости от выбранного режима создания каркаса
 
 Сгенерированное с помощью каркаса приложение с режимом по умолчанию `--exhaustive` выглядит так:
 
@@ -96,33 +143,35 @@ my-twenty-app/
   .yarnrc.yml
   .yarn/
     install-state.gz
-  eslint.config.mjs
+  .oxlintrc.json
   tsconfig.json
   README.md
-  public/                           # Public assets folder (images, fonts, etc.)
+  public/                           # Папка публичных ресурсов (изображения, шрифты и т. д.)
   src/
-  ├── application-config.ts           # Required - main application configuration
+  ├── application-config.ts           # Обязательный — основная конфигурация приложения
   ├── roles/
-  │   └── default-role.ts               # Default role for logic functions
+  │   └── default-role.ts               # Роль по умолчанию для логических функций
   ├── objects/
-  │   └── example-object.ts             # Example custom object definition
+  │   └── example-object.ts             # Пример определения пользовательского объекта
   ├── fields/
-  │   └── example-field.ts              # Example standalone field definition
+  │   └── example-field.ts              # Пример определения отдельного поля
   ├── logic-functions/
-  │   ├── hello-world.ts                # Example logic function
-  │   ├── pre-install.ts                # Pre-install logic function
-  │   └── post-install.ts               # Post-install logic function
+  │   ├── hello-world.ts                # Пример логической функции
+  │   ├── pre-install.ts                # Предустановочная логическая функция
+  │   └── post-install.ts               # Послеустановочная логическая функция
   ├── front-components/
-  │   └── hello-world.tsx               # Example front component
+  │   └── hello-world.tsx               # Пример фронтенд-компонента
   ├── views/
-  │   └── example-view.ts                # Example saved view definition
+  │   └── example-view.ts                # Пример определения сохранённого представления
   ├── navigation-menu-items/
-  │   └── example-navigation-menu-item.ts # Example sidebar navigation link
-  └── skills/
-      └── example-skill.ts                # Example AI agent skill definition
+  │   └── example-navigation-menu-item.ts # Пример ссылки боковой панели навигации
+  ├── skills/
+  │   └── example-skill.ts                # Пример определения навыка агента ИИ
+  └── agents/
+      └── example-agent.ts                # Пример определения агента ИИ
 ```
 
-With `--minimal`, only the core files are created (`application-config.ts`, `roles/default-role.ts`, `logic-functions/pre-install.ts`, and `logic-functions/post-install.ts`). С `--interactive` вы выбираете, какие примерные файлы включить.
+С `--minimal` создаются только основные файлы (`application-config.ts`, `roles/default-role.ts`, `logic-functions/pre-install.ts` и `logic-functions/post-install.ts`).
 
 В общих чертах:
 
@@ -130,7 +179,7 @@ With `--minimal`, only the core files are created (`application-config.ts`, `rol
 * **.gitignore**: Игнорирует распространённые артефакты, такие как `node_modules`, `.yarn`, `generated/` (типизированный клиент), `dist/`, `build/`, каталоги coverage, файлы журналов и файлы `.env*`.
 * **yarn.lock**, **.yarnrc.yml**, **.yarn/**: Фиксируют и настраивают используемый в проекте инструментарий Yarn 4.
 * **.nvmrc**: Фиксирует версию Node.js, ожидаемую проектом.
-* **eslint.config.mjs** и **tsconfig.json**: Обеспечивают линтинг и конфигурацию TypeScript для исходников вашего приложения на TypeScript.
+* **.oxlintrc.json** and **tsconfig.json**: Provide linting and TypeScript configuration for your app's TypeScript sources.
 * **README.md**: Короткий README в корне приложения с базовыми инструкциями.
 * **public/**: Папка для хранения общедоступных ресурсов (изображений, шрифтов, статических файлов), которые будут отдаваться вашим приложением. Файлы, размещённые здесь, загружаются во время синхронизации и доступны во время выполнения.
 * **src/**: Основное место, где вы определяете приложение как код
@@ -139,18 +188,19 @@ With `--minimal`, only the core files are created (`application-config.ts`, `rol
 
 SDK обнаруживает сущности, разбирая ваши файлы TypeScript в поисках вызовов **`export default define<Entity>({...})`**. Для каждого типа сущности существует соответствующая вспомогательная функция, экспортируемая из `twenty-sdk`:
 
-| Вспомогательная функция            | Тип сущности                                          |
-| ---------------------------------- | ----------------------------------------------------- |
-| `defineObject()`                   | Определения пользовательских объектов                 |
-| `defineLogicFunction()`            | Определения логических функций                        |
-| `definePreInstallLogicFunction()`  | Pre-install logic function (runs before installation) |
-| `definePostInstallLogicFunction()` | Post-install logic function (runs after installation) |
-| `defineFrontComponent()`           | Определения компонентов фронтенда                     |
-| `defineRole()`                     | Определения ролей                                     |
-| `defineField()`                    | Расширения полей для существующих объектов            |
-| `defineView()`                     | Определения сохранённых представлений                 |
-| `defineNavigationMenuItem()`       | Определения пунктов меню навигации                    |
-| `defineSkill()`                    | Определения навыков агента ИИ                         |
+| Вспомогательная функция            | Тип сущности                                                       |
+| ---------------------------------- | ------------------------------------------------------------------ |
+| `defineObject()`                   | Определения пользовательских объектов                              |
+| `defineLogicFunction()`            | Определения логических функций                                     |
+| `definePreInstallLogicFunction()`  | Предустановочная логическая функция (запускается до установки)     |
+| `definePostInstallLogicFunction()` | Послеустановочная логическая функция (запускается после установки) |
+| `defineFrontComponent()`           | Определения компонентов фронтенда                                  |
+| `defineRole()`                     | Определения ролей                                                  |
+| `defineField()`                    | Расширения полей для существующих объектов                         |
+| `defineView()`                     | Определения сохранённых представлений                              |
+| `defineNavigationMenuItem()`       | Определения пунктов меню навигации                                 |
+| `defineSkill()`                    | Определения навыков агента ИИ                                      |
+| `defineAgent()`                    | Определения агентов ИИ                                             |
 
 <Note>
 **Имена файлов заданы гибко.** Обнаружение сущностей основано на AST — SDK сканирует ваши исходные файлы в поисках шаблона `export default define<Entity>({...})`. Вы можете организовывать файлы и папки как угодно. Группировка по типу сущности (например, `logic-functions/`, `roles/`) — это лишь соглашение для организации кода, а не требование.
@@ -171,7 +221,7 @@ export default defineObject({
 
 Позднее команды добавят больше файлов и папок:
 
-* `yarn twenty app:dev` автоматически сгенерирует два типизированных клиента API в `node_modules/twenty-sdk/generated`: `CoreApiClient` (для данных рабочего пространства через `/graphql`) и `MetadataApiClient` (для конфигурации рабочего пространства и загрузки файлов через `/metadata`).
+* `yarn twenty dev` автоматически сгенерирует два типизированных клиента API в `node_modules/twenty-sdk/clients`: `CoreApiClient` (для данных рабочего пространства через `/graphql`) и `MetadataApiClient` (для конфигурации рабочего пространства и загрузки файлов через `/metadata`).
 * `yarn twenty entity:add` добавит файлы определений сущностей в `src/` для ваших пользовательских объектов, функций, фронтенд-компонентов, ролей, навыков и многого другого.
 
 ## Аутентификация
@@ -215,19 +265,20 @@ yarn twenty auth:status
 
 SDK предоставляет вспомогательные функции для определения сущностей вашего приложения. Как описано в [Обнаружение сущностей](#entity-detection), вы должны использовать `export default define<Entity>({...})`, чтобы ваши сущности были обнаружены:
 
-| Функция                            | Назначение                                                             |
-| ---------------------------------- | ---------------------------------------------------------------------- |
-| `defineApplication()`              | Настройка метаданных приложения (обязательно, по одному на приложение) |
-| `defineObject()`                   | Определяет пользовательские объекты с полями                           |
-| `defineLogicFunction()`            | Определение логических функций с обработчиками                         |
-| `definePreInstallLogicFunction()`  | Define a pre-install logic function (one per app)                      |
-| `definePostInstallLogicFunction()` | Define a post-install logic function (one per app)                     |
-| `defineFrontComponent()`           | Определение фронт-компонентов для настраиваемого интерфейса            |
-| `defineRole()`                     | Настраивает права роли и доступ к объектам                             |
-| `defineField()`                    | Расширение существующих объектов дополнительными полями                |
-| `defineView()`                     | Определяйте сохранённые представления для объектов                     |
-| `defineNavigationMenuItem()`       | Определяйте ссылки боковой панели навигации                            |
-| `defineSkill()`                    | Определение навыков агента ИИ                                          |
+| Функция                            | Назначение                                                               |
+| ---------------------------------- | ------------------------------------------------------------------------ |
+| `defineApplication()`              | Настройка метаданных приложения (обязательно, по одному на приложение)   |
+| `defineObject()`                   | Определяет пользовательские объекты с полями                             |
+| `defineLogicFunction()`            | Определение логических функций с обработчиками                           |
+| `definePreInstallLogicFunction()`  | Определяет предустановочную логическую функцию (по одной на приложение)  |
+| `definePostInstallLogicFunction()` | Определяет послеустановочную логическую функцию (по одной на приложение) |
+| `defineFrontComponent()`           | Определение фронт-компонентов для настраиваемого интерфейса              |
+| `defineRole()`                     | Настраивает права роли и доступ к объектам                               |
+| `defineField()`                    | Расширение существующих объектов дополнительными полями                  |
+| `defineView()`                     | Определяйте сохранённые представления для объектов                       |
+| `defineNavigationMenuItem()`       | Определяйте ссылки боковой панели навигации                              |
+| `defineSkill()`                    | Определение навыков агента ИИ                                            |
+| `defineAgent()`                    | Определяйте ИИ-агентов с системными промптами                            |
 
 Эти функции проверяют вашу конфигурацию на этапе сборки и обеспечивают автодополнение в IDE и безопасность типов.
 
@@ -320,6 +371,72 @@ export default defineObject({
 но это не рекомендуется.
 </Note>
 
+### Определение полей для существующих объектов
+
+Используйте `defineField()` для добавления настраиваемых полей к существующим объектам — как стандартным объектам (например, `company`, `person`, `opportunity`), так и пользовательским объектам, определённым другими приложениями. Каждое поле находится в собственном файле и ссылается на целевой объект по его `universalIdentifier`.
+
+Чтобы ссылаться на стандартные объекты, импортируйте `STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS` из `twenty-sdk`. Эта константа предоставляет стабильные идентификаторы для всех встроенных объектов и их полей:
+
+```typescript
+// src/fields/apollo-total-funding.field.ts
+import {
+  defineField,
+  FieldType,
+  STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS,
+} from 'twenty-sdk';
+
+export default defineField({
+  universalIdentifier: 'c90ae72d-4ddf-4f22-882f-eef98c91e40e',
+  objectUniversalIdentifier:
+    STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.company.universalIdentifier,
+  type: FieldType.CURRENCY,
+  name: 'apolloTotalFunding',
+  label: 'Total Funding',
+  description: 'Total funding raised by the company',
+  icon: 'IconCash',
+});
+```
+
+Основные моменты:
+
+* `objectUniversalIdentifier` сообщает Twenty, к какому объекту прикрепить поле. Используйте `STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.<objectName>.universalIdentifier` для стандартных объектов.
+* Каждому полю требуется собственный стабильный `universalIdentifier`, а также `name`, `type`, `label` и целевой `objectUniversalIdentifier`.
+* Вы можете сгенерировать новые поля с помощью `yarn twenty entity:add`, выбрав опцию поля.
+* Для удобства `STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS` также экспортируется как `STANDARD_OBJECT` — обе ссылки указывают на одну и ту же константу.
+
+Доступные стандартные объекты включают: `attachment`, `blocklist`, `calendarChannel`, `calendarEvent`, `calendarEventParticipant`, `company`, `connectedAccount`, `dashboard`, `favorite`, `favoriteFolder`, `message`, `messageChannel`, `messageParticipant`, `messageThread`, `note`, `noteTarget`, `opportunity`, `person`, `task`, `taskTarget`, `timelineActivity`, `workflow`, `workflowAutomatedTrigger`, `workflowRun`, `workflowVersion` и `workspaceMember`.
+
+Каждый стандартный объект также предоставляет идентификаторы своих полей. Например, чтобы сослаться на конкретное поле стандартного объекта в разрешениях роли:
+
+```typescript
+STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.company.fields.name.universalIdentifier
+```
+
+#### Поля связей в существующих объектах
+
+Вы также можете определить поля связей, которые связывают существующие объекты с вашими пользовательскими объектами:
+
+```typescript
+// src/fields/people-on-call-recording.field.ts
+import { defineField, FieldType, RelationType, STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS } from 'twenty-sdk';
+import { CALL_RECORDING_OBJECT_UNIVERSAL_IDENTIFIER } from 'src/objects/call-recording';
+import { CALL_RECORDING_ON_PERSON_ID } from 'src/fields/call-recording-on-person.field';
+
+export default defineField({
+  universalIdentifier: '4a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d',
+  objectUniversalIdentifier:
+    CALL_RECORDING_OBJECT_UNIVERSAL_IDENTIFIER,
+  type: FieldType.RELATION,
+  name: 'person',
+  label: 'Person',
+  relationTargetObjectMetadataUniversalIdentifier:
+    STANDARD_OBJECT_UNIVERSAL_IDENTIFIERS.person.universalIdentifier,
+  relationTargetFieldMetadataUniversalIdentifier:
+    CALL_RECORDING_ON_PERSON_ID,
+  relationType: RelationType.MANY_TO_ONE,
+});
+```
+
 ### Конфигурация приложения (application-config.ts)
 
 У каждого приложения есть единственный файл `application-config.ts`, который описывает:
@@ -327,7 +444,7 @@ export default defineObject({
 * **Что это за приложение**: идентификаторы, отображаемое имя и описание.
 * **Как запускаются его функции**: какую роль они используют для прав доступа.
 * **(Необязательно) переменные**: пары ключ-значение, предоставляемые вашим функциям как переменные окружения.
-* **(Optional) pre-install function**: a logic function that runs before the app is installed.
+* **(Необязательно) предустановочная функция**: логическая функция, которая запускается до установки приложения.
 * **(Необязательно) послеустановочная функция**: функция логики, которая запускается после установки приложения.
 
 Используйте `defineApplication()` для определения конфигурации вашего приложения:
@@ -359,7 +476,7 @@ export default defineApplication({
 * `universalIdentifier` — это детерминированные идентификаторы, которыми вы управляете; сгенерируйте их один раз и сохраняйте стабильными между синхронизациями.
 * `applicationVariables` становятся переменными окружения для ваших функций (например, `DEFAULT_RECIPIENT_NAME` доступна как `process.env.DEFAULT_RECIPIENT_NAME`).
 * `defaultRoleUniversalIdentifier` должен соответствовать файлу роли (см. ниже).
-* Pre-install and post-install functions are automatically detected during the manifest build. See [Pre-install functions](#pre-install-functions) and [Post-install functions](#post-install-functions).
+* Предустановочные и послеустановочные функции автоматически обнаруживаются во время сборки манифеста. См. [Предустановочные функции](#pre-install-functions) и [Послеустановочные функции](#post-install-functions).
 
 #### Роли и разрешения
 
@@ -433,7 +550,7 @@ export default defineRole({
 // src/app/createPostCard.logic-function.ts
 import { defineLogicFunction } from 'twenty-sdk';
 import type { DatabaseEventPayload, ObjectRecordCreateEvent, CronPayload, RoutePayload } from 'twenty-sdk';
-import { CoreApiClient, type Person } from 'twenty-sdk/generated';
+import { CoreApiClient, type Person } from 'twenty-client-sdk/core';
 
 const handler = async (params: RoutePayload) => {
   const client = new CoreApiClient();
@@ -479,7 +596,7 @@ export default defineLogicFunction({
     //   updatedFields: ['name'],
     // },
   ],
-});
+});},{
 ```
 
 Распространённые типы триггеров:
@@ -498,11 +615,11 @@ export default defineLogicFunction({
 * Массив `triggers` необязателен. Функции без триггеров можно использовать как вспомогательные, вызываемые другими функциями.
 * Вы можете сочетать несколько типов триггеров в одной функции.
 
-### Pre-install functions
+### Предустановочные функции
 
-A pre-install function is a logic function that runs automatically before your app is installed on a workspace. This is useful for validation tasks, prerequisite checks, or preparing workspace state before the main installation proceeds.
+Предустановочная функция — это логическая функция, которая автоматически выполняется до установки вашего приложения в рабочем пространстве. Это полезно для задач валидации, проверки предварительных условий или подготовки состояния рабочего пространства перед основной установкой.
 
-When you scaffold a new app with `create-twenty-app`, a pre-install function is generated for you at `src/logic-functions/pre-install.ts`:
+Когда вы создаёте каркас нового приложения с помощью `create-twenty-app`, для вас генерируется предустановочная функция по пути `src/logic-functions/pre-install.ts`:
 
 ```typescript
 // src/logic-functions/pre-install.ts
@@ -521,7 +638,7 @@ export default definePreInstallLogicFunction({
 });
 ```
 
-You can also manually execute the pre-install function at any time using the CLI:
+Вы также можете вручную выполнить предустановочную функцию в любое время с помощью CLI:
 
 ```bash filename="Terminal"
 yarn twenty function:execute --preInstall
@@ -529,12 +646,12 @@ yarn twenty function:execute --preInstall
 
 Основные моменты:
 
-* Pre-install functions use `definePreInstallLogicFunction()` — a specialized variant that omits trigger settings (`cronTriggerSettings`, `databaseEventTriggerSettings`, `httpRouteTriggerSettings`, `isTool`).
-* The handler receives an `InstallLogicFunctionPayload` with `{ previousVersion: string }` — the version of the app that was previously installed (or an empty string for fresh installs).
-* Only one pre-install function is allowed per application. The manifest build will error if more than one is detected.
-* The function's `universalIdentifier` is automatically set as `preInstallLogicFunctionUniversalIdentifier` on the application manifest during the build — you do not need to reference it in `defineApplication()`.
-* The default timeout is set to 300 seconds (5 minutes) to allow for longer preparation tasks.
-* Pre-install functions do not need triggers — they are invoked by the platform before installation or manually via `function:execute --preInstall`.
+* Предустановочные функции используют `definePreInstallLogicFunction()` — специализированный вариант, который опускает настройки триггеров (`cronTriggerSettings`, `databaseEventTriggerSettings`, `httpRouteTriggerSettings`, `isTool`).
+* Обработчик получает `InstallLogicFunctionPayload` с `{ previousVersion: string }` — версией приложения, которая была установлена ранее (или пустой строкой для новых установок).
+* Для каждого приложения допускается только одна предустановочная функция. Сборка манифеста завершится ошибкой, если будет обнаружено более одной такой функции.
+* Параметр `universalIdentifier` функции автоматически устанавливается как `preInstallLogicFunctionUniversalIdentifier` в манифесте приложения во время сборки — вам не нужно ссылаться на него в `defineApplication()`.
+* Тайм-аут по умолчанию установлен на 300 секунд (5 минут), чтобы обеспечить выполнение более длительных задач подготовки.
+* Предустановочным функциям не нужны триггеры — платформа вызывает их перед установкой или вручную через `function:execute --preInstall`.
 
 ### Послеустановочные функции
 
@@ -567,10 +684,10 @@ yarn twenty function:execute --postInstall
 
 Основные моменты:
 
-* Post-install functions use `definePostInstallLogicFunction()` — a specialized variant that omits trigger settings (`cronTriggerSettings`, `databaseEventTriggerSettings`, `httpRouteTriggerSettings`, `isTool`).
-* The handler receives an `InstallLogicFunctionPayload` with `{ previousVersion: string }` — the version of the app that was previously installed (or an empty string for fresh installs).
-* Only one post-install function is allowed per application. The manifest build will error if more than one is detected.
-* The function's `universalIdentifier` is automatically set as `postInstallLogicFunctionUniversalIdentifier` on the application manifest during the build — you do not need to reference it in `defineApplication()`.
+* Послеустановочные функции используют `definePostInstallLogicFunction()` — специализированный вариант, который опускает настройки триггеров (`cronTriggerSettings`, `databaseEventTriggerSettings`, `httpRouteTriggerSettings`, `isTool`).
+* Обработчик получает `InstallLogicFunctionPayload` с `{ previousVersion: string }` — версией приложения, которая была установлена ранее (или пустой строкой для новых установок).
+* Для каждого приложения допускается только одна послеустановочная функция. Сборка манифеста завершится ошибкой, если будет обнаружено более одной такой функции.
+* Параметр `universalIdentifier` функции автоматически устанавливается как `postInstallLogicFunctionUniversalIdentifier` в манифесте приложения во время сборки — вам не нужно ссылаться на него в `defineApplication()`.
 * Тайм-аут по умолчанию установлен на 300 секунд (5 минут), чтобы позволить выполнять более длительные задачи настройки, такие как инициализация данных.
 * Постустановочным функциям не нужны триггеры — платформа вызывает их во время установки или вручную через `function:execute --postInstall`.
 
@@ -678,7 +795,7 @@ const handler = async (event: RoutePayload) => {
 ```typescript
 // src/logic-functions/enrich-company.logic-function.ts
 import { defineLogicFunction } from 'twenty-sdk';
-import { CoreApiClient } from 'twenty-sdk/generated';
+import { CoreApiClient } from 'twenty-client-sdk/core';
 
 const handler = async (params: { companyName: string; domain?: string }) => {
   const client = new CoreApiClient();
@@ -719,7 +836,7 @@ export default defineLogicFunction({
     },
     required: ['companyName'],
   },
-});},{
+});
 ```
 
 Основные моменты:
@@ -763,12 +880,261 @@ export default defineFrontComponent({
 
 * Фронт-компоненты — это компоненты React, которые рендерятся в изолированных контекстах внутри Twenty.
 * Поле `component` ссылается на ваш компонент React.
-* Компоненты автоматически собираются и синхронизируются во время `yarn twenty app:dev`.
+* Компоненты автоматически собираются и синхронизируются во время `yarn twenty dev`.
 
 Вы можете создать новые фронт-компоненты двумя способами:
 
 * **Сгенерировано**: Запустите `yarn twenty entity:add` и выберите опцию добавления нового фронтенд-компонента.
 * **Вручную**: Создайте новый файл `.tsx` и используйте `defineFrontComponent()`, следуя тому же шаблону.
+
+#### Где можно использовать фронт-компоненты
+
+Фронт-компоненты могут отображаться в двух местах внутри Twenty:
+
+* **Боковая панель** — фронт-компоненты с интерфейсом открываются в правой боковой панели. Это поведение по умолчанию, когда фронт-компонент запускается из меню команд.
+* **Виджеты (дашборды и страницы записей)** — фронт-компоненты можно встраивать как виджеты в макеты страниц. При настройке дашборда или макета страницы записи пользователи могут добавить виджет фронт-компонента.
+
+#### Headless и non-headless
+
+Фронт-компоненты поддерживают два режима отображения, управляемых опцией `isHeadless`:
+
+**Non-headless (по умолчанию)** — компонент отображает видимый интерфейс. При запуске из меню команд он открывается в боковой панели. Это поведение по умолчанию, когда `isHeadless` имеет значение `false` или опущен.
+
+**Headless** — компонент монтируется невидимо в фоновом режиме. Он не открывает боковую панель. Компоненты headless предназначены для действий, которые выполняют логику и затем размонтируются — например, запуск асинхронной задачи, переход на страницу или показ модального окна подтверждения. Они естественно сочетаются с компонентами SDK Command, описанными ниже.
+
+```typescript
+export default defineFrontComponent({
+  universalIdentifier: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  name: 'my-action',
+  description: 'Runs an action without opening the side panel',
+  component: MyAction,
+  isHeadless: true,
+  command: {
+    universalIdentifier: 'b2c3d4e5-f6a7-8901-bcde-f12345678901',
+    label: 'Run my action',
+  },
+});
+```
+
+#### Добавление элементов меню команд
+
+Чтобы фронт-компонент отображался как элемент в меню команд Twenty, добавьте свойство `command` в `defineFrontComponent()`. Когда пользователи открывают меню команд (Cmd+K / Ctrl+K), элемент появляется и при клике запускает фронт-компонент.
+
+Объект `command` принимает следующие поля:
+
+| Поле                                    | Тип                                              | Описание                                                                                      |
+| --------------------------------------- | ------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| `universalIdentifier`                   | `string` (обязательно)                           | Уникальный ID для элемента меню команд                                                        |
+| `метка`                                 | `string` (обязательно)                           | Отображаемая метка в меню команд                                                              |
+| `иконка`                                | `string` (необязательно)                         | Имя иконки (например, `'IconSparkles'`)                                                       |
+| `isPinned`                              | `boolean` (необязательно)                        | Закреплена ли команда в верхней части меню                                                    |
+| `availabilityType`                      | `'GLOBAL' \| 'RECORD_SELECTION'` (необязательно) | `GLOBAL` показывает команду везде; `RECORD_SELECTION` показывает её только в контексте записи |
+| `availabilityObjectUniversalIdentifier` | `string` (необязательно)                         | Ограничивает команду конкретным типом объекта (например, Person)                              |
+
+Вот пример из приложения записи звонков, которое добавляет команду, ограниченную записями Person:
+
+```typescript
+import { defineFrontComponent } from 'twenty-sdk';
+
+export default defineFrontComponent({
+  universalIdentifier: 'c3d4e5f6-a7b8-9012-cdef-123456789012',
+  name: 'Summarize Person Call Recordings',
+  description: 'Generates a summary of call recordings for a person',
+  component: SummarizePersonRecordings,
+  command: {
+    universalIdentifier: 'd4e5f6a7-b8c9-0123-defa-234567890123',
+    label: 'Summarize call recordings',
+    icon: 'IconSparkles',
+    isPinned: false,
+    availabilityType: 'RECORD_SELECTION',
+    availabilityObjectUniversalIdentifier:
+      '20202020-e674-48e5-a542-72570eee7213',
+  },
+});
+```
+
+Когда команда синхронизируется, она появляется в меню команд. Если фронт-компонент с интерфейсом, открывается боковая панель с отображаемым внутри компонентом. Если он headless, компонент монтируется в фоновом режиме и выполняет свою логику.
+
+#### Компоненты SDK Command
+
+Пакет `twenty-sdk` предоставляет четыре вспомогательных компонента Command, предназначенных для headless фронт-компонентов. Каждый компонент выполняет действие при монтировании, обрабатывает ошибки, показывая уведомление snackbar, и автоматически размонтирует фронт-компонент по завершении.
+
+Импортируйте их из `twenty-sdk/command`:
+
+* **`Command`** — запускает асинхронный колбэк через проп `execute`.
+* **`CommandLink`** — переходит по пути внутри приложения. Пропы: `to`, `params`, `queryParams`, `options`.
+* **`CommandModal`** — открывает модальное окно подтверждения. Если пользователь подтвердит, выполняет колбэк `execute`. Пропы: `title`, `subtitle`, `execute`, `confirmButtonText`, `confirmButtonAccent`.
+* **`CommandOpenSidePanelPage`** — открывает конкретную страницу боковой панели. Пропы: `page`, `pageTitle`, `pageIcon`.
+
+Полный пример headless фронт-компонента, использующего `Command` для запуска действия из меню команд:
+
+```typescript
+// src/front-components/run-action.tsx
+import { defineFrontComponent } from 'twenty-sdk';
+import { Command } from 'twenty-sdk/command';
+import { CoreApiClient } from 'twenty-sdk/clients';
+
+const RunAction = () => {
+  const execute = async () => {
+    const client = new CoreApiClient();
+
+    await client.mutation({
+      createTask: {
+        __args: { data: { title: 'Created by my app' } },
+        id: true,
+      },
+    });
+  };
+
+  return <Command execute={execute} />;
+};
+
+export default defineFrontComponent({
+  universalIdentifier: 'e5f6a7b8-c9d0-1234-efab-345678901234',
+  name: 'run-action',
+  description: 'Creates a task from the command menu',
+  component: RunAction,
+  isHeadless: true,
+  command: {
+    universalIdentifier: 'f6a7b8c9-d0e1-2345-fabc-456789012345',
+    label: 'Run my action',
+    icon: 'IconPlayerPlay',
+  },
+});
+```
+
+А также пример с использованием `CommandModal` для запроса подтверждения перед выполнением:
+
+```typescript
+// src/front-components/delete-draft.tsx
+import { defineFrontComponent } from 'twenty-sdk';
+import { CommandModal } from 'twenty-sdk/command';
+
+const DeleteDraft = () => {
+  const execute = async () => {
+    // perform the deletion
+  };
+
+  return (
+    <CommandModal
+      title="Delete draft?"
+      subtitle="This action cannot be undone."
+      execute={execute}
+      confirmButtonText="Delete"
+      confirmButtonAccent="danger"
+    />
+  );
+};
+
+export default defineFrontComponent({
+  universalIdentifier: 'a7b8c9d0-e1f2-3456-abcd-567890123456',
+  name: 'delete-draft',
+  description: 'Deletes a draft with confirmation',
+  component: DeleteDraft,
+  isHeadless: true,
+  command: {
+    universalIdentifier: 'b8c9d0e1-f2a3-4567-bcde-678901234567',
+    label: 'Delete draft',
+    icon: 'IconTrash',
+  },
+});
+```
+
+#### Контекст выполнения
+
+Каждый фронт-компонент получает контекст выполнения, который предоставляет информацию о том, где и как он запущен. Получайте значения контекста с помощью хуков из `twenty-sdk`:
+
+| Хук                     | Тип возвращаемого значения | Описание                                                                                                                                                                              |
+| ----------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useFrontComponentId()` | `строка`                   | Уникальный ID текущего экземпляра фронт-компонента                                                                                                                                    |
+| `useRecordId()`         | `string \| null`           | ID текущей записи, когда компонент запускается в контексте записи (например, виджет на странице записи или команда с областью действия записи). В противном случае возвращает `null`. |
+| `useUserId()`           | `string \| null`           | ID текущего пользователя                                                                                                                                                              |
+
+```typescript
+import { useRecordId, useUserId } from 'twenty-sdk';
+
+const MyWidget = () => {
+  const recordId = useRecordId();
+  const userId = useUserId();
+
+  return (
+    <div>
+      <p>Record: {recordId ?? 'none'}</p>
+      <p>User: {userId ?? 'anonymous'}</p>
+    </div>
+  );
+};
+```
+
+Контекст реактивный: если окружающая запись изменяется, хуки автоматически возвращают обновлённые значения.
+
+#### Функции API хоста
+
+Фронт-компоненты выполняются в изолированной песочнице, но могут взаимодействовать с интерфейсом Twenty через набор функций, предоставляемых хостом. Импортируйте их напрямую из `twenty-sdk`:
+
+```typescript
+import {
+  navigate,
+  closeSidePanel,
+  enqueueSnackbar,
+  unmountFrontComponent,
+  openSidePanelPage,
+  openCommandConfirmationModal,
+} from 'twenty-sdk';
+```
+
+| Функция                        | Сигнатура                                                | Описание                                                                                                                                                                              |
+| ------------------------------ | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `навигация`                    | `(to, params?, queryParams?, options?) => Promise<void>` | Переход по типизированному пути приложения внутри Twenty                                                                                                                              |
+| `closeSidePanel`               | `() => Promise<void>`                                    | Закрыть боковую панель                                                                                                                                                                |
+| `enqueueSnackbar`              | `(params) => Promise<void>`                              | Показать уведомление snackbar. Параметры: `message`, `variant` (`'error'`, `'success'`, `'info'`, `'warning'`), необязательно `duration`, `detailedMessage`, `dedupeKey`              |
+| `unmountFrontComponent`        | `() => Promise<void>`                                    | Размонтировать текущий фронт-компонент (используется headless-компонентами для очистки после выполнения)                                                                              |
+| `openSidePanelPage`            | `(params) => Promise<void>`                              | Открыть страницу в боковой панели. Параметры: `page`, `pageTitle`, `pageIcon`, `shouldResetSearchState`                                                                               |
+| `openCommandConfirmationModal` | `(params) => Promise<'confirm' \| 'cancel'>`             | Показать модальное окно подтверждения и дождаться ответа пользователя. Параметры: `title`, `subtitle`, `confirmButtonText`, `confirmButtonAccent` (`'default'`, `'blue'`, `'danger'`) |
+
+Пример, который использует API хоста для показа snackbar и закрытия боковой панели после завершения действия:
+
+```typescript
+import { defineFrontComponent, useRecordId } from 'twenty-sdk';
+import { enqueueSnackbar, closeSidePanel } from 'twenty-sdk';
+import { CoreApiClient } from 'twenty-sdk/clients';
+
+const ArchiveRecord = () => {
+  const recordId = useRecordId();
+
+  const handleArchive = async () => {
+    const client = new CoreApiClient();
+
+    await client.mutation({
+      updateTask: {
+        __args: { id: recordId, data: { status: 'ARCHIVED' } },
+        id: true,
+      },
+    });
+
+    await enqueueSnackbar({
+      message: 'Record archived',
+      variant: 'success',
+    });
+
+    await closeSidePanel();
+  };
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <p>Archive this record?</p>
+      <button onClick={handleArchive}>Archive</button>
+    </div>
+  );
+};
+
+export default defineFrontComponent({
+  universalIdentifier: 'c9d0e1f2-a3b4-5678-cdef-789012345678',
+  name: 'archive-record',
+  description: 'Archives the current record',
+  component: ArchiveRecord,
+});
+```
 
 ### Навыки
 
@@ -805,15 +1171,51 @@ export default defineSkill({
 * **Сгенерировано**: Запустите `yarn twenty entity:add` и выберите опцию добавления нового навыка.
 * **Вручную**: Создайте новый файл и используйте `defineSkill()`, следуя тому же шаблону.
 
+### Агенты
+
+Agents позволяют определять ИИ-агентов с системными промптами, которые могут работать в вашем рабочем пространстве. Используйте `defineAgent()` для определения агентов со встроенной валидацией:
+
+```typescript
+// src/agents/example-agent.ts
+import { defineAgent } from 'twenty-sdk';
+
+export default defineAgent({
+  universalIdentifier: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+  name: 'sales-assistant',
+  label: 'Sales Assistant',
+  description: 'An AI agent that helps with sales tasks',
+  icon: 'IconRobot',
+  prompt: `You are a sales assistant. Help users with:
+1. Researching prospects and companies
+2. Drafting personalized outreach messages
+3. Tracking follow-ups and next steps
+4. Analyzing deal pipeline and suggesting actions`,
+});
+```
+
+Основные моменты:
+
+* `name` — уникальная строка-идентификатор агента (рекомендуется kebab-case).
+* `label` — читаемое человеком отображаемое имя, показываемое в UI.
+* `prompt` содержит системный промпт — это текст инструкции, который определяет поведение агента.
+* `icon` (необязательно) задаёт значок, отображаемый в UI.
+* `description` (необязательно) предоставляет дополнительный контекст о назначении агента.
+
+Вы можете создать новых агентов двумя способами:
+
+* **Сгенерировано**: Запустите `yarn twenty entity:add` и выберите опцию добавления нового агента.
+* **Вручную**: Создайте новый файл и используйте `defineAgent()`, следуя тому же шаблону.
+
 ### Сгенерированные типизированные клиенты
 
-Два типизированных клиента автоматически генерируются с помощью `yarn twenty app:dev` и сохраняются в `node_modules/twenty-sdk/generated` на основе схемы вашего рабочего пространства:
+Два типизированных клиента автоматически генерируются с помощью `yarn twenty dev` и сохраняются в `node_modules/twenty-sdk/clients` на основе схемы вашего рабочего пространства:
 
 * **`CoreApiClient`** — выполняет запросы к конечной точке `/graphql` для получения данных рабочего пространства
 * **`MetadataApiClient`** — выполняет запросы к эндпоинту `/metadata` для получения конфигурации рабочего пространства и загрузки файлов.
 
 ```typescript
-import { CoreApiClient, MetadataApiClient } from 'twenty-sdk/generated';
+import { CoreApiClient } from 'twenty-client-sdk/core';
+import { MetadataApiClient } from 'twenty-client-sdk/metadata';
 
 const client = new CoreApiClient();
 const { me } = await client.query({ me: { id: true, displayName: true } });
@@ -822,7 +1224,7 @@ const metadataClient = new MetadataApiClient();
 const { currentWorkspace } = await metadataClient.query({ currentWorkspace: { id: true } });
 ```
 
-Оба клиента автоматически перегенерируются с помощью `yarn twenty app:dev` при изменении ваших объектов или полей.
+`CoreApiClient` автоматически перегенерируется с помощью `yarn twenty dev` при изменении ваших объектов или полей. `MetadataApiClient` поставляется готовым в составе SDK.
 
 #### Учётные данные времени выполнения в логических функциях
 
@@ -839,10 +1241,10 @@ const { currentWorkspace } = await metadataClient.query({ currentWorkspace: { id
 
 #### Загрузка файлов
 
-Сгенерированный `MetadataApiClient` включает метод `uploadFile` для прикрепления файлов к полям типа «файл» в объектах вашего рабочего пространства. Поскольку стандартные клиенты GraphQL изначально не поддерживают многочастовую загрузку файлов, клиент предоставляет специальный метод, который под капотом реализует [спецификацию многочастных запросов GraphQL](https://github.com/jaydenseric/graphql-multipart-request-spec).
+`MetadataApiClient` включает метод `uploadFile` для прикрепления файлов к полям типа «файл» в объектах вашего рабочего пространства. Поскольку стандартные клиенты GraphQL изначально не поддерживают многочастовую загрузку файлов, клиент предоставляет специальный метод, который под капотом реализует [спецификацию многочастных запросов GraphQL](https://github.com/jaydenseric/graphql-multipart-request-spec).
 
 ```typescript
-import { MetadataApiClient } from 'twenty-sdk/generated';
+import { MetadataApiClient } from 'twenty-client-sdk/metadata';
 import * as fs from 'fs';
 
 const metadataClient = new MetadataApiClient();
@@ -888,6 +1290,113 @@ uploadFile(
 
 Ознакомьтесь с минимальным сквозным примером, демонстрирующим объекты, логические функции, фронт-компоненты и несколько триггеров, [здесь](https://github.com/twentyhq/twenty/tree/main/packages/twenty-apps/hello-world):
 
+## Сборка вашего приложения
+
+После того как вы разработали приложение с помощью `app:dev`, используйте `app:build`, чтобы скомпилировать его в распространяемый пакет.
+
+```bash filename="Terminal"
+# Собрать приложение (результат сохраняется в .twenty/output/)
+yarn twenty build
+
+# Собрать и создать tarball (.tgz) для распространения
+yarn twenty build --tarball
+```
+
+Процесс сборки:
+
+1. **Разбирает и проверяет манифест** — читает все сущности `defineX()` из ваших исходных файлов и проверяет структуру манифеста.
+2. **Компилирует логические функции и фронтенд-компоненты** — упаковывает исходники TypeScript в ESM-файлы `.mjs` с помощью esbuild.
+3. **Генерирует контрольные суммы** — вычисляет хэши MD5 для каждого собранного файла, сохраняемые в манифесте как `builtHandlerChecksum` / `builtComponentChecksum`.
+4. **Генерирует типизированный клиент API** — проводит интроспекцию схемы GraphQL и генерирует типизированные клиенты `CoreApiClient` и `MetadataApiClient`.
+5. **Запускает проверку типов TypeScript** — выполняет `tsc --noEmit`, чтобы обнаружить ошибки типов перед публикацией.
+6. **Пересобирает со сгенерированным клиентом** — выполняет второй проход компиляции, чтобы включить сгенерированные типы клиента.
+7. **Опционально создаёт tar-архив** — если передан `--tarball`, выполняет `npm pack` для создания файла `.tgz`, готового к распространению.
+
+Результат сборки в `.twenty/output/` содержит:
+
+```text
+.twenty/output/
+├── manifest.json              # Manifest with checksums for all built files
+├── package.json               # Copied from app root
+├── yarn.lock                  # Copied from app root
+├── src/
+│   ├── logic-functions/       # Compiled .mjs logic function files
+│   └── front-components/      # Compiled .mjs front component files
+├── public/                    # Static assets (if any)
+└── my-app-1.0.0.tgz          # Only with --tarball flag
+```
+
+| Вариант     | Описание                                                    |
+| ----------- | ----------------------------------------------------------- |
+| `[appPath]` | Путь к каталогу приложения (по умолчанию — текущий каталог) |
+| `--tarball` | Также упаковать результат в tar-архив `.tgz`                |
+
+## Публикация вашего приложения
+
+Используйте `app:publish` для распространения вашего приложения — либо в реестр npm, либо напрямую на сервер Twenty.
+
+### Публикация в npm (по умолчанию)
+
+```bash filename="Terminal"
+# Опубликовать в npm (требуется вход в npm)
+yarn twenty publish
+
+# Опубликовать с меткой dist-tag (например, beta, next)
+yarn twenty publish --tag beta
+```
+
+Это собирает приложение и выполняет `npm publish` из каталога `.twenty/output/`. Опубликованный пакет затем может быть установлен из маркетплейса Twenty любым рабочим пространством.
+
+### Публикация на сервер Twenty
+
+```bash filename="Terminal"
+# Опубликовать напрямую на сервер Twenty
+yarn twenty publish --server https://app.twenty.com
+```
+
+Это собирает приложение с tar-архивом, загружает его на сервер через мутацию GraphQL `uploadAppTarball` и запускает установку в один шаг. Это полезно для приватных развёртываний или тестирования на конкретном сервере.
+
+| Вариант           | Описание                                                              |
+| ----------------- | --------------------------------------------------------------------- |
+| `[appPath]`       | Путь к каталогу приложения (по умолчанию — текущий каталог)           |
+| `--server <url>`  | Публиковать на сервер Twenty вместо npm                               |
+| `--token <token>` | Токен аутентификации для целевого сервера                             |
+| `--tag <tag>`     | dist-тег npm (например, `beta`, `next`) — только для публикации в npm |
+
+## Регистрация приложения
+
+Прежде чем приложение можно будет установить в рабочем пространстве, его необходимо **зарегистрировать**. Регистрация — это запись метаданных, описывающая, откуда берётся приложение и как его аутентифицировать. В большинстве случаев это делает CLI автоматически.
+
+### Типы источников
+
+У каждой регистрации есть **тип источника**, который определяет, как файлы приложения будут получены при установке:
+
+| Тип источника | Как получаются файлы                                                                | Типичный сценарий использования                   |
+| ------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `LOCAL`       | Файлы синхронизируются в реальном времени наблюдателем CLI — установка пропускается | Разработка с `app:dev`                            |
+| `NPM`         | Получается из реестра npm через поле `sourcePackage`                                | Опубликованные приложения в npm                   |
+| `TARBALL`     | Извлекается из загруженного файла `.tgz`, хранящегося на сервере                    | Приватные приложения, опубликованные с `--server` |
+
+### Как происходит регистрация
+
+* **`app:dev`** — автоматически создаёт регистрацию `LOCAL` при первом запуске режима разработки для рабочего пространства.
+* **`app:publish --server`** — загружает tar-архив и создаёт (или обновляет) регистрацию `TARBALL`, затем устанавливает приложение.
+* **маркетплейс npm** — регистрации `NPM` создаются, когда приложения синхронизируются из реестра npm в каталог маркетплейса Twenty.
+* **GraphQL API** — вы также можете создавать регистрации программно через мутацию `createApplicationRegistration`.
+
+### Регистрация и установка
+
+**Регистрация** и **установка** — это разные понятия:
+
+* **Регистрация** (`ApplicationRegistration`) — это глобальная запись метаданных, описывающая приложение: его имя, тип источника, учётные данные OAuth и статус публикации в маркетплейсе. Она существует независимо от какого-либо рабочего пространства.
+* **Установка** (`Application`) — это экземпляр для каждого рабочего пространства. Когда пользователь устанавливает приложение, Twenty получает пакет из источника, указанного в регистрации, записывает собранные файлы в хранилище и синхронизирует манифест (создавая объекты, поля, логические функции и т. д.) в этом рабочем пространстве.
+
+Одну и ту же регистрацию можно установить во многих рабочих пространствах. Каждое рабочее пространство получает свою собственную копию файлов приложения и модели данных.
+
+### Учётные данные OAuth
+
+Каждая регистрация включает учётные данные OAuth (`oAuthClientId` и `oAuthClientSecret`), сгенерированные при создании. Они используются приложением для аутентификации запросов к API от имени пользователей. Секрет клиента возвращается **один раз** при создании — храните его в надёжном месте. Позже вы можете сменить его через мутацию `rotateApplicationRegistrationClientSecret`.
+
 ## Ручная настройка (без генератора)
 
 Хотя мы рекомендуем использовать `create-twenty-app` для наилучшего старта, вы также можете настроить проект вручную. Не устанавливайте CLI глобально. Вместо этого добавьте `twenty-sdk` как локальную зависимость и настройте один скрипт в вашем package.json:
@@ -906,13 +1415,13 @@ yarn add -D twenty-sdk
 }
 ```
 
-Теперь вы можете запускать все команды через `yarn twenty <command>`, например, `yarn twenty app:dev`, `yarn twenty help` и т. д.
+Теперь вы можете запускать все команды через `yarn twenty <command>`, например, `yarn twenty dev`, `yarn twenty help` и т. д.
 
 ## Устранение неполадок
 
 * Ошибки аутентификации: выполните `yarn twenty auth:login` и убедитесь, что у вашего ключа API есть необходимые права.
 * Не удаётся подключиться к серверу: проверьте URL API и доступность сервера Twenty.
-* Types or client missing/outdated: restart `yarn twenty app:dev` — it auto-generates the typed client.
-* Режим разработки не синхронизируется: убедитесь, что запущен `yarn twenty app:dev`, и что ваша среда не игнорирует изменения.
+* Типы или клиент отсутствуют/устарели: перезапустите `yarn twenty dev` — он автоматически генерирует типизированный клиент.
+* Режим разработки не синхронизируется: убедитесь, что запущен `yarn twenty dev`, и что ваша среда не игнорирует изменения.
 
 Канал помощи в Discord: https://discord.com/channels/1130383047699738754/1130386664812982322

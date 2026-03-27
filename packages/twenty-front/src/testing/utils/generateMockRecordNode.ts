@@ -1,22 +1,8 @@
 import { getRecordNodeFromRecord } from '@/object-record/cache/utils/getRecordNodeFromRecord';
 import { generateDepthRecordGqlFieldsFromObject } from '@/object-record/graphql/record-gql-fields/utils/generateDepthRecordGqlFieldsFromObject';
-import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
-import { prefillRecord } from '@/object-record/utils/prefillRecord';
-import { generatedMockObjectMetadataItems } from '~/testing/utils/generatedMockObjectMetadataItems';
+import { generateMockRecord } from '~/testing/utils/generateMockRecord';
+import { getTestEnrichedObjectMetadataItemsMock } from '~/testing/utils/getTestEnrichedObjectMetadataItemsMock';
 import { getMockObjectMetadataItemOrThrow } from '~/testing/utils/getMockObjectMetadataItemOrThrow';
-
-export const generateMockRecord = ({
-  objectNameSingular,
-  input,
-}: {
-  objectNameSingular: string;
-  input: Record<string, unknown>;
-}): ObjectRecord => {
-  const objectMetadataItem =
-    getMockObjectMetadataItemOrThrow(objectNameSingular);
-
-  return prefillRecord({ objectMetadataItem, input });
-};
 
 export const generateMockRecordNode = ({
   objectNameSingular,
@@ -37,12 +23,12 @@ export const generateMockRecordNode = ({
   return getRecordNodeFromRecord({
     record,
     objectMetadataItem,
-    objectMetadataItems: generatedMockObjectMetadataItems,
+    objectMetadataItems: getTestEnrichedObjectMetadataItemsMock(),
     computeReferences,
     recordGqlFields: withDepthOneRelation
       ? generateDepthRecordGqlFieldsFromObject({
           objectMetadataItem,
-          objectMetadataItems: generatedMockObjectMetadataItems,
+          objectMetadataItems: getTestEnrichedObjectMetadataItemsMock(),
           depth: 1,
         })
       : undefined,

@@ -1,8 +1,8 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useState } from 'react';
 
 import { type Attachment } from '@/activities/files/types/Attachment';
 import { useUpdatePageLayoutWidget } from '@/page-layout/hooks/useUpdatePageLayoutWidget';
-import { isPageLayoutInEditModeComponentState } from '@/page-layout/states/isPageLayoutInEditModeComponentState';
+import { isDashboardInEditModeComponentState } from '@/page-layout/states/isDashboardInEditModeComponentState';
 import { pageLayoutEditingWidgetIdComponentState } from '@/page-layout/states/pageLayoutEditingWidgetIdComponentState';
 import { type PageLayoutWidget } from '@/page-layout/types/PageLayoutWidget';
 import { DashboardsBlockEditor } from '@/page-layout/widgets/standalone-rich-text/components/DashboardsBlockEditor';
@@ -45,8 +45,8 @@ export const StandaloneRichTextEditorContent = ({
   const { pushFocusItemToFocusStack } = usePushFocusItemToFocusStack();
   const { removeFocusItemFromFocusStackById } =
     useRemoveFocusItemFromFocusStackById();
-  const isPageLayoutInEditModeState = useAtomComponentStateCallbackState(
-    isPageLayoutInEditModeComponentState,
+  const isDashboardInEditModeState = useAtomComponentStateCallbackState(
+    isDashboardInEditModeComponentState,
   );
   const pageLayoutEditingWidgetIdState = useAtomComponentStateCallbackState(
     pageLayoutEditingWidgetIdComponentState,
@@ -57,27 +57,25 @@ export const StandaloneRichTextEditorContent = ({
   const store = useStore();
 
   const shouldPersistDraft = useCallback(() => {
-    const isPageLayoutInEditMode = store.get(isPageLayoutInEditModeState);
+    const isDashboardInEditMode = store.get(isDashboardInEditModeState);
     const editingWidgetId = store.get(pageLayoutEditingWidgetIdState);
 
-    return isPageLayoutInEditMode && editingWidgetId === widget.id;
+    return isDashboardInEditMode && editingWidgetId === widget.id;
   }, [
-    isPageLayoutInEditModeState,
+    isDashboardInEditModeState,
     pageLayoutEditingWidgetIdState,
     widget.id,
     store,
   ]);
 
-  const initialContent = useMemo(
-    () => filterSupportedBlocks(parseInitialBlocknote(currentBody)),
-    [currentBody],
+  const [initialContent] = useState(() =>
+    filterSupportedBlocks(parseInitialBlocknote(currentBody)),
   );
 
   const editor = useCreateBlockNote({
     initialContent,
     domAttributes: { editor: { class: 'editor' } },
     schema: DASHBOARD_BLOCK_SCHEMA,
-    sideMenuDetection: 'editor',
     placeholders: {
       default: t`Enter text or type '/' for commands`,
     },
@@ -115,7 +113,7 @@ export const StandaloneRichTextEditorContent = ({
     handleAttachmentSync(newStringifiedBody, currentBody);
   };
 
-  const handleBlockEditorFocus = useCallback(() => {
+  const handleBlockEditorFocus = () => {
     pushFocusItemToFocusStack({
       component: {
         instanceId: widget.id,
@@ -124,14 +122,14 @@ export const StandaloneRichTextEditorContent = ({
       focusId: widget.id,
       globalHotkeysConfig: BLOCK_EDITOR_GLOBAL_HOTKEYS_CONFIG,
     });
-  }, [pushFocusItemToFocusStack, widget.id]);
+  };
 
-  const handleBlockEditorBlur = useCallback(() => {
+  const handleBlockEditorBlur = () => {
     handlePersistBody.flush();
     removeFocusItemFromFocusStackById({
       focusId: widget.id,
     });
-  }, [handlePersistBody, removeFocusItemFromFocusStackById, widget.id]);
+  };
 
   return (
     <>

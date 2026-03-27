@@ -7,9 +7,10 @@ import { seedBuiltFrontComponentFile } from 'test/integration/metadata/suites/fr
 import { findManyObjectMetadata } from 'test/integration/metadata/suites/object-metadata/utils/find-many-object-metadata.util';
 import { updateFeatureFlag } from 'test/integration/metadata/suites/utils/update-feature-flag.util';
 import { jestExpectToBeDefined } from 'test/utils/jest-expect-to-be-defined.util.test';
+import { FeatureFlagKey } from 'twenty-shared/types';
 
-import { FeatureFlagKey } from 'src/engine/core-modules/feature-flag/enums/feature-flag-key.enum';
-import { CommandMenuItemAvailabilityType } from 'src/engine/metadata-modules/command-menu-item/entities/command-menu-item.entity';
+import { CommandMenuItemAvailabilityType } from 'src/engine/metadata-modules/command-menu-item/enums/command-menu-item-availability-type.enum';
+import { EngineComponentKey } from 'src/engine/metadata-modules/command-menu-item/enums/engine-component-key.enum';
 
 describe('CommandMenuItem creation should succeed', () => {
   let createdCommandMenuItemId: string;
@@ -93,6 +94,7 @@ describe('CommandMenuItem creation should succeed', () => {
       expectToFail: false,
       input: {
         workflowVersionId,
+        engineComponentKey: EngineComponentKey.TRIGGER_WORKFLOW_VERSION,
         label: 'Test Command Menu Item',
       },
     });
@@ -117,10 +119,11 @@ describe('CommandMenuItem creation should succeed', () => {
       expectToFail: false,
       input: {
         workflowVersionId,
+        engineComponentKey: EngineComponentKey.TRIGGER_WORKFLOW_VERSION,
         label: 'Full Command Menu Item',
         icon: 'IconSparkles',
         isPinned: true,
-        availabilityType: CommandMenuItemAvailabilityType.SINGLE_RECORD,
+        availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
         availabilityObjectMetadataId: companyObjectMetadataId,
       },
     });
@@ -133,7 +136,7 @@ describe('CommandMenuItem creation should succeed', () => {
       label: 'Full Command Menu Item',
       icon: 'IconSparkles',
       isPinned: true,
-      availabilityType: CommandMenuItemAvailabilityType.SINGLE_RECORD,
+      availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
       availabilityObjectMetadataId: companyObjectMetadataId,
     });
   });
@@ -145,8 +148,9 @@ describe('CommandMenuItem creation should succeed', () => {
       expectToFail: false,
       input: {
         workflowVersionId,
+        engineComponentKey: EngineComponentKey.TRIGGER_WORKFLOW_VERSION,
         label: 'Bulk Records Command',
-        availabilityType: CommandMenuItemAvailabilityType.BULK_RECORDS,
+        availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
         availabilityObjectMetadataId: personObjectMetadataId,
       },
     });
@@ -157,7 +161,7 @@ describe('CommandMenuItem creation should succeed', () => {
       id: expect.any(String),
       workflowVersionId,
       label: 'Bulk Records Command',
-      availabilityType: CommandMenuItemAvailabilityType.BULK_RECORDS,
+      availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
       availabilityObjectMetadataId: personObjectMetadataId,
     });
   });
@@ -169,6 +173,7 @@ describe('CommandMenuItem creation should succeed', () => {
       expectToFail: false,
       input: {
         workflowVersionId,
+        engineComponentKey: EngineComponentKey.TRIGGER_WORKFLOW_VERSION,
         label: 'Global Command',
       },
     });
@@ -202,6 +207,7 @@ describe('CommandMenuItem creation should succeed', () => {
       expectToFail: false,
       input: {
         frontComponentId: createdFrontComponentId,
+        engineComponentKey: EngineComponentKey.FRONT_COMPONENT_RENDERER,
         label: 'Front Component Command',
       },
     });

@@ -8,8 +8,9 @@ import {
   eachTestingContextFilter,
   type EachTestingContext,
 } from 'twenty-shared/testing';
+import { FeatureFlagKey } from 'twenty-shared/types';
 
-import { FeatureFlagKey } from 'src/engine/core-modules/feature-flag/enums/feature-flag-key.enum';
+import { EngineComponentKey } from 'src/engine/metadata-modules/command-menu-item/enums/engine-component-key.enum';
 import { type UpdateCommandMenuItemInput } from 'src/engine/metadata-modules/command-menu-item/dtos/update-command-menu-item.input';
 
 type TestContext = {
@@ -44,6 +45,7 @@ describe('CommandMenuItem update should fail', () => {
       expectToFail: false,
       input: {
         workflowVersionId: faker.string.uuid(),
+        engineComponentKey: EngineComponentKey.TRIGGER_WORKFLOW_VERSION,
         label: 'Test Command Menu Item To Update',
         icon: 'IconOriginal',
         isPinned: false,
@@ -106,6 +108,16 @@ describe('CommandMenuItem update should fail', () => {
           input: () => ({
             id: faker.string.uuid(),
             label: 'Updated Label',
+          }),
+        },
+      },
+      {
+        title:
+          'when changing engineComponentKey to a standard key on an item with workflowVersionId',
+        context: {
+          input: (testSetup) => ({
+            id: testSetup.testCommandMenuItemId,
+            engineComponentKey: EngineComponentKey.GO_TO_PEOPLE,
           }),
         },
       },

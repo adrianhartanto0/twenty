@@ -1,19 +1,21 @@
 import { gql, InMemoryCache } from '@apollo/client';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { act, renderHook } from '@testing-library/react';
 import { type ReactNode } from 'react';
 import { Provider as JotaiProvider } from 'jotai';
 
 import { useActivityTargetObjectRecords } from '@/activities/hooks/useActivityTargetObjectRecords';
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
-import { objectMetadataItemsState } from '@/object-metadata/states/objectMetadataItemsState';
 import { recordStoreFamilyState } from '@/object-record/record-store/states/recordStoreFamilyState';
+import { setTestObjectMetadataItemsInMetadataStore } from '~/testing/utils/setTestObjectMetadataItemsInMetadataStore';
 import { useSetAtomFamilyState } from '@/ui/utilities/state/jotai/hooks/useSetAtomFamilyState';
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
 import { SnackBarComponentInstanceContext } from '@/ui/feedback/snack-bar-manager/contexts/SnackBarComponentInstanceContext';
+import { getRecordFromRecordNode } from '@/object-record/cache/utils/getRecordFromRecordNode';
+import { type WorkspaceMember } from '@/workspace-member/types/WorkspaceMember';
 import { JestObjectMetadataItemSetter } from '~/testing/jest/JestObjectMetadataItemSetter';
-import { mockWorkspaceMembers } from '~/testing/mock-data/workspace-members';
-import { generatedMockObjectMetadataItems } from '~/testing/utils/generatedMockObjectMetadataItems';
+import { mockedWorkspaceMemberRecords } from '~/testing/mock-data/generated/data/workspaceMembers/mock-workspaceMembers-data';
+import { getTestEnrichedObjectMetadataItemsMock } from '~/testing/utils/getTestEnrichedObjectMetadataItemsMock';
 
 const cache = new InMemoryCache();
 
@@ -131,11 +133,16 @@ const Wrapper = ({ children }: { children: ReactNode }) => (
 
 describe('useActivityTargetObjectRecords', () => {
   it('return targetObjects', async () => {
-    jotaiStore.set(currentWorkspaceMemberState.atom, mockWorkspaceMembers[0]);
-
     jotaiStore.set(
-      objectMetadataItemsState.atom,
-      generatedMockObjectMetadataItems,
+      currentWorkspaceMemberState.atom,
+      getRecordFromRecordNode<WorkspaceMember>({
+        recordNode: mockedWorkspaceMemberRecords[0],
+      }),
+    );
+
+    setTestObjectMetadataItemsInMetadataStore(
+      jotaiStore,
+      getTestEnrichedObjectMetadataItemsMock(),
     );
 
     const { result } = renderHook(

@@ -9,8 +9,9 @@ import { type FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object
 import { buildObjectIdByNameMaps } from 'src/engine/metadata-modules/flat-object-metadata/utils/build-object-id-by-name-maps.util';
 import { generateObjectRecordFields } from 'src/modules/workflow/workflow-builder/workflow-schema/utils/generate-object-record-fields';
 
-const QUICK_LEAD_WORKFLOW_ID = '8b213cac-a68b-4ffe-817a-3ec994e9932d';
-const QUICK_LEAD_WORKFLOW_VERSION_ID = 'ac67974f-c524-4288-9d88-af8515400b68';
+export const QUICK_LEAD_WORKFLOW_ID = '8b213cac-a68b-4ffe-817a-3ec994e9932d';
+export const QUICK_LEAD_WORKFLOW_VERSION_ID =
+  'ac67974f-c524-4288-9d88-af8515400b68';
 
 export const prefillWorkflows = async (
   entityManager: EntityManager,
@@ -270,9 +271,7 @@ export const prefillWorkflows = async (
                       '{{6e089bc9-aabd-435f-865f-f31c01c8f4a7.email}}',
                     additionalEmails: [],
                   },
-                  company: {
-                    id: '{{0715b6cd-7cc1-4b98-971b-00f54dfe643b.id}}',
-                  },
+                  companyId: '{{0715b6cd-7cc1-4b98-971b-00f54dfe643b.id}}',
                 },
               },
               outputSchema: {

@@ -1,13 +1,15 @@
-import { type RecordGqlOperationOrderBy } from 'twenty-shared/types';
+import {
+  CoreObjectNameSingular,
+  type RecordGqlOperationOrderBy,
+} from 'twenty-shared/types';
 
 import { findActivityTargetsOperationSignatureFactory } from '@/activities/graphql/operation-signatures/factories/findActivityTargetsOperationSignatureFactory';
 import { type ActivityTargetableObject } from '@/activities/types/ActivityTargetableEntity';
 import { type NoteTarget } from '@/activities/types/NoteTarget';
 import { type TaskTarget } from '@/activities/types/TaskTarget';
 import { getActivityTargetsFilter } from '@/activities/utils/getActivityTargetsFilter';
-import { objectMetadataItemsState } from '@/object-metadata/states/objectMetadataItemsState';
-import { CoreObjectNameSingular } from '@/object-metadata/types/CoreObjectNameSingular';
-import { type ObjectMetadataItem } from '@/object-metadata/types/ObjectMetadataItem';
+import { objectMetadataItemsSelector } from '@/object-metadata/states/objectMetadataItemsSelector';
+import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { useFindManyRecords } from '@/object-record/hooks/useFindManyRecords';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
@@ -32,8 +34,8 @@ export const useActivityTargetsForTargetableObjects = ({
   activityTargetsOrderByVariables: RecordGqlOperationOrderBy;
   limit: number;
 }) => {
-  const objectMetadataItems = useAtomStateValue<ObjectMetadataItem[]>(
-    objectMetadataItemsState,
+  const objectMetadataItems = useAtomStateValue<EnrichedObjectMetadataItem[]>(
+    objectMetadataItemsSelector,
   );
   const isNoteTargetMigrated = useIsFeatureEnabled(
     FeatureFlagKey.IS_NOTE_TARGET_MIGRATED,

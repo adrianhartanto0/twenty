@@ -5,9 +5,10 @@ import { findManyObjectMetadata } from 'test/integration/metadata/suites/object-
 import { updateCommandMenuItem } from 'test/integration/metadata/suites/command-menu-item/utils/update-command-menu-item.util';
 import { updateFeatureFlag } from 'test/integration/metadata/suites/utils/update-feature-flag.util';
 import { jestExpectToBeDefined } from 'test/utils/jest-expect-to-be-defined.util.test';
+import { FeatureFlagKey } from 'twenty-shared/types';
 
-import { FeatureFlagKey } from 'src/engine/core-modules/feature-flag/enums/feature-flag-key.enum';
-import { CommandMenuItemAvailabilityType } from 'src/engine/metadata-modules/command-menu-item/entities/command-menu-item.entity';
+import { CommandMenuItemAvailabilityType } from 'src/engine/metadata-modules/command-menu-item/enums/command-menu-item-availability-type.enum';
+import { EngineComponentKey } from 'src/engine/metadata-modules/command-menu-item/enums/engine-component-key.enum';
 
 describe('CommandMenuItem update should succeed', () => {
   let createdCommandMenuItemId: string;
@@ -64,6 +65,7 @@ describe('CommandMenuItem update should succeed', () => {
       expectToFail: false,
       input: {
         workflowVersionId,
+        engineComponentKey: EngineComponentKey.TRIGGER_WORKFLOW_VERSION,
         label: 'Original Label',
         icon: 'IconOriginal',
         isPinned: false,
@@ -134,14 +136,14 @@ describe('CommandMenuItem update should succeed', () => {
       expectToFail: false,
       input: {
         id: createdCommandMenuItemId,
-        availabilityType: CommandMenuItemAvailabilityType.SINGLE_RECORD,
+        availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
         availabilityObjectMetadataId: companyObjectMetadataId,
       },
     });
 
     expect(data.updateCommandMenuItem).toMatchObject({
       id: createdCommandMenuItemId,
-      availabilityType: CommandMenuItemAvailabilityType.SINGLE_RECORD,
+      availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
       availabilityObjectMetadataId: companyObjectMetadataId,
     });
   });
@@ -154,7 +156,7 @@ describe('CommandMenuItem update should succeed', () => {
         label: 'Fully Updated Label',
         icon: 'IconNew',
         isPinned: true,
-        availabilityType: CommandMenuItemAvailabilityType.BULK_RECORDS,
+        availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
         availabilityObjectMetadataId: personObjectMetadataId,
       },
     });
@@ -164,7 +166,7 @@ describe('CommandMenuItem update should succeed', () => {
       label: 'Fully Updated Label',
       icon: 'IconNew',
       isPinned: true,
-      availabilityType: CommandMenuItemAvailabilityType.BULK_RECORDS,
+      availabilityType: CommandMenuItemAvailabilityType.RECORD_SELECTION,
       availabilityObjectMetadataId: personObjectMetadataId,
     });
   });

@@ -1,5 +1,7 @@
-import { DEFAULT_FAST_MODEL } from '@/ai/constants/DefaultFastModel';
-import { DEFAULT_SMART_MODEL } from '@/ai/constants/DefaultSmartModel';
+import {
+  AUTO_SELECT_FAST_MODEL_ID,
+  AUTO_SELECT_SMART_MODEL_ID,
+} from 'twenty-shared/constants';
 import { type CurrentUserWorkspace } from '@/auth/states/currentUserWorkspaceState';
 import { CUSTOM_WORKSPACE_APPLICATION_MOCK } from '@/object-metadata/hooks/__tests__/constants/CustomWorkspaceApplicationMock.test.constant';
 import { type WorkspaceMember } from '@/workspace-member/types/WorkspaceMember';
@@ -15,7 +17,7 @@ import {
   WorkspaceMemberTimeFormatEnum,
 } from '~/generated-metadata/graphql';
 import { mockBillingPlans } from '~/testing/mock-data/billing-plans';
-import { generatedMockObjectMetadataItems } from '~/testing/utils/generatedMockObjectMetadataItems';
+import { getTestEnrichedObjectMetadataItemsMock } from '~/testing/utils/getTestEnrichedObjectMetadataItemsMock';
 
 type MockedUser = Pick<
   User,
@@ -68,6 +70,8 @@ export const mockCurrentWorkspace = {
   allowImpersonation: true,
   activationStatus: WorkspaceActivationStatus.ACTIVE,
   hasValidEnterpriseKey: false,
+  hasValidSignedEnterpriseKey: false,
+  hasValidEnterpriseValidityToken: false,
   isGoogleAuthEnabled: true,
   isPasswordAuthEnabled: true,
   isMicrosoftAuthEnabled: false,
@@ -84,11 +88,9 @@ export const mockCurrentWorkspace = {
   updatedAt: '2023-04-26T10:23:42.33625+00:00',
   metadataVersion: 1,
   trashRetentionDays: 14,
-  fastModel: DEFAULT_FAST_MODEL,
-  smartModel: DEFAULT_SMART_MODEL,
+  fastModel: AUTO_SELECT_FAST_MODEL_ID,
+  smartModel: AUTO_SELECT_SMART_MODEL_ID,
   routerModel: 'auto',
-  autoEnableNewAiModels: true,
-  disabledAiModelIds: [],
   enabledAiModelIds: [],
   useRecommendedModels: true,
   currentBillingSubscription: {
@@ -103,7 +105,7 @@ export const mockCurrentWorkspace = {
     phases: [],
     billingSubscriptionItems: [
       {
-        __typename: 'BillingSubscriptionItemDTO',
+        __typename: 'BillingSubscriptionItem',
         id: '11111111-1111-4111-8111-111111111111',
         hasReachedCurrentPeriodCap: false,
         quantity: 1,
@@ -116,7 +118,7 @@ export const mockCurrentWorkspace = {
         },
       },
       {
-        __typename: 'BillingSubscriptionItemDTO',
+        __typename: 'BillingSubscriptionItem',
         id: '11111111-1111-4111-8111-111111111112',
         hasReachedCurrentPeriodCap: false,
         quantity: null,
@@ -140,7 +142,7 @@ export const mockCurrentWorkspace = {
       phases: [],
       billingSubscriptionItems: [
         {
-          __typename: 'BillingSubscriptionItemDTO',
+          __typename: 'BillingSubscriptionItem',
           id: '22222222-2222-4222-8222-222222222222',
           hasReachedCurrentPeriodCap: false,
           quantity: 1,
@@ -201,16 +203,18 @@ export const mockedUserData: MockedUser = {
       PermissionFlagType.CONNECTED_ACCOUNTS,
     ],
     twoFactorAuthenticationMethodSummary: [],
-    objectsPermissions: generatedMockObjectMetadataItems.map((item) => ({
-      objectMetadataId: item.id,
-      canReadObjectRecords: true,
-      canUpdateObjectRecords: true,
-      canSoftDeleteObjectRecords: true,
-      canDestroyObjectRecords: true,
-      restrictedFields: {},
-      rowLevelPermissionPredicates: [],
-      rowLevelPermissionPredicateGroups: [],
-    })),
+    objectsPermissions: getTestEnrichedObjectMetadataItemsMock().map(
+      (item) => ({
+        objectMetadataId: item.id,
+        canReadObjectRecords: true,
+        canUpdateObjectRecords: true,
+        canSoftDeleteObjectRecords: true,
+        canDestroyObjectRecords: true,
+        restrictedFields: {},
+        rowLevelPermissionPredicates: [],
+        rowLevelPermissionPredicateGroups: [],
+      }),
+    ),
   },
   locale: 'en',
   workspaces: [{ workspace: mockCurrentWorkspace }],
@@ -227,7 +231,7 @@ export const mockedLimitedPermissionsUserData: MockedUser = {
   ...mockedUserData,
   currentUserWorkspace: {
     ...mockedUserData.currentUserWorkspace,
-    objectsPermissions: generatedMockObjectMetadataItems
+    objectsPermissions: getTestEnrichedObjectMetadataItemsMock()
       .filter(
         (objectMetadata) =>
           objectMetadata.nameSingular !== 'task' &&
@@ -265,16 +269,18 @@ export const mockedOnboardingUserData = (
     currentWorkspace: mockCurrentWorkspace,
     currentUserWorkspace: {
       permissionFlags: [PermissionFlagType.WORKSPACE_MEMBERS],
-      objectPermissions: generatedMockObjectMetadataItems.map((item) => ({
-        objectMetadataId: item.id,
-        canReadObjectRecords: true,
-        canUpdateObjectRecords: true,
-        canSoftDeleteObjectRecords: true,
-        canDestroyObjectRecords: true,
-        restrictedFields: {},
-        rowLevelPermissionPredicates: [],
-        rowLevelPermissionPredicateGroups: [],
-      })),
+      objectPermissions: getTestEnrichedObjectMetadataItemsMock().map(
+        (item) => ({
+          objectMetadataId: item.id,
+          canReadObjectRecords: true,
+          canUpdateObjectRecords: true,
+          canSoftDeleteObjectRecords: true,
+          canDestroyObjectRecords: true,
+          restrictedFields: {},
+          rowLevelPermissionPredicates: [],
+          rowLevelPermissionPredicateGroups: [],
+        }),
+      ),
     },
     locale: 'en',
     workspaces: [{ workspace: mockCurrentWorkspace }],

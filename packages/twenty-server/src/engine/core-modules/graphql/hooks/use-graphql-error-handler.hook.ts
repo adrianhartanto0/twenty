@@ -92,7 +92,15 @@ export const useGraphQLErrorHandlerHook = <
       }
 
       const operationType = rootOperation.operation;
-      const user = args.contextValue.req.user;
+      const rawUser = args.contextValue.req.user;
+      const user = rawUser
+        ? {
+            id: rawUser.id,
+            email: rawUser.email,
+            firstName: rawUser.firstName,
+            lastName: rawUser.lastName,
+          }
+        : undefined;
       const document = getDocumentString(args.document, print);
       const opName =
         args.operationName ||
@@ -283,8 +291,8 @@ export const useGraphQLErrorHandlerHook = <
         }
 
         if (
-          !frontEndAppVersion ||
-          !backendAppVersion ||
+          !isDefined(frontEndAppVersion) ||
+          !isDefined(backendAppVersion) ||
           !semver.valid(frontEndAppVersion) ||
           !semver.valid(backendAppVersion)
         ) {

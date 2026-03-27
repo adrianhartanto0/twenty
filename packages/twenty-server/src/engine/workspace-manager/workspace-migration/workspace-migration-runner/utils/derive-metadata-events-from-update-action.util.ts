@@ -131,6 +131,9 @@ const deriveAllMetadataEventsFromUpdateAction = ({
     case 'commandMenuItem':
     case 'frontComponent':
     case 'navigationMenuItem':
+    case 'permissionFlag':
+    case 'objectPermission':
+    case 'viewSort':
     case 'webhook': {
       const flatEntityMapsKey = getMetadataFlatEntityMapsKey(
         flatAction.metadataName,

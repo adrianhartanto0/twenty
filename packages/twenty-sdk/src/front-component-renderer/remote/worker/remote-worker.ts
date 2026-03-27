@@ -24,6 +24,10 @@ import { type FrontComponentHostCommunicationApi } from '../../types/FrontCompon
 import { type HostToWorkerRenderContext } from '../../types/HostToWorkerRenderContext';
 import { type WorkerExports } from '../../types/WorkerExports';
 import { exposeGlobals } from '../utils/exposeGlobals';
+import {
+  createOpenCommandConfirmationModalAdapter,
+  handleCommandConfirmationModalResult,
+} from './utils/createCommandConfirmationModalBridge';
 import { setWorkerEnv } from './utils/setWorkerEnv';
 
 installStylePropertyOnRemoteElements();
@@ -32,6 +36,49 @@ patchRemoteElementSetAttribute();
 exposeGlobals({
   __HTML_TAG_TO_CUSTOM_ELEMENT_TAG__: HTML_TAG_TO_CUSTOM_ELEMENT_TAG,
 });
+
+const fetchComponentSource = async (
+  url: string,
+  headers?: Record<string, string>,
+): Promise<string> => {
+  const response = await fetch(url, { headers });
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch ${url}: ${response.status} ${response.statusText}`,
+    );
+  }
+
+  return response.text();
+};
+
+const SDK_IMPORT_SPECIFIERS = [
+  'twenty-client-sdk/core',
+  'twenty-client-sdk/metadata',
+] as const;
+
+// Rewrites bare SDK import specifiers to the blob URLs provided by the host.
+const rewriteSdkImports = (
+  source: string,
+  sdkClientUrls: { core: string; metadata: string },
+): string => {
+  const specifierToBlobUrl: Record<string, string> = {
+    'twenty-client-sdk/core': sdkClientUrls.core,
+    'twenty-client-sdk/metadata': sdkClientUrls.metadata,
+  };
+
+  let rewritten = source;
+
+  for (const [specifier, blobUrl] of Object.entries(specifierToBlobUrl)) {
+    rewritten = rewritten
+      .split(`"${specifier}"`)
+      .join(`"${blobUrl}"`)
+      .split(`'${specifier}'`)
+      .join(`'${blobUrl}'`);
+  }
+
+  return rewritten;
+};
 
 const render: WorkerExports['render'] = async (
   connection: RemoteConnection,
@@ -57,25 +104,30 @@ const render: WorkerExports['render'] = async (
     });
   }
 
-  const response = await fetch(renderContext.componentUrl, {
-    headers: isDefined(renderContext.applicationAccessToken)
-      ? { Authorization: `Bearer ${renderContext.applicationAccessToken}` }
-      : undefined,
-  });
+  const authHeaders = isDefined(renderContext.applicationAccessToken)
+    ? { Authorization: `Bearer ${renderContext.applicationAccessToken}` }
+    : undefined;
 
-  if (!response.ok) {
-    throw new Error(
-      `Failed to fetch front component from ${renderContext.componentUrl}: ${response.status} ${response.statusText}`,
+  const componentSource = await fetchComponentSource(
+    renderContext.componentUrl,
+    authHeaders,
+  );
+
+  const hasSdkImports =
+    isDefined(renderContext.sdkClientUrls) &&
+    SDK_IMPORT_SPECIFIERS.some((specifier) =>
+      componentSource.includes(specifier),
     );
-  }
 
-  const responseText = await response.text();
+  const finalSource = hasSdkImports
+    ? rewriteSdkImports(componentSource, renderContext.sdkClientUrls!)
+    : componentSource;
 
-  const blob = new Blob([responseText], {
+  const componentBlob = new Blob([finalSource], {
     type: 'application/javascript',
   });
 
-  const importUrl = URL.createObjectURL(blob);
+  const importUrl = URL.createObjectURL(componentBlob);
 
   try {
     /* @vite-ignore */
@@ -97,11 +149,19 @@ const initializeHostCommunicationApi: WorkerExports['initializeHostCommunication
       hostApi.requestAccessTokenRefresh;
     frontComponentHostCommunicationApi.openSidePanelPage =
       hostApi.openSidePanelPage;
+    frontComponentHostCommunicationApi.openCommandConfirmationModal =
+      createOpenCommandConfirmationModalAdapter(hostApi);
     frontComponentHostCommunicationApi.unmountFrontComponent =
       hostApi.unmountFrontComponent;
     frontComponentHostCommunicationApi.enqueueSnackbar =
       hostApi.enqueueSnackbar;
     frontComponentHostCommunicationApi.closeSidePanel = hostApi.closeSidePanel;
+    frontComponentHostCommunicationApi.updateProgress = hostApi.updateProgress;
+  };
+
+const onConfirmationModalResult: WorkerExports['onConfirmationModalResult'] =
+  async (result) => {
+    await handleCommandConfirmationModalResult(result);
   };
 
 const updateContext: WorkerExports['updateContext'] = async (
@@ -113,5 +173,6 @@ const updateContext: WorkerExports['updateContext'] = async (
 ThreadWebWorker.self.export({
   render,
   initializeHostCommunicationApi,
+  onConfirmationModalResult,
   updateContext,
 });
