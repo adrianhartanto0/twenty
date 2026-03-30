@@ -2,11 +2,6 @@ import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 
-import { InformationBannerBillingSubscriptionPaused } from '@/information-banner/components/billing/InformationBannerBillingSubscriptionPaused';
-import { InformationBannerEndTrialPeriod } from '@/information-banner/components/billing/InformationBannerEndTrialPeriod';
-import { InformationBannerFailPaymentInfo } from '@/information-banner/components/billing/InformationBannerFailPaymentInfo';
-import { InformationBannerNoBillingSubscription } from '@/information-banner/components/billing/InformationBannerNoBillingSubscription';
-import { InformationBannerLegacyEnterpriseKey } from '@/information-banner/components/enterprise/InformationBannerLegacyEnterpriseKey';
 import { InformationBannerReconnectAccountEmailAliases } from '@/information-banner/components/reconnect-account/InformationBannerReconnectAccountEmailAliases';
 import { InformationBannerReconnectAccountInsufficientPermissions } from '@/information-banner/components/reconnect-account/InformationBannerReconnectAccountInsufficientPermissions';
 import { usePermissionFlagMap } from '@/settings/roles/hooks/usePermissionFlagMap';
@@ -53,21 +48,21 @@ export const InformationBannerWrapper = () => {
 
   return (
     <StyledInformationBannerWrapper>
-      <InformationBannerLegacyEnterpriseKey />
+      {/* <InformationBannerLegacyEnterpriseKey /> */}
       {isAccountSyncEnabled && (
         <InformationBannerReconnectAccountInsufficientPermissions />
       )}
       {isAccountSyncEnabled && (
         <InformationBannerReconnectAccountEmailAliases />
       )}
-      {displayBillingSubscriptionPausedBanner && (
+      {/* {displayBillingSubscriptionPausedBanner && (
         <InformationBannerBillingSubscriptionPaused /> // TODO: remove this once paused subscriptions are deprecated
       )}
       {displayBillingSubscriptionCanceledBanner && (
         <InformationBannerNoBillingSubscription />
       )}
       {displayFailPaymentInfoBanner && <InformationBannerFailPaymentInfo />}
-      {displayEndTrialPeriodBanner && <InformationBannerEndTrialPeriod />}
+      {displayEndTrialPeriodBanner && <InformationBannerEndTrialPeriod />} */}
     </StyledInformationBannerWrapper>
   );
 };

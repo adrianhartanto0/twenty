@@ -15,6 +15,14 @@ export class AddTypeToNavigationMenuItem1773681736596
     );
 
     await queryRunner.query(
+      `UPDATE core."navigationMenuItem" SET "type" = 'VIEW' WHERE "workspaceId" = '3b8e6458-5fc1-4e63-8563-008ccddaa6db' and viewId IS NOT NULL`,
+    );
+
+    await queryRunner.query(
+      `UPDATE core."navigationMenuItem" set "type" = 'FOLDER' WHERE "workspaceId" = '3b8e6458-5fc1-4e63-8563-008ccddaa6db' and core."navigationMenuItem"."name" IN ('High Value', 'Workflows')`,
+    );
+
+    await queryRunner.query(
       `ALTER TABLE "core"."navigationMenuItem" DROP CONSTRAINT "CHK_navigation_menu_item_target_fields"`,
     );
   }
