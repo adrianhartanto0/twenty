@@ -1,6 +1,12 @@
 #!/bin/sh
 set -e
 
+setup_clickhouse() {
+    echo "Running clickhouse migration"
+
+    yarn clickhouse:migrate:prod
+}
+
 setup_and_migrate_db() {
     if [ "${DISABLE_DB_MIGRATIONS}" = "true" ]; then
         echo "Database setup and migrations are disabled, skipping..."
@@ -38,6 +44,7 @@ register_background_jobs() {
     fi
 }
 
+setup_clickhouse
 setup_and_migrate_db
 register_background_jobs
 

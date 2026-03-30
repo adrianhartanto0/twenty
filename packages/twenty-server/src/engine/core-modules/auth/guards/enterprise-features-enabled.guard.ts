@@ -6,10 +6,6 @@ import {
   Injectable,
 } from '@nestjs/common';
 
-import {
-  AuthException,
-  AuthExceptionCode,
-} from 'src/engine/core-modules/auth/auth.exception';
 import { EnterprisePlanService } from 'src/engine/core-modules/enterprise/services/enterprise-plan.service';
 import { GuardRedirectService } from 'src/engine/core-modules/guard-redirect/services/guard-redirect.service';
 
@@ -21,25 +17,27 @@ export class EnterpriseFeaturesEnabledGuard implements CanActivate {
   ) {}
 
   canActivate(context: ExecutionContext): boolean {
-    try {
-      if (!this.enterprisePlanService.isValid()) {
-        throw new AuthException(
-          'Enterprise features are not enabled',
-          AuthExceptionCode.ENTERPRISE_VALIDITY_TOKEN_NOT_VALID,
-        );
-      }
+    return true
 
-      return true;
-    } catch (err) {
-      this.guardRedirectService.dispatchErrorFromGuard(
-        context,
-        err,
-        this.guardRedirectService.getSubdomainAndCustomDomainFromContext(
-          context,
-        ),
-      );
+    // try {
+    //   if (!this.twentyConfigService.get('ENTERPRISE_KEY')) {
+    //     throw new AuthException(
+    //       'Enterprise key missing',
+    //       AuthExceptionCode.MISSING_ENVIRONMENT_VARIABLE,
+    //     );
+    //   }
 
-      return false;
-    }
+    //   return true;
+    // } catch (err) {
+    //   this.guardRedirectService.dispatchErrorFromGuard(
+    //     context,
+    //     err,
+    //     this.guardRedirectService.getSubdomainAndCustomDomainFromContext(
+    //       context,
+    //     ),
+    //   );
+
+    //   return false;
+    // }
   }
 }

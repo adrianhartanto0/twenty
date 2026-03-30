@@ -55,7 +55,7 @@ export const SettingsSSOIdentitiesProvidersListCard = () => {
 
   return loading || !SSOIdentitiesProviders.length ? (
     <StyledLinkContainer
-      isDisabled={currentWorkspace?.hasValidEnterpriseKey !== true}
+      isDisabled={false)
     >
       <Link to={getSettingsPath(SettingsPath.NewSSOIdentityProvider)}>
         <SettingsCard

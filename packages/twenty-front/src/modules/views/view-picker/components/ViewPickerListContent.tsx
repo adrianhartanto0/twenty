@@ -1,8 +1,9 @@
-import { styled } from '@linaria/react';
 import { type DropResult } from '@hello-pangea/dnd';
+import { styled } from '@linaria/react';
 import { type MouseEvent, useCallback } from 'react';
 
 import { useContextStoreObjectMetadataItemOrThrow } from '@/context-store/hooks/useContextStoreObjectMetadataItemOrThrow';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { DraggableItem } from '@/ui/layout/draggable-list/components/DraggableItem';
 import { DraggableList } from '@/ui/layout/draggable-list/components/DraggableList';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
@@ -10,8 +11,8 @@ import { DropdownMenuItemsContainer } from '@/ui/layout/dropdown/components/Drop
 import { DropdownMenuSectionLabel } from '@/ui/layout/dropdown/components/DropdownMenuSectionLabel';
 import { DropdownMenuSeparator } from '@/ui/layout/dropdown/components/DropdownMenuSeparator';
 import { useCloseDropdown } from '@/ui/layout/dropdown/hooks/useCloseDropdown';
-import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
+import { useSetAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useSetAtomComponentState';
 import { usePerformViewAPIUpdate } from '@/views/hooks/internal/usePerformViewAPIUpdate';
 import { useChangeView } from '@/views/hooks/useChangeView';
 import { useGetCurrentViewOnly } from '@/views/hooks/useGetCurrentViewOnly';
@@ -25,7 +26,7 @@ import { useLingui } from '@lingui/react/macro';
 import { IconPlus } from 'twenty-ui/display';
 import { MenuItem } from 'twenty-ui/navigation';
 import { themeCssVariables } from 'twenty-ui/theme-constants';
-import { ViewVisibility } from '~/generated-metadata/graphql';
+import { PermissionFlagType, ViewVisibility } from '~/generated-metadata/graphql';
 import { moveArrayItem } from '~/utils/array/moveArrayItem';
 
 const StyledBoldDropdownMenuItemsContainerWrapper = styled.div`
@@ -40,6 +41,10 @@ export const ViewPickerListContent = () => {
   const viewsOnCurrentObject = useAtomFamilySelectorValue(
     viewsFromObjectMetadataItemFamilySelector,
     { objectMetadataItemId: objectMetadataItem.id },
+  );
+
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
   );
 
   const workspaceViews = viewsOnCurrentObject.filter(
@@ -184,14 +189,20 @@ export const ViewPickerListContent = () => {
                     key={view.id}
                     draggableId={view.id}
                     index={index}
-                    isDragDisabled={unlistedViews.length === 1}
+                    isDragDisabled={
+                      unlistedViews.length === 1 || !canEditPersonalViews
+                    }
                     itemComponent={
                       <ViewPickerOptionDropdown
                         view={view}
                         handleViewSelect={handleViewSelect}
                         isIndexView={isIndexView}
                         isLastView={isLastView}
-                        onEdit={handleEditViewButtonClick}
+                        onEdit={
+                          canEditPersonalViews
+                            ? handleEditViewButtonClick
+                            : undefined
+                        }
                       />
                     }
                   />
@@ -202,15 +213,18 @@ export const ViewPickerListContent = () => {
         </>
       )}
       <DropdownMenuSeparator />
-      <StyledBoldDropdownMenuItemsContainerWrapper>
-        <DropdownMenuItemsContainer scrollable={false}>
-          <MenuItem
-            onClick={handleAddViewButtonClick}
-            LeftIcon={IconPlus}
-            text={t`Add view`}
-          />
-        </DropdownMenuItemsContainer>
-      </StyledBoldDropdownMenuItemsContainerWrapper>
+
+      {canEditPersonalViews && (
+        <StyledBoldDropdownMenuItemsContainerWrapper>
+          <DropdownMenuItemsContainer scrollable={false}>
+            <MenuItem
+              onClick={handleAddViewButtonClick}
+              LeftIcon={IconPlus}
+              text={t`Add view`}
+            />
+          </DropdownMenuItemsContainer>
+        </StyledBoldDropdownMenuItemsContainerWrapper>
+      )}
     </DropdownContent>
   );
 };

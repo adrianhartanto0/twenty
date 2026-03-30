@@ -13,9 +13,11 @@ import { useResizeTableHeader } from '@/object-record/record-table/record-table-
 import { isRecordTableCheckboxColumnHiddenComponentState } from '@/object-record/record-table/states/isRecordTableCheckboxColumnHiddenComponentState';
 import { isRecordTableColumnHeadersReadOnlyComponentState } from '@/object-record/record-table/states/isRecordTableColumnHeadersReadOnlyComponentState';
 import { isRecordTableDragColumnHiddenComponentState } from '@/object-record/record-table/states/isRecordTableDragColumnHiddenComponentState';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { styled } from '@linaria/react';
 import { filterOutByProperty } from 'twenty-shared/utils';
+import { PermissionFlagType } from '~/generated-metadata/graphql';
 
 const StyledHeaderContainer = styled.div`
   display: flex;
@@ -52,6 +54,10 @@ export const RecordTableHeader = () => {
 
   useResizeTableHeader();
 
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
+  );
+
   return (
     <StyledHeaderContainer>
       {!isRecordTableDragColumnHidden && <RecordTableHeaderDragDropColumn />}
@@ -69,11 +75,11 @@ export const RecordTableHeader = () => {
           />
         ),
       )}
-      {isRecordTableColumnHeadersReadOnly ? (
-        <RecordTableHeaderEmptyLastColumn />
-      ) : (
-        <RecordTableHeaderAddColumnButton />
-      )}
+      { isRecordTableColumnHeadersReadOnly && <RecordTableHeaderEmptyLastColumn /> }
+
+      {
+        (!isRecordTableColumnHeadersReadOnly && canEditPersonalViews) && <RecordTableHeaderAddColumnButton />
+      }
       <RecordTableHeaderLastEmptyColumn />
     </StyledHeaderContainer>
   );

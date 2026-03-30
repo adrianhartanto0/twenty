@@ -617,11 +617,14 @@ msgstr "Možnost přidat více než jednu URL adresu"
 msgid "Ability to edit all settings"
 msgstr "Schopnost upravovat všechna nastavení"
 
+<<<<<<< HEAD
 #. js-lingui-id: MjUIIf
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 msgid "Ability to filter the records a user can interact with"
 msgstr "Možnost filtrovat záznamy, se kterými může uživatel pracovat"
 
+=======
+>>>>>>> add-personal-view
 #. js-lingui-id: 7J3Y++
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 msgid "Ability to filter the records a user can interact with."
@@ -885,7 +888,11 @@ msgid "Add BCC"
 msgstr "Přidat BCC"
 
 #. js-lingui-id: We0vOO
+<<<<<<< HEAD
 #: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardEditorSideMenu.tsx
+=======
+#: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardBlockDragHandleMenu.tsx
+>>>>>>> add-personal-view
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 msgid "Add Block"
 msgstr "Přidat blok"
@@ -2773,7 +2780,11 @@ msgid "CC"
 msgstr "CC"
 
 #. js-lingui-id: tHntRt
+<<<<<<< HEAD
 #: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardEditorSideMenu.tsx
+=======
+#: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardBlockDragHandleMenu.tsx
+>>>>>>> add-personal-view
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 msgid "Change Color"
 msgstr "Změnit barvu"
@@ -3429,10 +3440,16 @@ msgid "Context size"
 msgstr "Velikost kontextu"
 
 #. js-lingui-id: LXIm4m
+<<<<<<< HEAD
 #: src/pages/settings/admin-panel/SettingsAdminNewAiModel.tsx
 #: src/modules/ai/components/internal/AIChatContextUsageButton.tsx
 msgid "Context window"
 msgstr "Kontextové okno"
+=======
+#: src/modules/ai/components/internal/AIChatContextUsageButton.tsx
+msgid "Context window"
+msgstr ""
+>>>>>>> add-personal-view
 
 #. js-lingui-id: xGVfLh
 #: src/pages/onboarding/SyncEmails.tsx
@@ -3761,6 +3778,11 @@ msgstr "Vytvořte pracovní prostor"
 #: src/modules/settings/roles/role-permissions/permission-flags/hooks/useSettingsRolePermissionFlagConfig.ts
 msgid "Create and configure AI agents"
 msgstr "Vytvořit a nakonfigurovat AI agenty"
+
+#. js-lingui-id: Gv60fT
+#: src/modules/settings/roles/role-permissions/permission-flags/hooks/useActionRolePermissionFlagConfig.ts
+msgid "Create and edit own personal views"
+msgstr ""
 
 #. js-lingui-id: uXGLuq
 #: src/pages/settings/workspace/SettingsApiWebhooks.tsx
@@ -4510,7 +4532,10 @@ msgstr "smazat"
 #: src/modules/views/view-picker/components/ViewPickerOptionDropdown.tsx
 #: src/modules/views/view-picker/components/ViewPickerEditButton.tsx
 #: src/modules/views/view-picker/components/ViewPickerCreateButton.tsx
+<<<<<<< HEAD
 #: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutTabSettingsContent.tsx
+=======
+>>>>>>> add-personal-view
 #: src/modules/settings/security/components/SSO/SettingsSecuritySSORowDropdownMenu.tsx
 #: src/modules/settings/logic-functions/components/tabs/SettingsLogicFunctionTabEnvironmentVariableTableRow.tsx
 #: src/modules/settings/emailing-domains/components/SettingsEmailingDomainRowDropdownMenu.tsx
@@ -4527,12 +4552,18 @@ msgstr "smazat"
 #: src/modules/page-layout/widgets/fields/components/FieldsConfigurationGroupDropdown.tsx
 #: src/modules/object-record/record-field-list/record-detail-section/relation/components/RecordDetailRelationRecordsListItem.tsx
 #: src/modules/object-record/record-field/ui/meta-types/input/components/MultiItemFieldMenuItem.tsx
+<<<<<<< HEAD
 #: src/modules/navigation-menu-item/display/folder/components/NavigationMenuItemFolderNavigationDrawerItemDropdown.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/mock/command-menu-items.mock.tsx
 #: src/modules/command-menu-item/mock/command-menu-items.mock.tsx
+=======
+#: src/modules/navigation-menu-item/components/NavigationMenuItemFolderNavigationDrawerItemDropdown.tsx
+#: src/modules/favorites/components/FavoriteFolderNavigationDrawerItemDropdown.tsx
+#: src/modules/command-menu/pages/page-layout/components/CommandMenuPageLayoutTabSettings.tsx
+>>>>>>> add-personal-view
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 #: src/modules/activities/files/components/AttachmentDropdown.tsx
 msgid "Delete"
@@ -5258,6 +5289,11 @@ msgstr ""
 #: src/modules/settings/billing/components/SettingsBillingContent.tsx
 msgid "Edit payment method, see your invoices and more"
 msgstr "Upravit způsob platby, zobrazit faktury a další"
+
+#. js-lingui-id: zrGZwD
+#: src/modules/settings/roles/role-permissions/permission-flags/hooks/useActionRolePermissionFlagConfig.ts
+msgid "Edit Personal Views"
+msgstr ""
 
 #. js-lingui-id: QJQd1J
 #: src/modules/settings/roles/role-permissions/permission-flags/hooks/useActionRolePermissionFlagConfig.ts
@@ -10656,9 +10692,14 @@ msgid "Ordered List"
 msgstr ""
 
 #. js-lingui-id: ucgZ0o
+<<<<<<< HEAD
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 #: src/modules/settings/billing/hooks/useBillingWording.ts
 #: src/modules/settings/billing/components/internal/PlansTags.tsx
+=======
+#: src/modules/billing/hooks/useBillingWording.ts
+#: src/modules/billing/components/internal/PlansTags.tsx
+>>>>>>> add-personal-view
 msgid "Organization"
 msgstr "Organizace"
 
@@ -11602,7 +11643,6 @@ msgstr "Typ záznamu"
 
 #. js-lingui-id: uMOyEH
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
-#: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 msgid "Record-level"
 msgstr "Na úrovni záznamu"
 
@@ -12534,7 +12574,11 @@ msgstr "Vyhledáno na webu"
 #. js-lingui-id: J7YRXR
 #: src/modules/ai/utils/getToolDisplayMessage.ts
 msgid "Searched the web for {query}"
+<<<<<<< HEAD
 msgstr "Vyhledáno na webu {query}"
+=======
+msgstr ""
+>>>>>>> add-personal-view
 
 #. js-lingui-id: AyoeWR
 #: src/modules/ai/utils/getToolDisplayMessage.ts
@@ -12544,7 +12588,11 @@ msgstr "Vyhledávání na webu"
 #. js-lingui-id: BOCV5/
 #: src/modules/ai/utils/getToolDisplayMessage.ts
 msgid "Searching the web for {query}"
+<<<<<<< HEAD
 msgstr "Vyhledávání na webu {query}"
+=======
+msgstr ""
+>>>>>>> add-personal-view
 
 #. js-lingui-id: 8sgZS9
 #: src/modules/settings/enterprise/components/EnterprisePlanModal.tsx
@@ -14235,11 +14283,14 @@ msgstr "Tato aplikace není uvedena na Marketplace. Byla sdílena prostřednictv
 msgid "This database value overrides environment settings. "
 msgstr "Tato hodnota databáze přepisuje nastavení prostředí."
 
+<<<<<<< HEAD
 #. js-lingui-id: 8IRnd6
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 msgid "This feature is part of the Enterprise Plan"
 msgstr "Tato funkce je součástí plánu Enterprise"
 
+=======
+>>>>>>> add-personal-view
 #. js-lingui-id: own57K
 #: src/modules/activities/files/components/DocumentViewer.tsx
 msgid "This file cannot be previewed because it is hosted locally."
@@ -14956,6 +15007,10 @@ msgstr ""
 #: src/modules/object-record/components/RecordChip.tsx
 #: src/modules/object-record/components/RecordChip.tsx
 #: src/modules/mention/components/MentionRecordChip.tsx
+<<<<<<< HEAD
+=======
+#: src/modules/command-menu/components/CommandMenuContextChip.tsx
+>>>>>>> add-personal-view
 #: src/modules/ai/components/RecordLink.tsx
 #: src/modules/ai/components/AIChatThreadGroup.tsx
 #: src/modules/ai/components/internal/AgentChatFilePreview.tsx
@@ -15058,9 +15113,14 @@ msgid "Updates"
 msgstr "Aktualizace"
 
 #. js-lingui-id: kwkhPe
+<<<<<<< HEAD
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 #: src/modules/settings/billing/components/internal/MeteredPriceSelector.tsx
 #: src/modules/settings/billing/components/internal/MeteredPriceSelector.tsx
+=======
+#: src/modules/billing/components/internal/MeteredPriceSelector.tsx
+#: src/modules/billing/components/internal/MeteredPriceSelector.tsx
+>>>>>>> add-personal-view
 msgid "Upgrade"
 msgstr "Upgrade"
 
@@ -15069,6 +15129,7 @@ msgstr "Upgrade"
 msgid "Upgrade Plan"
 msgstr "Upgradovat plán"
 
+<<<<<<< HEAD
 #. js-lingui-id: pKCx2F
 #: src/pages/settings/applications/components/SettingsApplicationVersionContainer.tsx
 msgid "Upgrade to {latestAvailableVersion}"
@@ -15079,6 +15140,8 @@ msgstr "Aktualizovat na {latestAvailableVersion}"
 msgid "Upgrade to access"
 msgstr "Přejděte na vyšší verzi pro přístup"
 
+=======
+>>>>>>> add-personal-view
 #. js-lingui-id: jmVW3I
 #: src/pages/settings/security/SettingsSecurity.tsx
 msgid "Upgrade to Enterprise to access audit logs"
