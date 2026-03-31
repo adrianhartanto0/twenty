@@ -615,16 +615,8 @@ msgstr "Могућност додавања више од једне URL адр�
 #. js-lingui-id: JE9zuL
 #: src/modules/settings/roles/role-permissions/permission-flags/components/SettingsRolePermissionsSettingsSection.tsx
 msgid "Ability to edit all settings"
-msgstr "Могућност измене свих подешавања"
+msgstr "Могућност измене свих подешавања<<<<<<< HEAD"
 
-<<<<<<< HEAD
-#. js-lingui-id: MjUIIf
-#: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
-msgid "Ability to filter the records a user can interact with"
-msgstr "Могућност филтрирања записа са којима корисник може да интерагује"
-
-=======
->>>>>>> add-personal-view
 #. js-lingui-id: 7J3Y++
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 msgid "Ability to filter the records a user can interact with."
@@ -888,11 +880,7 @@ msgid "Add BCC"
 msgstr ""
 
 #. js-lingui-id: We0vOO
-<<<<<<< HEAD
 #: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardEditorSideMenu.tsx
-=======
-#: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardBlockDragHandleMenu.tsx
->>>>>>> add-personal-view
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 msgid "Add Block"
 msgstr "Додај блок"
@@ -2780,11 +2768,7 @@ msgid "CC"
 msgstr ""
 
 #. js-lingui-id: tHntRt
-<<<<<<< HEAD
 #: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardEditorSideMenu.tsx
-=======
-#: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardBlockDragHandleMenu.tsx
->>>>>>> add-personal-view
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 msgid "Change Color"
 msgstr "Промени боју"
@@ -3440,16 +3424,10 @@ msgid "Context size"
 msgstr "Величина контекста"
 
 #. js-lingui-id: LXIm4m
-<<<<<<< HEAD
 #: src/pages/settings/admin-panel/SettingsAdminNewAiModel.tsx
 #: src/modules/ai/components/internal/AIChatContextUsageButton.tsx
 msgid "Context window"
-msgstr "Контекстни прозор"
-=======
-#: src/modules/ai/components/internal/AIChatContextUsageButton.tsx
-msgid "Context window"
-msgstr ""
->>>>>>> add-personal-view
+msgstr ">>>>>>> add-personal-view"
 
 #. js-lingui-id: xGVfLh
 #: src/pages/onboarding/SyncEmails.tsx
@@ -4532,10 +4510,7 @@ msgstr "обриши"
 #: src/modules/views/view-picker/components/ViewPickerOptionDropdown.tsx
 #: src/modules/views/view-picker/components/ViewPickerEditButton.tsx
 #: src/modules/views/view-picker/components/ViewPickerCreateButton.tsx
-<<<<<<< HEAD
 #: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutTabSettingsContent.tsx
-=======
->>>>>>> add-personal-view
 #: src/modules/settings/security/components/SSO/SettingsSecuritySSORowDropdownMenu.tsx
 #: src/modules/settings/logic-functions/components/tabs/SettingsLogicFunctionTabEnvironmentVariableTableRow.tsx
 #: src/modules/settings/emailing-domains/components/SettingsEmailingDomainRowDropdownMenu.tsx
@@ -4552,18 +4527,12 @@ msgstr "обриши"
 #: src/modules/page-layout/widgets/fields/components/FieldsConfigurationGroupDropdown.tsx
 #: src/modules/object-record/record-field-list/record-detail-section/relation/components/RecordDetailRelationRecordsListItem.tsx
 #: src/modules/object-record/record-field/ui/meta-types/input/components/MultiItemFieldMenuItem.tsx
-<<<<<<< HEAD
 #: src/modules/navigation-menu-item/display/folder/components/NavigationMenuItemFolderNavigationDrawerItemDropdown.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/mock/command-menu-items.mock.tsx
 #: src/modules/command-menu-item/mock/command-menu-items.mock.tsx
-=======
-#: src/modules/navigation-menu-item/components/NavigationMenuItemFolderNavigationDrawerItemDropdown.tsx
-#: src/modules/favorites/components/FavoriteFolderNavigationDrawerItemDropdown.tsx
-#: src/modules/command-menu/pages/page-layout/components/CommandMenuPageLayoutTabSettings.tsx
->>>>>>> add-personal-view
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 #: src/modules/activities/files/components/AttachmentDropdown.tsx
 msgid "Delete"
@@ -10692,14 +10661,8 @@ msgid "Ordered List"
 msgstr ""
 
 #. js-lingui-id: ucgZ0o
-<<<<<<< HEAD
-#: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 #: src/modules/settings/billing/hooks/useBillingWording.ts
 #: src/modules/settings/billing/components/internal/PlansTags.tsx
-=======
-#: src/modules/billing/hooks/useBillingWording.ts
-#: src/modules/billing/components/internal/PlansTags.tsx
->>>>>>> add-personal-view
 msgid "Organization"
 msgstr "Организација"
 
@@ -12574,11 +12537,7 @@ msgstr "Веб је претражен"
 #. js-lingui-id: J7YRXR
 #: src/modules/ai/utils/getToolDisplayMessage.ts
 msgid "Searched the web for {query}"
-<<<<<<< HEAD
-msgstr "Веб је претражен за {query}"
-=======
 msgstr ""
->>>>>>> add-personal-view
 
 #. js-lingui-id: AyoeWR
 #: src/modules/ai/utils/getToolDisplayMessage.ts
@@ -12588,11 +12547,7 @@ msgstr "Претраживање веба"
 #. js-lingui-id: BOCV5/
 #: src/modules/ai/utils/getToolDisplayMessage.ts
 msgid "Searching the web for {query}"
-<<<<<<< HEAD
-msgstr "Претраживање веба за {query}"
-=======
 msgstr ""
->>>>>>> add-personal-view
 
 #. js-lingui-id: 8sgZS9
 #: src/modules/settings/enterprise/components/EnterprisePlanModal.tsx
@@ -14281,16 +14236,8 @@ msgstr "Ова апликација није листирана на марке�
 #. js-lingui-id: SLIRqz
 #: src/modules/settings/admin-panel/config-variables/components/ConfigVariableHelpText.tsx
 msgid "This database value overrides environment settings. "
-msgstr "Ова вредност из базе података замењује подешавања окружења."
+msgstr "Ова вредност из базе података замењује подешавања окружења.<<<<<<< HEAD"
 
-<<<<<<< HEAD
-#. js-lingui-id: 8IRnd6
-#: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
-msgid "This feature is part of the Enterprise Plan"
-msgstr "Ова функција је део Enterprise плана"
-
-=======
->>>>>>> add-personal-view
 #. js-lingui-id: own57K
 #: src/modules/activities/files/components/DocumentViewer.tsx
 msgid "This file cannot be previewed because it is hosted locally."
@@ -15007,10 +14954,6 @@ msgstr ""
 #: src/modules/object-record/components/RecordChip.tsx
 #: src/modules/object-record/components/RecordChip.tsx
 #: src/modules/mention/components/MentionRecordChip.tsx
-<<<<<<< HEAD
-=======
-#: src/modules/command-menu/components/CommandMenuContextChip.tsx
->>>>>>> add-personal-view
 #: src/modules/ai/components/RecordLink.tsx
 #: src/modules/ai/components/AIChatThreadGroup.tsx
 #: src/modules/ai/components/internal/AgentChatFilePreview.tsx
@@ -15113,35 +15056,21 @@ msgid "Updates"
 msgstr "Ажурирања"
 
 #. js-lingui-id: kwkhPe
-<<<<<<< HEAD
-#: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 #: src/modules/settings/billing/components/internal/MeteredPriceSelector.tsx
 #: src/modules/settings/billing/components/internal/MeteredPriceSelector.tsx
-=======
-#: src/modules/billing/components/internal/MeteredPriceSelector.tsx
-#: src/modules/billing/components/internal/MeteredPriceSelector.tsx
->>>>>>> add-personal-view
 msgid "Upgrade"
 msgstr "Унапређење"
 
 #. js-lingui-id: 7aHRdp
 #: src/modules/ai/components/AIChatCreditsExhaustedMessage.tsx
 msgid "Upgrade Plan"
-msgstr "Надоградите план"
+msgstr "Надоградите план<<<<<<< HEAD"
 
-<<<<<<< HEAD
 #. js-lingui-id: pKCx2F
 #: src/pages/settings/applications/components/SettingsApplicationVersionContainer.tsx
 msgid "Upgrade to {latestAvailableVersion}"
 msgstr "Надогради на {latestAvailableVersion}"
 
-#. js-lingui-id: ggd+Ee
-#: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
-msgid "Upgrade to access"
-msgstr "Надоградите да бисте приступили"
-
-=======
->>>>>>> add-personal-view
 #. js-lingui-id: jmVW3I
 #: src/pages/settings/security/SettingsSecurity.tsx
 msgid "Upgrade to Enterprise to access audit logs"

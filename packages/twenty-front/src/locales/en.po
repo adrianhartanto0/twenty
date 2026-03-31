@@ -875,11 +875,7 @@ msgid "Add BCC"
 msgstr "Add BCC"
 
 #. js-lingui-id: We0vOO
-<<<<<<< HEAD
 #: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardEditorSideMenu.tsx
-=======
-#: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardBlockDragHandleMenu.tsx
->>>>>>> add-personal-view
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 msgid "Add Block"
 msgstr "Add Block"
@@ -2767,11 +2763,7 @@ msgid "CC"
 msgstr "CC"
 
 #. js-lingui-id: tHntRt
-<<<<<<< HEAD
 #: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardEditorSideMenu.tsx
-=======
-#: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardBlockDragHandleMenu.tsx
->>>>>>> add-personal-view
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 msgid "Change Color"
 msgstr "Change Color"
@@ -3427,10 +3419,7 @@ msgid "Context size"
 msgstr "Context size"
 
 #. js-lingui-id: LXIm4m
-<<<<<<< HEAD
 #: src/pages/settings/admin-panel/SettingsAdminNewAiModel.tsx
-=======
->>>>>>> add-personal-view
 #: src/modules/ai/components/internal/AIChatContextUsageButton.tsx
 msgid "Context window"
 msgstr "Context window"
@@ -4516,10 +4505,7 @@ msgstr "delete"
 #: src/modules/views/view-picker/components/ViewPickerOptionDropdown.tsx
 #: src/modules/views/view-picker/components/ViewPickerEditButton.tsx
 #: src/modules/views/view-picker/components/ViewPickerCreateButton.tsx
-<<<<<<< HEAD
 #: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutTabSettingsContent.tsx
-=======
->>>>>>> add-personal-view
 #: src/modules/settings/security/components/SSO/SettingsSecuritySSORowDropdownMenu.tsx
 #: src/modules/settings/logic-functions/components/tabs/SettingsLogicFunctionTabEnvironmentVariableTableRow.tsx
 #: src/modules/settings/emailing-domains/components/SettingsEmailingDomainRowDropdownMenu.tsx
@@ -4536,18 +4522,12 @@ msgstr "delete"
 #: src/modules/page-layout/widgets/fields/components/FieldsConfigurationGroupDropdown.tsx
 #: src/modules/object-record/record-field-list/record-detail-section/relation/components/RecordDetailRelationRecordsListItem.tsx
 #: src/modules/object-record/record-field/ui/meta-types/input/components/MultiItemFieldMenuItem.tsx
-<<<<<<< HEAD
 #: src/modules/navigation-menu-item/display/folder/components/NavigationMenuItemFolderNavigationDrawerItemDropdown.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/mock/command-menu-items.mock.tsx
 #: src/modules/command-menu-item/mock/command-menu-items.mock.tsx
-=======
-#: src/modules/navigation-menu-item/components/NavigationMenuItemFolderNavigationDrawerItemDropdown.tsx
-#: src/modules/favorites/components/FavoriteFolderNavigationDrawerItemDropdown.tsx
-#: src/modules/command-menu/pages/page-layout/components/CommandMenuPageLayoutTabSettings.tsx
->>>>>>> add-personal-view
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 #: src/modules/activities/files/components/AttachmentDropdown.tsx
 msgid "Delete"
@@ -10676,14 +10656,8 @@ msgid "Ordered List"
 msgstr "Ordered List"
 
 #. js-lingui-id: ucgZ0o
-<<<<<<< HEAD
-#: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 #: src/modules/settings/billing/hooks/useBillingWording.ts
 #: src/modules/settings/billing/components/internal/PlansTags.tsx
-=======
-#: src/modules/billing/hooks/useBillingWording.ts
-#: src/modules/billing/components/internal/PlansTags.tsx
->>>>>>> add-personal-view
 msgid "Organization"
 msgstr "Organization"
 
@@ -14261,14 +14235,6 @@ msgstr "This application is not listed on the marketplace. It was shared via a d
 msgid "This database value overrides environment settings. "
 msgstr "This database value overrides environment settings. "
 
-<<<<<<< HEAD
-#. js-lingui-id: 8IRnd6
-#: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
-msgid "This feature is part of the Enterprise Plan"
-msgstr "This feature is part of the Enterprise Plan"
-
-=======
->>>>>>> add-personal-view
 #. js-lingui-id: own57K
 #: src/modules/activities/files/components/DocumentViewer.tsx
 msgid "This file cannot be previewed because it is hosted locally."
@@ -14985,10 +14951,6 @@ msgstr "Unordered list with bullets"
 #: src/modules/object-record/components/RecordChip.tsx
 #: src/modules/object-record/components/RecordChip.tsx
 #: src/modules/mention/components/MentionRecordChip.tsx
-<<<<<<< HEAD
-=======
-#: src/modules/command-menu/components/CommandMenuContextChip.tsx
->>>>>>> add-personal-view
 #: src/modules/ai/components/RecordLink.tsx
 #: src/modules/ai/components/AIChatThreadGroup.tsx
 #: src/modules/ai/components/internal/AgentChatFilePreview.tsx
@@ -15091,14 +15053,8 @@ msgid "Updates"
 msgstr "Updates"
 
 #. js-lingui-id: kwkhPe
-<<<<<<< HEAD
-#: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 #: src/modules/settings/billing/components/internal/MeteredPriceSelector.tsx
 #: src/modules/settings/billing/components/internal/MeteredPriceSelector.tsx
-=======
-#: src/modules/billing/components/internal/MeteredPriceSelector.tsx
-#: src/modules/billing/components/internal/MeteredPriceSelector.tsx
->>>>>>> add-personal-view
 msgid "Upgrade"
 msgstr "Upgrade"
 
@@ -15107,19 +15063,11 @@ msgstr "Upgrade"
 msgid "Upgrade Plan"
 msgstr "Upgrade Plan"
 
-<<<<<<< HEAD
 #. js-lingui-id: pKCx2F
 #: src/pages/settings/applications/components/SettingsApplicationVersionContainer.tsx
 msgid "Upgrade to {latestAvailableVersion}"
 msgstr "Upgrade to {latestAvailableVersion}"
 
-#. js-lingui-id: ggd+Ee
-#: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
-msgid "Upgrade to access"
-msgstr "Upgrade to access"
-
-=======
->>>>>>> add-personal-view
 #. js-lingui-id: jmVW3I
 #: src/pages/settings/security/SettingsSecurity.tsx
 msgid "Upgrade to Enterprise to access audit logs"
