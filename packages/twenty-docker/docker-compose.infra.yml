@@ -75,6 +75,12 @@ services:
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
       - "traefik.http.services.frontend.loadbalancer.server.port=5000"
+
+      - "traefik.http.routers.my-router.middlewares=rate-limit"
+      - "traefik.http.middlewares.rate-limit.ratelimit.average=75"
+      - "traefik.http.middlewares.rate-limit.ratelimit.burst=50"
+      - "traefik.http.middlewares.rate-limit.ratelimit.period=5s"
+
     depends_on:
       backend:
         condition: service_healthy
