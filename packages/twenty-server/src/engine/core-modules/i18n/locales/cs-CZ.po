@@ -1,58 +1,47 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2025-01-29 18:14+0100\n"
+"POT-Creation-Date: 2026-04-04 10:59+0700\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
-"Language: cs\n"
-"Project-Id-Version: cf448e737e0d6d7b78742f963d761c61\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-01-01 00:00\n"
-"Last-Translator: \n"
-"Language-Team: Czech\n"
-"Plural-Forms: nplurals=4; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 3;\n"
-"X-Crowdin-Project: cf448e737e0d6d7b78742f963d761c61\n"
-"X-Crowdin-Project-ID: 1\n"
-"X-Crowdin-Language: cs\n"
-"X-Crowdin-File: /packages/twenty-server/src/engine/core-modules/i18n/locales/en.po\n"
-"X-Crowdin-File-ID: 31\n"
+"Language: cs-CZ\n"
 
 #. js-lingui-id: Q0ISF1
 #: src/engine/twenty-orm/utils/compute-relation-connect-query-configs.util.ts
 msgid "{fieldName} and {fieldName}Id cannot be both provided."
-msgstr "{fieldName} a {fieldName}Id nemohou být poskytnuty současně."
+msgstr ""
 
 #. js-lingui-id: ZkHTHm
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 #: src/engine/metadata-modules/index-metadata/utils/validate-can-create-unique-index.util.ts
 msgid "{fieldType} fields cannot be unique."
-msgstr "{fieldType} pole nemohou být jedinečná."
+msgstr ""
 
 #. js-lingui-id: LeIJhm
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "{fieldType} fields cannot have a default value."
-msgstr "Pole {fieldType} nemohou mít výchozí hodnotu."
+msgstr ""
 
 #. js-lingui-id: iEZavm
 #: src/engine/core-modules/dns-manager/services/dns-manager.service.ts
 msgid "{hostnameCount} hostnames found for domain '{domainName}'. Expect 1"
-msgstr "{hostnameCount} hostitel(ů) nalezeno pro doménu '{domainName}'. Očekávejte 1"
+msgstr ""
 
 #. js-lingui-id: ixdsnM
 #: src/engine/core-modules/dns-manager/exceptions/dns-manager.exception.ts
 msgid "A DNS manager error occurred."
-msgstr "Došlo k chybě správce DNS."
+msgstr ""
 
 #. js-lingui-id: Hjj8vT
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "A duplicate entry was detected."
-msgstr "Byl zjištěn duplicitní záznam."
+msgstr ""
 
 #. js-lingui-id: othZF2
 #: src/engine/metadata-modules/field-metadata/field-metadata.exception.ts
 msgid "A field with this name already exists."
-msgstr "Pole s tímto názvem již existuje."
+msgstr ""
 
 #. js-lingui-id: D0Kuk1
 #: src/engine/metadata-modules/front-component/front-component.exception.ts
@@ -62,7 +51,7 @@ msgstr ""
 #. js-lingui-id: +aAI33
 #: src/engine/metadata-modules/logic-function/logic-function.exception.ts
 msgid "A function with this name already exists."
-msgstr "Funkce s tímto názvem již existuje."
+msgstr ""
 
 #. js-lingui-id: 1Pylbk
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-or-relation-flat-field-join-column-name.util.ts
@@ -72,12 +61,12 @@ msgstr ""
 #. js-lingui-id: Nh/ZZe
 #: src/engine/metadata-modules/object-metadata/object-metadata.exception.ts
 msgid "A name conflict occurred."
-msgstr "Došlo ke konfliktu názvů."
+msgstr ""
 
 #. js-lingui-id: ChJFls
 #: src/modules/calendar/calendar-event-import-manager/drivers/exceptions/calendar-event-import-driver.exception.ts
 msgid "A network error occurred while accessing calendar."
-msgstr "Při přístupu ke kalendáři došlo k síťové chybě."
+msgstr ""
 
 #. js-lingui-id: MtcxLV
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-or-relation-flat-field-join-column-name.util.ts
@@ -87,22 +76,22 @@ msgstr ""
 #. js-lingui-id: W6LTzL
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "A payment processing error occurred."
-msgstr "Došlo k chybě při zpracování platby."
+msgstr ""
 
 #. js-lingui-id: sieBE7
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "A record with this relationship already exists."
-msgstr "Záznam s tímto vztahem již existuje."
+msgstr ""
 
 #. js-lingui-id: j7gCou
 #: src/engine/api/graphql/workspace-query-runner/workspace-query-runner.exception.ts
 msgid "A record with this value already exists."
-msgstr "Záznam s touto hodnotou již existuje."
+msgstr ""
 
 #. js-lingui-id: bx1He3
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "A required configuration is missing."
-msgstr "Chybí požadovaná konfigurace."
+msgstr ""
 
 #. js-lingui-id: FVCXUT
 #: src/engine/api/common/common-args-processors/data-arg-processor/data-arg.processor.ts
@@ -113,7 +102,7 @@ msgstr ""
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-role-label-uniqueness.util.ts
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "A role with this label already exists."
-msgstr "Role s tímto štítkem již existuje."
+msgstr ""
 
 #. js-lingui-id: HijTmf
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-skill-name-uniqueness.util.ts
@@ -128,27 +117,27 @@ msgstr ""
 #. js-lingui-id: c1qcYo
 #: src/modules/calendar/calendar-event-import-manager/drivers/exceptions/calendar-event-import-driver.exception.ts
 msgid "A temporary error occurred. Please try again."
-msgstr "Došlo k dočasné chybě. Zkuste to prosím znovu."
+msgstr ""
 
 #. js-lingui-id: reBsjo
 #: src/modules/connected-account/refresh-tokens-manager/exceptions/connected-account-refresh-tokens.exception.ts
 msgid "A temporary network error occurred."
-msgstr "Došlo k dočasné síťové chybě."
+msgstr ""
 
 #. js-lingui-id: WBtp3/
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "A user with this email already exists."
-msgstr "Uživatel s tímto e-mailem již existuje."
+msgstr ""
 
 #. js-lingui-id: qqnpQ9
 #: src/engine/metadata-modules/view/exceptions/view.exception.ts
 msgid "A view error occurred."
-msgstr "Došlo k chybě zobrazení."
+msgstr ""
 
 #. js-lingui-id: NsB3MF
 #: src/engine/metadata-modules/view-field/exceptions/view-field.exception.ts
 msgid "A view field error occurred."
-msgstr "Došlo k chybě pole zobrazení."
+msgstr ""
 
 #. js-lingui-id: 4oDFCk
 #: src/engine/metadata-modules/view-field-group/exceptions/view-field-group.exception.ts
@@ -158,22 +147,22 @@ msgstr ""
 #. js-lingui-id: Rth998
 #: src/engine/metadata-modules/view-filter/exceptions/view-filter.exception.ts
 msgid "A view filter error occurred."
-msgstr "Došlo k chybě filtru zobrazení."
+msgstr ""
 
 #. js-lingui-id: 2rU/w8
 #: src/engine/metadata-modules/view-filter-group/exceptions/view-filter-group.exception.ts
 msgid "A view filter group error occurred."
-msgstr "Došlo k chybě skupiny filtrů zobrazení."
+msgstr ""
 
 #. js-lingui-id: znJ6EA
 #: src/engine/metadata-modules/view-group/exceptions/view-group.exception.ts
 msgid "A view group error occurred."
-msgstr "Došlo k chybě skupiny zobrazení."
+msgstr ""
 
 #. js-lingui-id: gHC5sU
 #: src/engine/metadata-modules/view-sort/exceptions/view-sort.exception.ts
 msgid "A view sort error occurred."
-msgstr "Došlo k chybě řazení zobrazení."
+msgstr ""
 
 #. js-lingui-id: SMhyGZ
 #: src/engine/metadata-modules/webhook/webhook.exception.ts
@@ -188,32 +177,32 @@ msgstr ""
 #. js-lingui-id: Bk+qoW
 #: src/modules/connected-account/refresh-tokens-manager/exceptions/connected-account-refresh-tokens.exception.ts
 msgid "Access token not found."
-msgstr "Přístupový token nenalezen."
+msgstr ""
 
 #. js-lingui-id: 48AxkT
 #: src/engine/workspace-manager/workspace-cleaner/services/cleaner.workspace-service.ts
 msgid "Action needed to prevent workspace deletion"
-msgstr "Akce potřebná k zabránění odstranění pracovního prostoru"
+msgstr ""
 
 #. js-lingui-id: j0DfGR
 #: src/engine/core-modules/auth/services/reset-password.service.ts
 msgid "Action Needed to Reset Password"
-msgstr "Je třeba akce k resetování hesla"
+msgstr ""
 
 #. js-lingui-id: 8Q5bRY
 #: src/engine/core-modules/auth/services/reset-password.service.ts
 msgid "Action Needed to Set Password"
-msgstr "Je třeba akce k nastavení hesla"
+msgstr ""
 
 #. js-lingui-id: VmatbA
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Admin role not found."
-msgstr "Administrátorská role nenalezena."
+msgstr ""
 
 #. js-lingui-id: kmAKx+
 #: src/engine/metadata-modules/ai/ai-agent/agent.exception.ts
 msgid "Agent execution failed."
-msgstr "Spuštění agenta selhalo."
+msgstr ""
 
 #. js-lingui-id: mDXkHu
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-agent-validator.service.ts
@@ -221,17 +210,17 @@ msgstr "Spuštění agenta selhalo."
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-agent-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-agent-validator.service.ts
 msgid "Agent not found"
-msgstr "Agent nenalezen"
+msgstr ""
 
 #. js-lingui-id: UxwIFr
 #: src/engine/metadata-modules/ai/ai-agent/agent.exception.ts
 msgid "Agent not found."
-msgstr "Agent nenalezen."
+msgstr ""
 
 #. js-lingui-id: EisfDV
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-name-uniqueness.util.ts
 msgid "Agent with name \"{name}\" already exists"
-msgstr "Agent s názvem \"{name}\" již existuje"
+msgstr ""
 
 #. js-lingui-id: wqJIjz
 #: src/engine/metadata-modules/flat-page-layout-widget/validators/utils/validate-base-graph-fields.util.ts
@@ -256,69 +245,69 @@ msgstr ""
 #. js-lingui-id: WG8+0x
 #: src/modules/workflow/common/exceptions/workflow-version-step.exception.ts
 msgid "AI agent step execution failed."
-msgstr "Provedení kroku agenta AI selhalo."
+msgstr ""
 
 #. js-lingui-id: pZEIPj
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-name-uniqueness.util.ts
 msgid "An agent with this name already exists"
-msgstr "Agent s tímto názvem již existuje"
+msgstr ""
 
 #. js-lingui-id: Wnol69
 #: src/engine/metadata-modules/ai/ai-agent/agent.exception.ts
 msgid "An agent with this name already exists."
-msgstr "Agent s tímto názvem již existuje."
+msgstr ""
 
 #. js-lingui-id: eW83iC
 #: src/modules/messaging/message-import-manager/drivers/microsoft/exceptions/microsoft-import-driver.exception.ts
 msgid "An error occurred during messages import"
-msgstr "Došlo k chybě během importu zpráv"
+msgstr ""
 
 #. js-lingui-id: dhcf1B
 #: src/engine/workspace-manager/workspace-migration.exception.ts
 msgid "An error occurred during workspace migration."
-msgstr "Při migraci pracovního prostoru došlo k chybě."
+msgstr ""
 
 #. js-lingui-id: S7yZl9
 #: src/engine/core-modules/two-factor-authentication/two-factor-authentication.exception.ts
 msgid "An error occurred with two-factor authentication data."
-msgstr "Došlo k chybě v datech dvoufaktorového ověřování."
+msgstr ""
 
 #. js-lingui-id: XyOToQ
 #: src/engine/core-modules/graphql/utils/generate-graphql-error-from-error.util.ts
 #: src/engine/core-modules/graphql/hooks/use-graphql-error-handler.hook.ts
 #: src/engine/api/common/common-query-runners/errors/standard-error-message.constant.ts
 msgid "An error occurred."
-msgstr "Došlo k chybě."
+msgstr ""
 
 #. js-lingui-id: P/8dT5
 #: src/engine/metadata-modules/index-metadata/index-field-metadata.exception.ts
 msgid "An index metadata error occurred."
-msgstr "Došlo k chybě metadat indexu."
+msgstr ""
 
 #. js-lingui-id: +MvnxO
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "An index must contain at least one field"
-msgstr "Index musí obsahovat alespoň jedno pole"
+msgstr ""
 
 #. js-lingui-id: SOp/Vw
 #: src/engine/core-modules/workspace-invitation/workspace-invitation.exception.ts
 msgid "An invitation has already been sent to this email."
-msgstr "Na tento e-mail již byla odeslána pozvánka."
+msgstr ""
 
 #. js-lingui-id: CQ5DXU
 #: src/engine/metadata-modules/object-metadata/object-metadata.exception.ts
 msgid "An object with this name already exists."
-msgstr "Objekt s tímto názvem již existuje."
+msgstr ""
 
 #. js-lingui-id: Tstlpf
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "An unexpected billing error occurred."
-msgstr "Došlo k neočekávané fakturační chybě."
+msgstr ""
 
 #. js-lingui-id: acTNEg
 #: src/engine/core-modules/twenty-config/twenty-config.exception.ts
 msgid "An unexpected configuration error occurred."
-msgstr "Došlo k neočekávané konfigurační chybě."
+msgstr ""
 
 #. js-lingui-id: W5A0Ly
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-runner/exceptions/workspace-migration-runner.exception.ts
@@ -333,33 +322,33 @@ msgstr "Došlo k neočekávané konfigurační chybě."
 #: src/engine/metadata-modules/row-level-permission-predicate/exceptions/row-level-permission-predicate.exception.ts
 #: src/engine/metadata-modules/row-level-permission-predicate/exceptions/row-level-permission-predicate-group.exception.ts
 msgid "An unexpected error occurred."
-msgstr "Došlo k neočekávané chybě."
+msgstr ""
 
 #. js-lingui-id: q8ZbjA
 #: src/modules/calendar/calendar-event-import-manager/exceptions/calendar-event-import.exception.ts
 #: src/modules/calendar/calendar-event-import-manager/drivers/exceptions/calendar-event-import-driver.exception.ts
 msgid "An unknown calendar error occurred."
-msgstr "Došlo k neznámé chybě kalendáře."
+msgstr ""
 
 #. js-lingui-id: fRWsMD
 #: src/engine/metadata-modules/ai/ai-agent/agent.exception.ts
 msgid "API key is not configured."
-msgstr "Klíč API není nakonfigurován."
+msgstr ""
 
 #. js-lingui-id: MyJhTw
 #: src/engine/core-modules/api-key/exceptions/api-key.exception.ts
 msgid "API key not found."
-msgstr "Klíč API nenalezen."
+msgstr ""
 
 #. js-lingui-id: TLSelA
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "API key role configuration not found."
-msgstr "Konfigurace role klíče API nenalezena."
+msgstr ""
 
 #. js-lingui-id: tGfHmi
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "API key role not found."
-msgstr "Role klíče API nenalezena."
+msgstr ""
 
 #. js-lingui-id: ltvmAF
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-runner/exceptions/workspace-migration-runner.exception.ts
@@ -369,43 +358,43 @@ msgstr "Role klíče API nenalezena."
 #: src/engine/core-modules/auth/strategies/jwt.auth.strategy.spec.ts
 #: src/engine/core-modules/application/application.exception.ts
 msgid "Application not found."
-msgstr "Aplikace nenalezena."
+msgstr ""
 
 #. js-lingui-id: 9qtW5o
 #: src/engine/core-modules/applicationVariable/application-variable.exception.ts
 msgid "Application variable not found."
-msgstr "Proměnná aplikace nenalezena."
+msgstr ""
 
 #. js-lingui-id: mU5fvk
 #: src/engine/core-modules/approved-access-domain/services/approved-access-domain.service.ts
 msgid "Approved access domain already registered."
-msgstr "Schválená přístupová doména je již zaregistrována."
+msgstr ""
 
 #. js-lingui-id: DGW5iN
 #: src/engine/core-modules/approved-access-domain/services/approved-access-domain.service.ts
 msgid "Approved access domain does not match email domain"
-msgstr "Schválená doména přístupu neodpovídá doméně e-mailu"
+msgstr ""
 
 #. js-lingui-id: BKvuAq
 #: src/engine/core-modules/approved-access-domain/services/approved-access-domain.service.ts
 #: src/engine/core-modules/approved-access-domain/services/approved-access-domain.service.ts
 msgid "Approved access domain has already been validated"
-msgstr "Schválená přístupová doména byla již ověřena"
+msgstr ""
 
 #. js-lingui-id: paHOg2
 #: src/engine/core-modules/approved-access-domain/approved-access-domain.exception.ts
 msgid "Approved access domain not found."
-msgstr "Schválená přístupová doména nenalezena."
+msgstr ""
 
 #. js-lingui-id: naCW6Z
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "April"
-msgstr "Duben"
+msgstr ""
 
 #. js-lingui-id: K9efby
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-relation-creation-payload.util.ts
 msgid "At least one relation is require"
-msgstr "Je vyžadován alespoň jeden vztah"
+msgstr ""
 
 #. js-lingui-id: aepsXP
 #: src/engine/core-modules/event-logs/event-logs.exception.ts
@@ -420,23 +409,23 @@ msgstr ""
 #. js-lingui-id: DBHTm/
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "August"
-msgstr "Srpen"
+msgstr ""
 
 #. js-lingui-id: LB4qX/
 #: src/engine/core-modules/auth/utils/auth-graphql-api-exception-handler.util.ts
 msgid "Authentication is not enabled with this provider."
-msgstr "Autentifikace není s tímto poskytovatelem povolena."
+msgstr ""
 
 #. js-lingui-id: Tsx+z2
 #: src/engine/metadata-modules/permissions/permissions.service.ts
 msgid "Authentication is required to access this feature. Please sign in and try again."
-msgstr "Je vyžadováno ověření přístupu k této funkci. Přihlaste se a zkuste to znovu."
+msgstr ""
 
 #. js-lingui-id: cgNV3G
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 #: src/engine/core-modules/file/file.exception.ts
 msgid "Authentication is required."
-msgstr "Je vyžadováno ověření."
+msgstr ""
 
 #. js-lingui-id: bWAwB6
 #: src/engine/core-modules/event-logs/filters/forbidden-exception-graphql.filter.ts
@@ -446,32 +435,32 @@ msgstr ""
 #. js-lingui-id: rkIGWa
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Billing customer not found."
-msgstr "Fakturační zákazník nenalezen."
+msgstr ""
 
 #. js-lingui-id: HVTHL6
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Billing meter not found."
-msgstr "Fakturační měřič nenalezen."
+msgstr ""
 
 #. js-lingui-id: FNftTK
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Billing plan not found."
-msgstr "Fakturační plán nenalezen."
+msgstr ""
 
 #. js-lingui-id: LI7tcn
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Billing price not found."
-msgstr "Fakturační cena nenalezena."
+msgstr ""
 
 #. js-lingui-id: DDKhmc
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Billing product not found."
-msgstr "Fakturační produkt nenalezen."
+msgstr ""
 
 #. js-lingui-id: Je6GWV
 #: src/engine/workspace-manager/workspace-cleaner/exceptions/workspace-cleaner.exception.ts
 msgid "Billing subscription not found."
-msgstr "Fakturační předplatné nenalezeno."
+msgstr ""
 
 #. js-lingui-id: Ara8xP
 #: src/engine/metadata-modules/flat-page-layout-widget/validators/utils/validate-standalone-rich-text-body.util.ts
@@ -496,73 +485,73 @@ msgstr ""
 #. js-lingui-id: bQS4UN
 #: src/modules/calendar/calendar-event-import-manager/drivers/exceptions/calendar-event-import-driver.exception.ts
 msgid "Calendar channel is misconfigured."
-msgstr "Kanál kalendáře je chybně nakonfigurován."
+msgstr ""
 
 #. js-lingui-id: 1t3DGy
 #: src/modules/calendar/calendar-event-import-manager/drivers/exceptions/calendar-event-import-driver.exception.ts
 msgid "Calendar event not found."
-msgstr "Událost kalendáře nenalezena."
+msgstr ""
 
 #. js-lingui-id: GtrALl
 #: src/modules/calendar/calendar-event-import-manager/exceptions/calendar-event-import.exception.ts
 msgid "Calendar provider is not supported."
-msgstr "Poskytovatel kalendáře není podporován."
+msgstr ""
 
 #. js-lingui-id: CnNFfU
 #: src/modules/calendar/calendar-event-import-manager/drivers/exceptions/calendar-event-import-driver.exception.ts
 msgid "Calendar sync error."
-msgstr "Chyba synchronizace kalendáře."
+msgstr ""
 
 #. js-lingui-id: eSaCR/
 #: src/engine/twenty-orm/field-operations/relation-nested-queries/utils/formatConnectRecordNotFoundErrorMessage.util.ts
 msgid "Can't connect to {connectFieldName}. No unique record found with condition: {formattedConnectCondition}"
-msgstr "Nelze se připojit k {connectFieldName}. Žádný jedinečný záznam nebyl nalezen za podmínek: {formattedConnectCondition}"
+msgstr ""
 
 #. js-lingui-id: 2oVE+z
 #: src/engine/guards/impersonate-permission.guard.ts
 msgid "Can't impersonate user via api key"
-msgstr "Nelze vámi se uživatele pomocí klíče API."
+msgstr ""
 
 #. js-lingui-id: vxbVwc
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "Cannot activate non-draft or non-last-published version"
-msgstr "Nelze aktivovat verzi, která není konceptem nebo naposledy publikovaná"
+msgstr ""
 
 #. js-lingui-id: QYS2AB
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Cannot add field permissions on system objects."
-msgstr "Nelze přidat oprávnění k polím na systémových objektech."
+msgstr ""
 
 #. js-lingui-id: FxFlC4
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Cannot add permissions on system objects."
-msgstr "Nelze přidat oprávnění na systémových objektech."
+msgstr ""
 
 #. js-lingui-id: 6kqLHf
 #: src/engine/api/graphql/workspace-query-runner/workspace-query-runner.exception.ts
 msgid "Cannot complete operation due to related records."
-msgstr "Operaci nelze dokončit kvůli souvisejícím záznamům."
+msgstr ""
 
 #. js-lingui-id: LIPsWu
 #: src/modules/workflow/common/workspace-services/workflow-version-validation.workspace-service.ts
 msgid "Cannot create multiple draft versions for the same workflow"
-msgstr "Nelze vytvořit více verzí návrhů pro stejný pracovní postup"
+msgstr ""
 
 #. js-lingui-id: RggZr4
 #: src/modules/workflow/common/workspace-services/workflow-version-validation.workspace-service.ts
 msgid "Cannot create workflow version with status other than draft"
-msgstr "Nelze vytvořit verzi pracovního postupu se stavem jiným než koncept"
+msgstr ""
 
 #. js-lingui-id: VPXcr5
 #: src/engine/core-modules/user/services/user.service.ts
 msgid "Cannot delete account: you are the only admin. Assign another admin or delete the workspace(s) first."
-msgstr "Nelze smazat účet: Jste jediný správce. Přiřaďte jiného správce nebo nejprve smažte pracovní prostor(y)."
+msgstr ""
 
 #. js-lingui-id: RYRFbW
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-agent-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-agent-validator.service.ts
 msgid "Cannot delete standard agent"
-msgstr "Nelze odstranit standardního agenta"
+msgstr ""
 
 #. js-lingui-id: EN2+6i
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-skill-validator.service.ts
@@ -573,37 +562,37 @@ msgstr ""
 #. js-lingui-id: /olFYI
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Cannot delete the last admin user."
-msgstr "Nelze smazat posledního administrátora."
+msgstr ""
 
 #. js-lingui-id: mWk3X+
 #: src/engine/metadata-modules/flat-field-metadata/utils/handle-index-changes-during-field-update.util.ts
 msgid "Cannot delete unique index that have not been created by the workspace custom application"
-msgstr "Nelze odstranit jedinečný index, který nebyl vytvořen vlastní aplikací pracovního prostoru."
+msgstr ""
 
 #. js-lingui-id: AQyr9X
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Cannot delete, please update the label identifier field first"
-msgstr "Nelze smazat, nejprve aktualizujte pole s identifikátorem štítku"
+msgstr ""
 
 #. js-lingui-id: FrNWt0
 #: src/modules/workflow/workflow-trigger/workspace-services/workflow-trigger.workspace-service.ts
 msgid "Cannot disable non-active workflow version"
-msgstr "Nelze deaktivovat neaktivní verzi pracovního postupu"
+msgstr ""
 
 #. js-lingui-id: lDTqT7
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Cannot give write permission on non-readable objects."
-msgstr "Nelze udělit oprávnění k zápisu na nečitelných objektech."
+msgstr ""
 
 #. js-lingui-id: r4uEo5
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Cannot give write permission without read permission."
-msgstr "Nelze udělit oprávnění k zápisu bez oprávnění ke čtení."
+msgstr ""
 
 #. js-lingui-id: IDMgr/
 #: src/modules/workflow/workflow-trigger/workspace-services/workflow-trigger.workspace-service.ts
 msgid "Cannot have more than one active workflow version"
-msgstr "Nelze mít více než jednu aktivní verzi pracovního postupu"
+msgstr ""
 
 #. js-lingui-id: DAGexD
 #: src/engine/metadata-modules/row-level-permission-predicate/exceptions/row-level-permission-predicate.exception.ts
@@ -668,28 +657,28 @@ msgstr ""
 #. js-lingui-id: Q0diyJ
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Cannot remove the last admin from the workspace."
-msgstr "Nelze odebrat posledního administrátora z pracovního prostoru."
+msgstr ""
 
 #. js-lingui-id: wNJvot
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Cannot switch subscription interval."
-msgstr "Nelze změnit interval předplatného."
+msgstr ""
 
 #. js-lingui-id: U/P/gT
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Cannot switch subscription plan."
-msgstr "Nelze změnit plán předplatného."
+msgstr ""
 
 #. js-lingui-id: PjZIyI
 #: src/modules/messaging/common/query-hooks/message/message-channel-update-one.pre-query.hook.ts
 msgid "Cannot update message channel while sync is ongoing. Please wait for the sync to complete."
-msgstr "Nelze aktualizovat kanál zpráv, když synchronizace probíhá. Počkejte, než se synchronizace dokončí."
+msgstr ""
 
 #. js-lingui-id: fpzw+t
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-agent-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-agent-validator.service.ts
 msgid "Cannot update standard agent"
-msgstr "Nelze aktualizovat standardního agenta"
+msgstr ""
 
 #. js-lingui-id: I2EmgT
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-skill-validator.service.ts
@@ -700,7 +689,7 @@ msgstr ""
 #. js-lingui-id: 4DKo3U
 #: src/modules/workflow/common/workspace-services/workflow-version-validation.workspace-service.ts
 msgid "Cannot update workflow version status manually"
-msgstr "Nelze ručně aktualizovat stav verze pracovního postupu"
+msgstr ""
 
 #. js-lingui-id: NGL+Sl
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-navigation-menu-item-validator.service.ts
@@ -722,7 +711,7 @@ msgstr ""
 #. js-lingui-id: o21Tgt
 #: src/modules/workflow/common/exceptions/workflow-version-step.exception.ts
 msgid "Code step execution failed."
-msgstr "Provedení kroku kódu selhalo."
+msgstr ""
 
 #. js-lingui-id: xBSqqt
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-command-menu-item-validator.service.ts
@@ -740,7 +729,7 @@ msgstr ""
 #. js-lingui-id: L1uQuF
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Composite type not found."
-msgstr "Kompozitní typ nenalezen."
+msgstr ""
 
 #. js-lingui-id: yU57/s
 #: src/engine/metadata-modules/flat-page-layout-widget/validators/utils/validate-fields-flat-page-layout-widget-for-creation.util.ts
@@ -825,37 +814,37 @@ msgstr ""
 #. js-lingui-id: n8EtHV
 #: src/engine/core-modules/twenty-config/twenty-config.exception.ts
 msgid "Configuration validation failed."
-msgstr "Ověření konfigurace se nezdařilo."
+msgstr ""
 
 #. js-lingui-id: g/dGHV
 #: src/engine/core-modules/twenty-config/twenty-config.exception.ts
 msgid "Configuration variable not found."
-msgstr "Konfigurační proměnná nenalezena."
+msgstr ""
 
 #. js-lingui-id: WtMHh6
 #: src/engine/core-modules/record-transformer/record-transformer.exception.ts
 msgid "Conflicting phone calling code and country code."
-msgstr "Konflikt mezi telefonní předvolbou a kódem země."
+msgstr ""
 
 #. js-lingui-id: gP+fzj
 #: src/engine/core-modules/record-transformer/record-transformer.exception.ts
 msgid "Conflicting phone calling code."
-msgstr "Konfliktní telefonní předvolba."
+msgstr ""
 
 #. js-lingui-id: CmQEdn
 #: src/engine/core-modules/record-transformer/record-transformer.exception.ts
 msgid "Conflicting phone country code."
-msgstr "Konfliktní telefonní kód země."
+msgstr ""
 
 #. js-lingui-id: 1fFL4B
 #: src/engine/twenty-orm/utils/compute-relation-connect-query-configs.util.ts
 msgid "Connect is not allowed for {connectFieldName} on {objectMetadataNameSingular}"
-msgstr "Připojení není povoleno pro {connectFieldName} na {objectMetadataNameSingular}."
+msgstr ""
 
 #. js-lingui-id: /OJTzk
 #: src/engine/core-modules/tool/tools/email-tool/exceptions/email-tool.exception.ts
 msgid "Connected account not found."
-msgstr "Propojený účet nenalezen."
+msgstr ""
 
 #. js-lingui-id: rx63gq
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-skill-required-properties.util.ts
@@ -866,7 +855,7 @@ msgstr ""
 #. js-lingui-id: gdbojg
 #: src/engine/metadata-modules/object-permission/field-permission/field-permission.service.ts
 msgid "Contradicting field permissions have been detected on a relation field ({fieldName})."
-msgstr "Na poli vazby ({fieldName}) byly zjištěny protichůdné úrovně přístupu."
+msgstr ""
 
 #. js-lingui-id: Fep47m
 #: src/engine/metadata-modules/flat-entity/utils/resolve-entity-relation-universal-identifiers.util.ts
@@ -882,17 +871,17 @@ msgstr ""
 #: src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-id-in-flat-entity-maps-or-throw.util.ts
 #: src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-id-in-flat-entity-maps-or-throw.util.ts
 msgid "Could not find flat entity in maps"
-msgstr "Nepodařilo se najít plochou entitu na mapách"
+msgstr ""
 
 #. js-lingui-id: jBrX/g
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Could not find index field related field metadata"
-msgstr "Nelze najít metadata pro pole související s indexem"
+msgstr ""
 
 #. js-lingui-id: HVajHk
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Could not find index related object metadata"
-msgstr "Nelze najít metadata objektu souvisejícího s indexem"
+msgstr ""
 
 #. js-lingui-id: YzCaIm
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-or-relation-flat-field-join-column-name.util.ts
@@ -907,111 +896,111 @@ msgstr ""
 #. js-lingui-id: 2ZhYYy
 #: src/engine/metadata-modules/flat-field-metadata/utils/from-create-field-input-to-flat-field-metadatas-to-create.util.ts
 msgid "Created field metadata, parent object metadata not found"
-msgstr "Vytvořena metadata pole, metadata nadřazeného objektu nenalezena"
+msgstr ""
 
 #. js-lingui-id: umhXiy
 #: src/modules/workflow/workflow-trigger/utils/compute-cron-pattern-from-schedule.ts
 msgid "Cron pattern '{pattern}' is invalid"
-msgstr "Cron vzor '{pattern}' je neplatný"
+msgstr ""
 
 #. js-lingui-id: 8vxOU0
 #: src/engine/core-modules/workspace/workspace.exception.ts
 msgid "Custom domain not found."
-msgstr "Vlastní doména nenalezena."
+msgstr ""
 
 #. js-lingui-id: zsYQk/
 #: src/engine/core-modules/workspace/workspace.exception.ts
 msgid "Custom domains are disabled for this workspace."
-msgstr "Vlastní domény jsou pro tento pracovní prostor zakázány."
+msgstr ""
 
 #. js-lingui-id: qHZppf
 #: src/engine/metadata-modules/object-metadata/object-metadata.exception.ts
 msgid "Custom object is missing a label identifier field."
-msgstr "U vlastního objektu chybí pole identifikátoru štítku."
+msgstr ""
 
 #. js-lingui-id: jlbLNx
 #: src/modules/dashboard/exceptions/dashboard.exception.ts
 msgid "Dashboard not found."
-msgstr "Řídicí panel nenalezen."
+msgstr ""
 
 #. js-lingui-id: Bv/LBb
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "Data structure is invalid."
-msgstr "Struktura dat je neplatná."
+msgstr ""
 
 #. js-lingui-id: /sRN4g
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "Data version mismatch. Please refresh and try again."
-msgstr "Nesoulad verze dat. Obnovte prosím a zkuste to znovu."
+msgstr ""
 
 #. js-lingui-id: NhQiQx
 #: src/engine/core-modules/twenty-config/twenty-config.exception.ts
 msgid "Database configuration is disabled."
-msgstr "Konfigurace databáze je zakázána."
+msgstr ""
 
 #. js-lingui-id: r6zgGo
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "December"
-msgstr "Prosinec"
+msgstr ""
 
 #. js-lingui-id: cgV4xo
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Default role not found."
-msgstr "Výchozí role nenalezena."
+msgstr ""
 
 #. js-lingui-id: GGNmm+
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Default value \"{defaultValue}\" must be one of the option values"
-msgstr "Výchozí hodnota \"{defaultValue}\" musí být jednou z hodnot možností"
+msgstr ""
 
 #. js-lingui-id: XeWfi3
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Default value cannot be null."
-msgstr "Výchozí hodnota nesmí být null."
+msgstr ""
 
 #. js-lingui-id: FdUbPo
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Default value must be a string"
-msgstr "Výchozí hodnota musí být řetězec"
+msgstr ""
 
 #. js-lingui-id: sv9P4Q
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Default value should be as quoted string"
-msgstr "Výchozí hodnota by měla být uvedena jako citovaný řetězec"
+msgstr ""
 
 #. js-lingui-id: 6pJV03
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Default values must be unique"
-msgstr "Výchozí hodnoty musí být jedinečné"
+msgstr ""
 
 #. js-lingui-id: IymH4t
 #: src/engine/core-modules/public-domain/public-domain.service.ts
 msgid "Domain already used for workspace custom domain"
-msgstr "Doména již byla použita pro vlastní doménu pracovního prostoru."
+msgstr ""
 
 #. js-lingui-id: 2sIVDj
 #: src/engine/core-modules/dns-manager/services/dns-manager.service.ts
 msgid "Domain is already registered"
-msgstr "Doména je již zaregistrována."
+msgstr ""
 
 #. js-lingui-id: PfJswy
 #: src/engine/core-modules/domain/custom-domain-manager/services/custom-domain-manager.service.ts
 msgid "Domain is already registered as public domain"
-msgstr "Doména je již zaregistrována jako veřejná doména."
+msgstr ""
 
 #. js-lingui-id: UrzTjS
 #: src/engine/core-modules/graphql/hooks/use-validate-graphql-query-complexity.hook.ts
 msgid "Duplicate root resolver found. Each root resolver can only be called once per document."
-msgstr "Nalezen duplicitní kořenový resolver. Každý kořenový resolver lze v dokumentu zavolat pouze jednou."
+msgstr ""
 
 #. js-lingui-id: BXtAxc
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Duplicated option {field}"
-msgstr "Duplikovaná možnost {field}"
+msgstr ""
 
 #. js-lingui-id: n6jNyT
 #: src/engine/metadata-modules/command-menu-item/command-menu-item.exception.ts
@@ -1026,7 +1015,7 @@ msgstr ""
 #. js-lingui-id: BBXuRb
 #: src/engine/core-modules/email-verification/email-verification-exception-filter.util.ts
 msgid "Email already verified."
-msgstr "Email již ověřen."
+msgstr ""
 
 #. js-lingui-id: LT5dFi
 #: src/engine/core-modules/user/services/user.service.ts
@@ -1036,37 +1025,37 @@ msgstr ""
 #. js-lingui-id: MYgdAv
 #: src/engine/core-modules/emailing-domain/drivers/exceptions/emailing-domain-driver.exception.ts
 msgid "Email domain configuration error."
-msgstr "Chyba konfigurace e-mailové domény."
+msgstr ""
 
 #. js-lingui-id: Ik1o4d
 #: src/engine/core-modules/emailing-domain/drivers/exceptions/emailing-domain-driver.exception.ts
 msgid "Email domain not found."
-msgstr "E-mailová doména nenalezena."
+msgstr ""
 
 #. js-lingui-id: m9fD11
 #: src/engine/core-modules/email-verification/email-verification.exception.ts
 msgid "Email is already verified."
-msgstr "E-mail je již ověřen."
+msgstr ""
 
 #. js-lingui-id: xw6iqb
 #: src/engine/core-modules/auth/auth.exception.ts
 #: src/engine/core-modules/auth/utils/auth-graphql-api-exception-handler.util.ts
 msgid "Email is not verified."
-msgstr "Email není ověřen."
+msgstr ""
 
 #. js-lingui-id: ZsZeV2
 #: src/engine/core-modules/auth/services/sign-in-up.service.ts
 #: src/engine/core-modules/auth/services/sign-in-up.service.ts
 #: src/engine/core-modules/auth/services/sign-in-up.service.ts
 msgid "Email is required"
-msgstr "Email je vyžadován"
+msgstr ""
 
 #. js-lingui-id: Qof3ks
 #: src/engine/core-modules/workspace-invitation/workspace-invitation.exception.ts
 #: src/engine/core-modules/email-verification/email-verification.exception.ts
 #: src/engine/core-modules/auth/services/auth.service.ts
 msgid "Email is required."
-msgstr "Email je vyžadován."
+msgstr ""
 
 #. js-lingui-id: 3wAyvl
 #: src/utils/get-domain-name-by-email.ts
@@ -1076,49 +1065,49 @@ msgstr ""
 #. js-lingui-id: y+BSWq
 #: src/engine/core-modules/user/user.exception.ts
 msgid "Email is unchanged."
-msgstr "E-mail se nezměnil."
+msgstr ""
 
 #. js-lingui-id: q87JH5
 #: src/engine/core-modules/user/user.exception.ts
 msgid "Email update is restricted to single workspace users."
-msgstr "Aktualizace e-mailu je omezena na uživatele jednoho pracovního prostoru."
+msgstr ""
 
 #. js-lingui-id: PeMFTI
 #: src/engine/core-modules/email-verification/email-verification.exception.ts
 msgid "Email verification is not required."
-msgstr "Ověření e-mailu není vyžadováno."
+msgstr ""
 
 #. js-lingui-id: y8LSMh
 #: src/engine/core-modules/email-verification/email-verification-exception-filter.util.ts
 msgid "Email verification not required."
-msgstr "Ověření emailu není požadováno."
+msgstr ""
 
 #. js-lingui-id: aVGG1u
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Empty field permissions are not allowed."
-msgstr "Prázdná oprávnění k polím nejsou povolena."
+msgstr ""
 
 #. js-lingui-id: qpXqpa
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-runner/exceptions/workspace-migration-action-execution.exception.ts
 #: src/engine/core-modules/application/application.exception.ts
 msgid "Entity not found."
-msgstr "Entita nenalezena."
+msgstr ""
 
 #. js-lingui-id: jxgcg/
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-runner/exceptions/workspace-migration-action-execution.exception.ts
 msgid "Enum operation failed."
-msgstr "Operace výčtu selhala."
+msgstr ""
 
 #. js-lingui-id: EzGlkq
 #: src/engine/core-modules/dns-manager/validator/dns-manager.validate.ts
 msgid "Environment variable CLOUDFLARE_API_KEY must be defined to use this feature."
-msgstr "Pro použití této funkce musí být definována proměnná prostředí CLOUDFLARE_API_KEY."
+msgstr ""
 
 #. js-lingui-id: SlfejT
 #: src/engine/core-modules/feature-flag/validates/feature-flag.validate.spec.ts
 #: src/engine/core-modules/feature-flag/validates/feature-flag.validate.spec.ts
 msgid "Error"
-msgstr "Chyba"
+msgstr ""
 
 #. js-lingui-id: ksMwKk
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-command-menu-item-validator.service.ts
@@ -1133,7 +1122,7 @@ msgstr ""
 #. js-lingui-id: AiFXmG
 #: src/engine/twenty-orm/utils/compute-relation-connect-query-configs.util.ts
 msgid "Expected the same constraint fields to be used consistently across all operations for {connectFieldName}."
-msgstr "Očekává se, že stejná omezení polí budou použita konzistentně ve všech operacích pro {connectFieldName}."
+msgstr ""
 
 #. js-lingui-id: E7Dsiq
 #: src/engine/metadata-modules/ai/ai-agent-monitor/resolvers/agent-turn.resolver.ts
@@ -1148,12 +1137,12 @@ msgstr ""
 #. js-lingui-id: M1ZSSL
 #: src/engine/metadata-modules/logic-function/logic-function.exception.ts
 msgid "Failed to create function."
-msgstr "Nepodařilo se vytvořit funkci."
+msgstr ""
 
 #. js-lingui-id: I71ur2
 #: src/engine/core-modules/record-crud/exceptions/record-crud.exception.ts
 msgid "Failed to create record."
-msgstr "Nepodařilo se vytvořit záznam."
+msgstr ""
 
 #. js-lingui-id: mWj8el
 #: src/engine/core-modules/file/files-field/files-field.service.ts
@@ -1163,22 +1152,22 @@ msgstr ""
 #. js-lingui-id: pUligB
 #: src/engine/core-modules/admin-panel/admin-panel-queue.service.ts
 msgid "Failed to delete jobs. Please try again later."
-msgstr "Nepodařilo se odstranit úlohy. Zkuste to prosím znovu později."
+msgstr ""
 
 #. js-lingui-id: MBdUff
 #: src/engine/core-modules/record-crud/exceptions/record-crud.exception.ts
 msgid "Failed to delete record."
-msgstr "Nepodařilo se smazat záznam."
+msgstr ""
 
 #. js-lingui-id: SkvO+5
 #: src/modules/dashboard/exceptions/dashboard.exception.ts
 msgid "Failed to duplicate dashboard."
-msgstr "Nepodařilo se duplikovat ovládací panel."
+msgstr ""
 
 #. js-lingui-id: HfhmrS
 #: src/engine/core-modules/admin-panel/admin-panel-queue.service.ts
 msgid "Failed to load queue jobs. Please try again later."
-msgstr "Nepodařilo se načíst úlohy fronty. Zkuste to prosím znovu později."
+msgstr ""
 
 #. js-lingui-id: ruD0s1
 #: src/engine/subscriptions/event-stream.exception.ts
@@ -1188,72 +1177,72 @@ msgstr ""
 #. js-lingui-id: /E7MoD
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Failed to record billing event."
-msgstr "Nepodařilo se zaznamenat fakturační událost."
+msgstr ""
 
 #. js-lingui-id: SJEIIJ
 #: src/engine/core-modules/admin-panel/admin-panel-queue.service.ts
 msgid "Failed to retry jobs. Please try again later."
-msgstr "Nepodařilo se opakovat úlohy. Zkuste to prosím znovu později."
+msgstr ""
 
 #. js-lingui-id: Cr+NSQ
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Failed to update field permission."
-msgstr "Nepodařilo se aktualizovat oprávnění k poli."
+msgstr ""
 
 #. js-lingui-id: nrcGtY
 #: src/engine/core-modules/record-crud/exceptions/record-crud.exception.ts
 msgid "Failed to update record."
-msgstr "Nepodařilo se aktualizovat záznam."
+msgstr ""
 
 #. js-lingui-id: FiYPA2
 #: src/engine/core-modules/record-crud/exceptions/record-crud.exception.ts
 msgid "Failed to upsert record."
-msgstr "Nepodařilo se vložit nebo aktualizovat záznam."
+msgstr ""
 
 #. js-lingui-id: Ai7knL
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "Feature configuration not found."
-msgstr "Konfigurace funkce nenalezena."
+msgstr ""
 
 #. js-lingui-id: 4lgLew
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "February"
-msgstr "Únor"
+msgstr ""
 
 #. js-lingui-id: vngnhF
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Field already exists"
-msgstr "Pole již existuje"
+msgstr ""
 
 #. js-lingui-id: ugu505
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Field cannot be indexed as it belongs to a different object"
-msgstr "Pole nelze indexovat, protože patří jinému objektu"
+msgstr ""
 
 #. js-lingui-id: Hg95ys
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-identifiers.util.ts
 msgid "Field cannot be used as label identifier"
-msgstr "Pole nelze použít jako identifikátor štítku"
+msgstr ""
 
 #. js-lingui-id: F6OLoA
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-identifiers.util.ts
 msgid "Field declared as image identifier not found"
-msgstr "Pole deklarované jako identifikátor obrázku nebylo nalezeno"
+msgstr ""
 
 #. js-lingui-id: 75hHpn
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-identifiers.util.ts
 msgid "Field declared as label identifier not found"
-msgstr "Pole deklarované jako identifikátor štítku nebylo nalezeno"
+msgstr ""
 
 #. js-lingui-id: qelyBB
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Field does not belong to the indexed object"
-msgstr "Pole nepatří k indexovanému objektu"
+msgstr ""
 
 #. js-lingui-id: AgbRjM
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
 msgid "Field label identifier is required"
-msgstr "Identifikátor pole je vyžadován"
+msgstr ""
 
 #. js-lingui-id: MPt365
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-filter-validator.service.ts
@@ -1267,7 +1256,7 @@ msgstr "Identifikátor pole je vyžadován"
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-row-level-permission-predicate-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-row-level-permission-predicate-validator.service.ts
 msgid "Field metadata not found"
-msgstr "Metadata pole nenalezena"
+msgstr ""
 
 #. js-lingui-id: JrAl/I
 #: src/modules/dashboard/chart-data/exceptions/chart-data.exception.ts
@@ -1275,63 +1264,63 @@ msgstr "Metadata pole nenalezena"
 #: src/engine/metadata-modules/row-level-permission-predicate/exceptions/row-level-permission-predicate.exception.ts
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Field metadata not found."
-msgstr "Metadata pole nenalezena."
+msgstr ""
 
 #. js-lingui-id: uTPwH1
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Field metadata to delete not found"
-msgstr "Metadata pole k odstranění nenalezena"
+msgstr ""
 
 #. js-lingui-id: Ljqo/T
 #: src/engine/metadata-modules/flat-field-metadata/utils/from-update-field-input-to-flat-field-metadata.util.ts
 msgid "Field metadata to update not found"
-msgstr "Metadata pole pro aktualizaci nenalezena"
+msgstr ""
 
 #. js-lingui-id: prTOhK
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Field name is not synced with field label"
-msgstr "Název pole není synchronizován se štítkem pole"
+msgstr ""
 
 #. js-lingui-id: XJmtgE
 #: src/engine/metadata-modules/field-metadata/field-metadata.exception.ts
 msgid "Field name is not synced with label."
-msgstr "Název pole není synchronizován se štítkem."
+msgstr ""
 
 #. js-lingui-id: Ts+YbB
 #: src/engine/metadata-modules/field-metadata/field-metadata.exception.ts
 #: src/engine/core-modules/application/application.exception.ts
 msgid "Field not found."
-msgstr "Pole nenalezeno."
+msgstr ""
 
 #. js-lingui-id: QXuG8C
 #: src/engine/metadata-modules/object-permission/field-permission/field-permission.service.ts
 msgid "Field permissions can only be used to restrict access, not to grant additional permissions."
-msgstr "Oprávnění pole lze použít pouze k omezování přístupu, nikoliv k udělení dalších přístupových práv."
+msgstr ""
 
 #. js-lingui-id: S+y2Wg
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Field referenced in index does not exist"
-msgstr "Pole uvedené v indexu neexistuje"
+msgstr ""
 
 #. js-lingui-id: ylQono
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Field restrictions only apply to readable objects."
-msgstr "Omezení polí platí pouze pro čitelné objekty."
+msgstr ""
 
 #. js-lingui-id: cK8ILP
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Field to create related object not found"
-msgstr "Pole pro vytvoření souvisejícího objektu nenalezeno"
+msgstr ""
 
 #. js-lingui-id: K6qzz4
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Field to update not found"
-msgstr "Pole pro aktualizaci nenalezeno"
+msgstr ""
 
 #. js-lingui-id: 5cm5Hn
 #: src/engine/metadata-modules/flat-field-metadata/utils/from-update-field-input-to-flat-field-metadata.util.ts
 msgid "Field to update object metadata not found"
-msgstr "Pole pro aktualizaci metadat objektu nebylo nalezeno."
+msgstr ""
 
 #. js-lingui-id: stY5BO
 #: src/engine/metadata-modules/flat-field-metadata/services/flat-field-metadata-type-validator.service.ts
@@ -1351,12 +1340,12 @@ msgstr ""
 #. js-lingui-id: 5Buorv
 #: src/engine/metadata-modules/field-metadata/field-metadata.exception.ts
 msgid "Field type validation error."
-msgstr "Chyba ověření typu pole."
+msgstr ""
 
 #. js-lingui-id: J4hC2m
 #: src/engine/metadata-modules/search-field-metadata/constants/search-vector-field.constants.ts
 msgid "Field used for full-text search"
-msgstr "Pole použité pro fulltextové vyhledávání"
+msgstr ""
 
 #. js-lingui-id: M4sb1B
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-group-validator.service.ts
@@ -1364,32 +1353,32 @@ msgstr "Pole použité pro fulltextové vyhledávání"
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-group-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-group-validator.service.ts
 msgid "Field value is required"
-msgstr "Hodnota pole je vyžadována"
+msgstr ""
 
 #. js-lingui-id: Sof2+k
 #: src/engine/metadata-modules/view-field/exceptions/view-field.exception.ts
 msgid "FieldMetadataId is required to create a view field."
-msgstr "FieldMetadataId je vyžadován k vytvoření pole zobrazení."
+msgstr ""
 
 #. js-lingui-id: NTyTR5
 #: src/engine/metadata-modules/view-filter-group/exceptions/view-filter-group.exception.ts
 msgid "FieldMetadataId is required to create a view filter group."
-msgstr "FieldMetadataId je vyžadován k vytvoření skupiny filtrů zobrazení."
+msgstr ""
 
 #. js-lingui-id: Ya6oU7
 #: src/engine/metadata-modules/view-filter/exceptions/view-filter.exception.ts
 msgid "FieldMetadataId is required to create a view filter."
-msgstr "FieldMetadataId je vyžadován k vytvoření filtru zobrazení."
+msgstr ""
 
 #. js-lingui-id: DU4jcg
 #: src/engine/metadata-modules/view-group/exceptions/view-group.exception.ts
 msgid "FieldMetadataId is required to create a view group."
-msgstr "FieldMetadataId je vyžadován k vytvoření skupiny zobrazení."
+msgstr ""
 
 #. js-lingui-id: snEXuU
 #: src/engine/metadata-modules/view-sort/exceptions/view-sort.exception.ts
 msgid "FieldMetadataId is required to create a view sort."
-msgstr "FieldMetadataId je vyžadován k vytvoření třídění zobrazení."
+msgstr ""
 
 #. js-lingui-id: ycn/wp
 #: src/engine/twenty-orm/field-operations/files-field-sync/files-field-sync.ts
@@ -1411,7 +1400,7 @@ msgstr ""
 #: src/engine/core-modules/file-storage/interfaces/file-storage-exception.ts
 #: src/engine/core-modules/file/file.exception.ts
 msgid "File not found."
-msgstr "Soubor nenalezen."
+msgstr ""
 
 #. js-lingui-id: psMxtB
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-files-flat-field-metadata.util.ts
@@ -1433,27 +1422,27 @@ msgstr ""
 #. js-lingui-id: eWmJYU
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Forbidden updated properties for relation field metadata"
-msgstr "Zakázané vlastnosti ke změně pro metadata vztahového pole"
+msgstr ""
 
 #. js-lingui-id: kuN9I4
 #: src/modules/workflow/workflow-trigger/utils/assert-form-step-is-valid.util.ts
 msgid "Form action fields must have a defined label and type"
-msgstr "Pole akce formuláře musí mít definovaný štítek a typ"
+msgstr ""
 
 #. js-lingui-id: QK3OvQ
 #: src/modules/workflow/workflow-trigger/utils/assert-form-step-is-valid.util.ts
 msgid "Form action fields must have unique names"
-msgstr "Pole akce formuláře musí mít unikátní názvy"
+msgstr ""
 
 #. js-lingui-id: KYP1t5
 #: src/modules/workflow/workflow-trigger/utils/assert-form-step-is-valid.util.ts
 msgid "Form action must have at least one field"
-msgstr "Akce formuláře musí mít alespoň jedno pole"
+msgstr ""
 
 #. js-lingui-id: 39y5bn
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "Friday"
-msgstr "Pátek"
+msgstr ""
 
 #. js-lingui-id: Wed+Kp
 #: src/engine/metadata-modules/front-component/front-component.exception.ts
@@ -1483,37 +1472,37 @@ msgstr ""
 #. js-lingui-id: pouguB
 #: src/engine/metadata-modules/logic-function/logic-function.exception.ts
 msgid "Function code is unchanged."
-msgstr "Kód funkce se nezměnil."
+msgstr ""
 
 #. js-lingui-id: Ho3UAo
 #: src/engine/metadata-modules/logic-function/logic-function.exception.ts
 msgid "Function execution limit reached."
-msgstr "Bylo dosaženo limitu provádění funkce."
+msgstr ""
 
 #. js-lingui-id: mdxF/u
 #: src/engine/metadata-modules/logic-function/logic-function.exception.ts
 msgid "Function execution timed out."
-msgstr "Časový limit pro provedení funkce vypršel."
+msgstr ""
 
 #. js-lingui-id: IsdR/t
 #: src/engine/metadata-modules/logic-function/logic-function.exception.ts
 msgid "Function is currently building."
-msgstr "Funkce se právě sestavuje."
+msgstr ""
 
 #. js-lingui-id: GhVI/u
 #: src/engine/metadata-modules/logic-function/logic-function.exception.ts
 msgid "Function is not ready."
-msgstr "Funkce není připravena."
+msgstr ""
 
 #. js-lingui-id: 2ACKTg
 #: src/engine/metadata-modules/logic-function/logic-function.exception.ts
 msgid "Function not found."
-msgstr "Funkce nenalezena."
+msgstr ""
 
 #. js-lingui-id: cvJ2e6
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "Google API authentication is disabled."
-msgstr "Ověřování přes Google API je zakázáno."
+msgstr ""
 
 #. js-lingui-id: pXkgL2
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-widget-validator.service.ts
@@ -1534,55 +1523,55 @@ msgstr ""
 #. js-lingui-id: CDiGGx
 #: src/modules/calendar/calendar-event-import-manager/drivers/exceptions/calendar-event-import-driver.exception.ts
 msgid "Handle aliases are required."
-msgstr "Jsou vyžadovány aliasy identifikátorů."
+msgstr ""
 
 #. js-lingui-id: 6cVc+b
 #: src/engine/core-modules/sso/sso.exception.ts
 msgid "Identity provider not found."
-msgstr "Poskytovatel identity nenalezen."
+msgstr ""
 
 #. js-lingui-id: YcVn4w
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "If defined default value must contain at least one value"
-msgstr "Je-li definována výchozí hodnota, musí obsahovat alespoň jednu hodnotu"
+msgstr ""
 
 #. js-lingui-id: Kfy/ML
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Index already exists"
-msgstr "Index již existuje"
+msgstr ""
 
 #. js-lingui-id: EwXumf
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Index field has an invalid reference"
-msgstr "Indexové pole má neplatný odkaz"
+msgstr ""
 
 #. js-lingui-id: ITue4V
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Index field references incorrect index metadata"
-msgstr "Indexové pole odkazuje na nesprávné metainformace indexu"
+msgstr ""
 
 #. js-lingui-id: K1hWwv
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Index must have at least one field"
-msgstr "Index musí mít alespoň jedno pole"
+msgstr ""
 
 #. js-lingui-id: Hl6cv2
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Index related object not found"
-msgstr "Související objekt indexu nebyl nalezen"
+msgstr ""
 
 #. js-lingui-id: fY2zUQ
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/builders/index/workspace-migration-index-actions-builder.service.ts
 msgid "Index to delete not found"
-msgstr "Index ke smazání nebyl nalezen"
+msgstr ""
 
 #. js-lingui-id: a+k+8J
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Index with same name already exists"
-msgstr "Index se stejným názvem již existuje"
+msgstr ""
 
 #. js-lingui-id: D6Tjt0
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
@@ -1592,78 +1581,78 @@ msgstr ""
 #. js-lingui-id: 9Lkkre
 #: src/engine/metadata-modules/utils/exceptions/invalid-metadata.exception.ts
 msgid "Input exceeds maximum length."
-msgstr "Vstup překračuje maximální délku."
+msgstr ""
 
 #. js-lingui-id: nrH4HK
 #: src/engine/metadata-modules/utils/exceptions/invalid-metadata.exception.ts
 msgid "Input is too short."
-msgstr "Vstup je příliš krátký."
+msgstr ""
 
 #. js-lingui-id: 9sx+WQ
 #: src/engine/core-modules/emailing-domain/drivers/exceptions/emailing-domain-driver.exception.ts
 msgid "Insufficient permissions for email domain."
-msgstr "Nedostatečná oprávnění pro e-mailovou doménu."
+msgstr ""
 
 #. js-lingui-id: Bluaux
 #: src/modules/calendar/calendar-event-import-manager/drivers/exceptions/calendar-event-import-driver.exception.ts
 msgid "Insufficient permissions to access calendar."
-msgstr "Nedostatečná oprávnění pro přístup ke kalendáři."
+msgstr ""
 
 #. js-lingui-id: J1UlII
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "Insufficient permissions."
-msgstr "Nedostatečná oprávnění."
+msgstr ""
 
 #. js-lingui-id: pSjWxS
 #: src/modules/workflow/workflow-trigger/exceptions/workflow-trigger.exception.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-runner/exceptions/workspace-migration-action-execution.exception.ts
 msgid "Invalid action type."
-msgstr "Neplatný typ akce."
+msgstr ""
 
 #. js-lingui-id: D/IcuN
 #: src/engine/metadata-modules/ai/ai-agent/agent.exception.ts
 msgid "Invalid agent input."
-msgstr "Neplatný vstup agenta."
+msgstr ""
 
 #. js-lingui-id: hJpBT6
 #: src/engine/api/rest/input-request-parsers/rest-input-request-parser.exception.ts
 msgid "Invalid aggregate fields parameter."
-msgstr "Neplatný parametr agregačních polí."
+msgstr ""
 
 #. js-lingui-id: KNrRpL
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Invalid argument provided."
-msgstr "Poskytnut neplatný argument."
+msgstr ""
 
 #. js-lingui-id: Z5WSzG
 #: src/engine/core-modules/audit/audit.exception.ts
 msgid "Invalid audit input."
-msgstr "Neplatný vstup auditu."
+msgstr ""
 
 #. js-lingui-id: g/ne5t
 #: src/engine/core-modules/audit/audit.exception.ts
 msgid "Invalid audit type."
-msgstr "Neplatný typ auditu."
+msgstr ""
 
 #. js-lingui-id: mIrUSZ
 #: src/engine/core-modules/imap-smtp-caldav-connection/services/imap-smtp-caldav-connection.service.ts
 msgid "Invalid CALDAV credentials. Please check your username and password."
-msgstr "Neplatné přihlašovací údaje pro CALDAV. Zkontrolujte své uživatelské jméno a heslo."
+msgstr ""
 
 #. js-lingui-id: X7+bC6
 #: src/engine/core-modules/record-transformer/utils/transform-phones-value.util.ts
 msgid "Invalid calling code {callingCode}"
-msgstr "Neplatný volající kód {callingCode}"
+msgstr ""
 
 #. js-lingui-id: tG/2Q/
 #: src/engine/core-modules/captcha/captcha.guard.ts
 msgid "Invalid Captcha, please try another device"
-msgstr "Neplatný Captcha, zkuste prosím jiné zařízení"
+msgstr ""
 
 #. js-lingui-id: guEsvP
 #: src/engine/core-modules/captcha/captcha.exception.ts
 msgid "Invalid captcha. Please try again."
-msgstr "Neplatná CAPTCHA. Zkuste to prosím znovu."
+msgstr ""
 
 #. js-lingui-id: lyfeGa
 #: src/engine/metadata-modules/command-menu-item/command-menu-item.exception.ts
@@ -1738,55 +1727,55 @@ msgstr ""
 #. js-lingui-id: jUt31O
 #: src/engine/core-modules/tool/tools/email-tool/exceptions/email-tool.exception.ts
 msgid "Invalid connected account ID."
-msgstr "Neplatné ID propojeného účtu."
+msgstr ""
 
 #. js-lingui-id: 1PtrY0
 #: src/engine/core-modules/record-transformer/utils/transform-phones-value.util.ts
 msgid "Invalid country code {countryCode}"
-msgstr "Neplatný kód země {countryCode}"
+msgstr ""
 
 #. js-lingui-id: egz9rA
 #: src/engine/metadata-modules/object-metadata/object-metadata.exception.ts
 msgid "Invalid data format."
-msgstr "Neplatný formát dat."
+msgstr ""
 
 #. js-lingui-id: 4EtFrA
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "Invalid day value. Should be integer greater than 1"
-msgstr "Neplatná hodnota dne. Měla by být celočíselná větší než 1"
+msgstr ""
 
 #. js-lingui-id: i++4Wk
 #: src/engine/api/rest/input-request-parsers/rest-input-request-parser.exception.ts
 msgid "Invalid depth parameter."
-msgstr "Neplatný parametr hloubky."
+msgstr ""
 
 #. js-lingui-id: 9lqqpY
 #: src/engine/core-modules/tool/tools/email-tool/exceptions/email-tool.exception.ts
 #: src/engine/core-modules/email-verification/email-verification.exception.ts
 msgid "Invalid email address."
-msgstr "Neplatná e-mailová adresa."
+msgstr ""
 
 #. js-lingui-id: YtFgT4
 #: src/engine/core-modules/feature-flag/feature-flag.exception.ts
 msgid "Invalid feature flag key."
-msgstr "Neplatný klíč příznaku funkce."
+msgstr ""
 
 #. js-lingui-id: MaFFIW
 #: src/engine/metadata-modules/field-metadata/field-metadata.exception.ts
 msgid "Invalid field input."
-msgstr "Neplatný vstup pole."
+msgstr ""
 
 #. js-lingui-id: d6DMa/
 #: src/engine/core-modules/tool/tools/email-tool/exceptions/email-tool.exception.ts
 msgid "Invalid file ID."
-msgstr "Neplatné ID souboru."
+msgstr ""
 
 #. js-lingui-id: 1yoHmO
 #: src/engine/api/rest/input-request-parsers/rest-input-request-parser.exception.ts
 #: src/engine/api/rest/input-request-parsers/filter-parser-utils/parse-filter.util.ts
 #: src/engine/api/rest/input-request-parsers/filter-parser-utils/check-filter-query.util.ts
 msgid "Invalid filter parameter."
-msgstr "Neplatný parametr filtru."
+msgstr ""
 
 #. js-lingui-id: /GCbsS
 #: src/engine/api/graphql/graphql-query-runner/graphql-query-parsers/graphql-query-filter/graphql-query-filter-field.parser.ts
@@ -1802,62 +1791,62 @@ msgstr ""
 #. js-lingui-id: lPC0WB
 #: src/engine/api/rest/input-request-parsers/rest-input-request-parser.exception.ts
 msgid "Invalid group by parameter."
-msgstr "Neplatný parametr GROUP BY."
+msgstr ""
 
 #. js-lingui-id: MBpeQ6
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "Invalid hour value. Should be integer between 0 and 23"
-msgstr "Neplatná hodnota hodiny. Měla by být celočíselná mezi 0 a 23"
+msgstr ""
 
 #. js-lingui-id: 9xsjn9
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "Invalid hour value. Should be integer greater than 1"
-msgstr "Neplatná hodnota hodiny. Měla by být celočíselná větší než 1"
+msgstr ""
 
 #. js-lingui-id: 6WLJFQ
 #: src/engine/core-modules/sso/sso.exception.ts
 msgid "Invalid identity provider type."
-msgstr "Neplatný typ poskytovatele identity."
+msgstr ""
 
 #. js-lingui-id: t7SpQO
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 #: src/engine/core-modules/auth/auth.exception.ts
 #: src/engine/core-modules/application/application.exception.ts
 msgid "Invalid input provided."
-msgstr "Poskytnut neplatný vstup."
+msgstr ""
 
 #. js-lingui-id: 4MWDA2
 #: src/engine/core-modules/sso/sso.exception.ts
 msgid "Invalid issuer URL."
-msgstr "Neplatná adresa URL vydavatele."
+msgstr ""
 
 #. js-lingui-id: tm//h9
 #: src/engine/metadata-modules/utils/exceptions/invalid-metadata.exception.ts
 msgid "Invalid label format."
-msgstr "Neplatný formát štítku."
+msgstr ""
 
 #. js-lingui-id: Y8ap4e
 #: src/engine/api/rest/input-request-parsers/rest-input-request-parser.exception.ts
 msgid "Invalid limit parameter."
-msgstr "Neplatný parametr limitu."
+msgstr ""
 
 #. js-lingui-id: iBBCnf
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "Invalid minute value. Should be integer between 0 and 59"
-msgstr "Neplatná hodnota minuty. Měla by být celočíselná mezi 0 a 59"
+msgstr ""
 
 #. js-lingui-id: hYcFSd
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "Invalid minute value. Should be integer greater than 1"
-msgstr "Neplatná hodnota minuty. Měla by být celočíselná větší než 1"
+msgstr ""
 
 #. js-lingui-id: sDfyvM
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-relation-creation-payload.util.ts
 msgid "Invalid morph relation input"
-msgstr "Neplatný vstup pro morfologickou relaci"
+msgstr ""
 
 #. js-lingui-id: isIEpm
 #: src/engine/metadata-modules/navigation-menu-item/navigation-menu-item.exception.ts
@@ -1867,77 +1856,77 @@ msgstr ""
 #. js-lingui-id: 5ZHOkh
 #: src/engine/metadata-modules/object-metadata/object-metadata.exception.ts
 msgid "Invalid object input."
-msgstr "Neplatný vstup objektu."
+msgstr ""
 
 #. js-lingui-id: t4AABW
 #: src/engine/api/rest/input-request-parsers/rest-input-request-parser.exception.ts
 msgid "Invalid order by parameter."
-msgstr "Neplatný parametr ORDER BY."
+msgstr ""
 
 #. js-lingui-id: f7SWSg
 #: src/engine/api/rest/input-request-parsers/rest-input-request-parser.exception.ts
 msgid "Invalid order by with group by parameter."
-msgstr "Neplatný parametr ORDER BY s parametrem GROUP BY."
+msgstr ""
 
 #. js-lingui-id: LM08/z
 #: src/engine/metadata-modules/page-layout/exceptions/page-layout.exception.ts
 msgid "Invalid page layout data."
-msgstr "Neplatná data rozložení stránky."
+msgstr ""
 
 #. js-lingui-id: 5qj/ud
 #: src/engine/metadata-modules/page-layout-tab/exceptions/page-layout-tab.exception.ts
 msgid "Invalid page layout tab data."
-msgstr "Neplatná data karty rozložení stránky."
+msgstr ""
 
 #. js-lingui-id: mgipnr
 #: src/engine/metadata-modules/page-layout-widget/exceptions/page-layout-widget.exception.ts
 msgid "Invalid page layout widget data."
-msgstr "Neplatná data widgetu rozložení stránky."
+msgstr ""
 
 #. js-lingui-id: HiaWGB
 #: src/engine/workspace-cache/exceptions/workspace-cache.exception.ts
 msgid "Invalid parameters provided."
-msgstr "Poskytnuty neplatné parametry."
+msgstr ""
 
 #. js-lingui-id: Pt2vVA
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Invalid permission setting."
-msgstr "Neplatné nastavení oprávnění."
+msgstr ""
 
 #. js-lingui-id: 0D0YwP
 #: src/engine/core-modules/record-transformer/record-transformer.exception.ts
 msgid "Invalid phone calling code."
-msgstr "Neplatná telefonní předvolba."
+msgstr ""
 
 #. js-lingui-id: P/5moy
 #: src/engine/core-modules/record-transformer/record-transformer.exception.ts
 msgid "Invalid phone country code."
-msgstr "Neplatný telefonní kód země."
+msgstr ""
 
 #. js-lingui-id: ZmVj5N
 #: src/engine/core-modules/record-transformer/record-transformer.exception.ts
 msgid "Invalid phone number."
-msgstr "Neplatné telefonní číslo."
+msgstr ""
 
 #. js-lingui-id: r+9b/a
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Invalid price."
-msgstr "Neplatná cena."
+msgstr ""
 
 #. js-lingui-id: tkzFzG
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Invalid pricing tiers."
-msgstr "Neplatné cenové úrovně."
+msgstr ""
 
 #. js-lingui-id: XBYAgs
 #: src/modules/connected-account/refresh-tokens-manager/exceptions/connected-account-refresh-tokens.exception.ts
 msgid "Invalid refresh token."
-msgstr "Neplatný obnovovací token."
+msgstr ""
 
 #. js-lingui-id: AXZsy/
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-relation-creation-payload.util.ts
 msgid "Invalid relation creation payload"
-msgstr "Neplatné zadání pro vytvoření vztahu"
+msgstr ""
 
 #. js-lingui-id: iWv3nK
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-relation-flat-field-metadata.util.ts
@@ -1948,17 +1937,17 @@ msgstr ""
 #. js-lingui-id: lOyHVQ
 #: src/engine/core-modules/record-crud/exceptions/record-crud.exception.ts
 msgid "Invalid request."
-msgstr "Neplatný požadavek."
+msgstr ""
 
 #. js-lingui-id: m4y7mj
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-response-format.util.ts
 msgid "Invalid response format type"
-msgstr "Neplatný typ formátu odpovědi"
+msgstr ""
 
 #. js-lingui-id: hVbdKt
 #: src/engine/metadata-modules/role/exceptions/role-target.exception.ts
 msgid "Invalid role target data."
-msgstr "Neplatná data cíle role."
+msgstr ""
 
 #. js-lingui-id: ppA1Aq
 #: src/engine/metadata-modules/row-level-permission-predicate/exceptions/row-level-permission-predicate.exception.ts
@@ -1978,7 +1967,7 @@ msgstr ""
 #. js-lingui-id: ApP70c
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "Invalid setting type provided in cron trigger"
-msgstr "Neplatný typ nastavení v cron spouštěči"
+msgstr ""
 
 #. js-lingui-id: TulNnA
 #: src/engine/metadata-modules/skill/skill.exception.ts
@@ -1988,27 +1977,27 @@ msgstr ""
 #. js-lingui-id: U3r7gv
 #: src/engine/metadata-modules/utils/exceptions/invalid-metadata.exception.ts
 msgid "Invalid string format."
-msgstr "Neplatný formát řetězce."
+msgstr ""
 
 #. js-lingui-id: lpSAqb
 #: src/engine/core-modules/workspace/workspace.exception.ts
 msgid "Invalid subdomain."
-msgstr "Neplatná subdoména."
+msgstr ""
 
 #. js-lingui-id: SFQl8b
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Invalid subscription interval."
-msgstr "Neplatný interval předplatného."
+msgstr ""
 
 #. js-lingui-id: Do5gvp
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Invalid subscription item."
-msgstr "Neplatná položka předplatného."
+msgstr ""
 
 #. js-lingui-id: mDAXg+
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Invalid subscription."
-msgstr "Neplatné předplatné."
+msgstr ""
 
 #. js-lingui-id: WreNd7
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-webhook-validator.service.ts
@@ -2024,12 +2013,12 @@ msgstr ""
 #. js-lingui-id: sHcAMD
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "Invalid trigger type for enabling workflow trigger"
-msgstr "Neplatný typ spouštěče k povolení spouštěče pracovního postupu"
+msgstr ""
 
 #. js-lingui-id: spfaiG
 #: src/engine/core-modules/two-factor-authentication/two-factor-authentication.exception.ts
 msgid "Invalid two-factor authentication configuration."
-msgstr "Neplatná konfigurace dvoufaktorového ověřování."
+msgstr ""
 
 #. js-lingui-id: brtxSP
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-or-relation-flat-field-metadata.util.ts
@@ -2039,7 +2028,7 @@ msgstr ""
 #. js-lingui-id: SzaGv7
 #: src/engine/core-modules/record-transformer/record-transformer.exception.ts
 msgid "Invalid URL format."
-msgstr "Neplatný formát adresy URL."
+msgstr ""
 
 #. js-lingui-id: Z3Su9z
 #: src/engine/api/graphql/workspace-query-runner/utils/assert-is-valid-uuid.util.ts
@@ -2049,7 +2038,7 @@ msgstr ""
 #. js-lingui-id: RyBgV/
 #: src/engine/core-modules/approved-access-domain/approved-access-domain.exception.ts
 msgid "Invalid validation token."
-msgstr "Neplatný ověřovací token."
+msgstr ""
 
 #. js-lingui-id: xvTxwi
 #: src/engine/api/common/common-args-processors/data-arg-processor/validator-utils/validate-files-field-or-throw.util.ts
@@ -2154,12 +2143,12 @@ msgstr ""
 #. js-lingui-id: I4caYo
 #: src/engine/core-modules/two-factor-authentication/two-factor-authentication.exception.ts
 msgid "Invalid verification code."
-msgstr "Neplatný ověřovací kód."
+msgstr ""
 
 #. js-lingui-id: VEKoJx
 #: src/engine/core-modules/two-factor-authentication/two-factor-authentication-exception.filter.ts
 msgid "Invalid verification code. Please try again."
-msgstr "Neplatný ověřovací kód. Zkuste to prosím znovu."
+msgstr ""
 
 #. js-lingui-id: bKmxhF
 #: src/engine/metadata-modules/flat-page-layout-widget/validators/utils/validate-fields-flat-page-layout-widget-for-creation.util.ts
@@ -2184,27 +2173,27 @@ msgstr ""
 #. js-lingui-id: bznmUY
 #: src/modules/workflow/common/exceptions/workflow-version-edge.exception.ts
 msgid "Invalid workflow edge request."
-msgstr "Neplatný požadavek na hranu pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: E7F6q9
 #: src/modules/workflow/workflow-runner/exceptions/workflow-run.exception.ts
 msgid "Invalid workflow input."
-msgstr "Neplatný vstup pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: aYt8SY
 #: src/modules/workflow/workflow-runner/exceptions/workflow-run.exception.ts
 msgid "Invalid workflow operation."
-msgstr "Neplatná operace pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: mNaQTB
 #: src/modules/workflow/workflow-runner/exceptions/workflow-run.exception.ts
 msgid "Invalid workflow run."
-msgstr "Neplatné spuštění pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: dIxBwv
 #: src/modules/workflow/workflow-trigger/exceptions/workflow-trigger.exception.ts
 msgid "Invalid workflow status."
-msgstr "Neplatný stav pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: v+ozTr
 #: src/modules/workflow/workflow-executor/exceptions/workflow-step-executor.exception.ts
@@ -2214,52 +2203,52 @@ msgstr ""
 #. js-lingui-id: GRz5NM
 #: src/modules/workflow/common/exceptions/workflow-version-step.exception.ts
 msgid "Invalid workflow step request."
-msgstr "Neplatný požadavek na krok pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: 0NdYmj
 #: src/modules/workflow/workflow-executor/exceptions/workflow-step-executor.exception.ts
 msgid "Invalid workflow step type."
-msgstr "Neplatný typ kroku pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: dw+g0N
 #: src/modules/workflow/workflow-trigger/exceptions/workflow-trigger.exception.ts
 msgid "Invalid workflow trigger configuration."
-msgstr "Neplatná konfigurace spouštěče pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: rEIcf+
 #: src/modules/workflow/workflow-trigger/exceptions/workflow-trigger.exception.ts
 msgid "Invalid workflow trigger input."
-msgstr "Neplatný vstup spouštěče pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: 8Dzcmh
 #: src/modules/workflow/workflow-trigger/exceptions/workflow-trigger.exception.ts
 msgid "Invalid workflow version."
-msgstr "Neplatná verze pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: rjyWPb
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "January"
-msgstr "Leden"
+msgstr ""
 
 #. js-lingui-id: cCj4vg
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Join column name is required."
-msgstr "Je vyžadován název spojovacího sloupce."
+msgstr ""
 
 #. js-lingui-id: PviVyk
 #: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
 msgid "Join your team on Twenty"
-msgstr "Připojte se k svému týmu na Twenty"
+msgstr ""
 
 #. js-lingui-id: eCBMag
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-response-format.util.ts
 msgid "JSON response format requires a schema"
-msgstr "Formát odpovědi JSON vyžaduje schéma."
+msgstr ""
 
 #. js-lingui-id: u4ex5r
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "July"
-msgstr "Červenec"
+msgstr ""
 
 #. js-lingui-id: ADIjmK
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-junction-target-settings.util.ts
@@ -2289,7 +2278,7 @@ msgstr ""
 #. js-lingui-id: zeEQd/
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "June"
-msgstr "Červen"
+msgstr ""
 
 #. js-lingui-id: QS/zML
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
@@ -2299,21 +2288,21 @@ msgstr "Červen"
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 msgid "Kanban main group by field metadata not found"
-msgstr "Metadata pole pro hlavní seskupení v Kanbanu nebyla nalezena"
+msgstr ""
 
 #. js-lingui-id: ZfLcEk
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 msgid "Kanban main group by field must be a select field"
-msgstr "Pole pro hlavní seskupení v Kanbanu musí být výběrové pole"
+msgstr ""
 
 #. js-lingui-id: RoCvZe
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 msgid "Kanban main group by field must be a SELECT field"
-msgstr "Pole pro hlavní seskupení v Kanbanu musí být pole typu SELECT"
+msgstr ""
 
 #. js-lingui-id: mAbBLH
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
@@ -2321,7 +2310,7 @@ msgstr "Pole pro hlavní seskupení v Kanbanu musí být pole typu SELECT"
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 msgid "Kanban view must have a main group by field"
-msgstr "Kanbanové zobrazení musí mít pole pro hlavní seskupení"
+msgstr ""
 
 #. js-lingui-id: 6sFS+I
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-skill-required-properties.util.ts
@@ -2329,17 +2318,17 @@ msgstr "Kanbanové zobrazení musí mít pole pro hlavní seskupení"
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-required-properties.util.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-required-properties.util.ts
 msgid "Label cannot be empty"
-msgstr "Štítek nesmí být prázdný"
+msgstr ""
 
 #. js-lingui-id: ljUvzm
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Label identifier field cannot be deactivated"
-msgstr "Pole s identifikátorem štítku nelze deaktivovat"
+msgstr ""
 
 #. js-lingui-id: Qx822J
 #: src/engine/metadata-modules/field-metadata/field-metadata.exception.ts
 msgid "Label identifier field not found."
-msgstr "Pole identifikátoru štítku nenalezeno."
+msgstr ""
 
 #. js-lingui-id: ACUSmL
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-label-identifier-field-metadata-id-flat-view-field.util.ts
@@ -2347,19 +2336,19 @@ msgstr "Pole identifikátoru štítku nenalezeno."
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 msgid "Label identifier view field cannot be deleted"
-msgstr "Pole zobrazení s identifikátorem štítku nelze odstranit"
+msgstr ""
 
 #. js-lingui-id: rI+dAx
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-label-identifier-field-metadata-id-flat-view-field.util.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-label-identifier-field-metadata-id-flat-view-field.util.ts
 msgid "Label identifier view field has to be in the lowest position"
-msgstr "Pole zobrazení s identifikátorem štítku musí být na nejnižší pozici"
+msgstr ""
 
 #. js-lingui-id: PqTWJf
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-label-identifier-field-metadata-id-flat-view-field.util.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-label-identifier-field-metadata-id-flat-view-field.util.ts
 msgid "Label identifier view field has to be visible"
-msgstr "Pole zobrazení s identifikátorem štítku musí být viditelné"
+msgstr ""
 
 #. js-lingui-id: w8Rv8T
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-command-menu-item-validator.service.ts
@@ -2372,19 +2361,19 @@ msgstr ""
 #. js-lingui-id: 6bWuI/
 #: src/engine/metadata-modules/utils/exceptions/invalid-metadata.exception.ts
 msgid "Label is required."
-msgstr "Štítek je vyžadován."
+msgstr ""
 
 #. js-lingui-id: 4EGmy6
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Label must not be empty"
-msgstr "Štítek nesmí být prázdný"
+msgstr ""
 
 #. js-lingui-id: k731jp
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Label must not contain a comma"
-msgstr "Štítek nesmí obsahovat čárku"
+msgstr ""
 
 #. js-lingui-id: 0x2TQ/
 #: src/engine/metadata-modules/flat-page-layout-widget/validators/utils/validate-bar-chart-configuration.util.ts
@@ -2433,7 +2422,7 @@ msgstr ""
 #. js-lingui-id: hg6l4j
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "March"
-msgstr "Březen"
+msgstr ""
 
 #. js-lingui-id: Dq8Em0
 #: src/engine/twenty-orm/field-operations/files-field-sync/files-field-sync.ts
@@ -2448,7 +2437,7 @@ msgstr ""
 #. js-lingui-id: hw7Mwk
 #: src/engine/api/common/common-query-runners/common-create-many-query-runner/common-create-many-query-runner.service.ts
 msgid "Maximum number of records to upsert is {QUERY_MAX_RECORDS}."
-msgstr "Maximální počet záznamů pro vložení je {QUERY_MAX_RECORDS}."
+msgstr ""
 
 #. js-lingui-id: b85bAt
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-files-flat-field-metadata.util.ts
@@ -2458,12 +2447,12 @@ msgstr ""
 #. js-lingui-id: 3JzsDb
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "May"
-msgstr "Květen"
+msgstr ""
 
 #. js-lingui-id: LOU3x5
 #: src/modules/messaging/common/query-hooks/message/message-channel-update-one.pre-query.hook.ts
 msgid "Message channel not found"
-msgstr "Kanál zpráv nenalezen"
+msgstr ""
 
 #. js-lingui-id: PslTPV
 #: src/engine/workspace-manager/workspace-migration/interceptors/workspace-migration-builder-exception-formatter.ts
@@ -2473,12 +2462,12 @@ msgstr ""
 #. js-lingui-id: akOVAq
 #: src/engine/metadata-modules/workspace-metadata-version/exceptions/workspace-metadata-version.exception.ts
 msgid "Metadata version not found."
-msgstr "Verze metadat nenalezena."
+msgstr ""
 
 #. js-lingui-id: WFVrzW
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "Microsoft API authentication is disabled."
-msgstr "Ověřování přes Microsoft API je zakázáno."
+msgstr ""
 
 #. js-lingui-id: oqzqZq
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-runner/exceptions/workspace-migration-runner.exception.ts
@@ -2488,68 +2477,68 @@ msgstr ""
 #. js-lingui-id: G6wJK8
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "Minute value cannot exceed 60. For intervals greater than 60 minutes, use the \"Hours\" trigger type or a custom cron expression"
-msgstr "Hodnota minut nesmí přesáhnout 60. Pro intervaly delší než 60 minut použijte typ spouštěče \"Hodiny\" nebo vlastní výraz CRON"
+msgstr ""
 
 #. js-lingui-id: lCnasH
 #: src/engine/workspace-cache/exceptions/workspace-cache.exception.ts
 msgid "Missing decorator configuration."
-msgstr "Chybí konfigurace dekorátoru."
+msgstr ""
 
 #. js-lingui-id: u8IV9J
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "Missing main alias target."
-msgstr "Chybí hlavní cíl aliasu."
+msgstr ""
 
 #. js-lingui-id: W5hpOP
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Missing request body."
-msgstr "Chybí tělo požadavku."
+msgstr ""
 
 #. js-lingui-id: SzCMUQ
 #: src/engine/twenty-orm/utils/compute-relation-connect-query-configs.util.ts
 msgid "Missing required fields: at least one unique constraint have to be fully populated for '{connectFieldName}'."
-msgstr "Chybí požadovaná pole: alespoň jedno jedinečné omezení musí být plně vyplněno pro '{connectFieldName}'."
+msgstr ""
 
 #. js-lingui-id: AHuHeg
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-required-properties.util.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-required-properties.util.ts
 msgid "Model ID cannot be empty"
-msgstr "ID modelu nesmí být prázdné"
+msgstr ""
 
 #. js-lingui-id: hty0d5
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "Monday"
-msgstr "Pondělí"
+msgstr ""
 
 #. js-lingui-id: Lcqv5g
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-relation-flat-field-metadata.util.ts
 msgid "Morph relation field must have a morph id"
-msgstr "Pole relace morph musí mít ID morph"
+msgstr ""
 
 #. js-lingui-id: Wu/pkS
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Multi-select field default value must be an array"
-msgstr "Výchozí hodnota pole s více možnostmi musí být pole"
+msgstr ""
 
 #. js-lingui-id: 6rLmLu
 #: src/engine/api/common/common-query-runners/common-create-many-query-runner/utils/get-matching-record-id.util.ts
 msgid "Multiple records found with the same unique field values for {conflictingFieldsValues}. Cannot determine which record to update."
-msgstr "Bylo nalezeno více záznamů se stejnými unikátními hodnotami polí pro {conflictingFieldsValues}. Nelze určit, který záznam aktualizovat."
+msgstr ""
 
 #. js-lingui-id: B9dbXq
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Multiple subscriptions found where one was expected."
-msgstr "Nalezeno více předplatných, očekávalo se jedno."
+msgstr ""
 
 #. js-lingui-id: 2m6Fru
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-flat-field-metadata-name-availability.util.ts
 msgid "Name \"{name}\" is not available"
-msgstr "Název \"{name}\" není dostupný"
+msgstr ""
 
 #. js-lingui-id: U8mbyw
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-flat-field-metadata-name-availability.util.ts
 msgid "Name \"{name}\" is not available as it is already used by another field"
-msgstr "Název \"{name}\" není dostupný, protože ho již používá jiné pole"
+msgstr ""
 
 #. js-lingui-id: dBDpp2
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-flat-field-metadata-name-availability.util.ts
@@ -2559,39 +2548,39 @@ msgstr ""
 #. js-lingui-id: Aam+mb
 #: src/engine/metadata-modules/utils/exceptions/invalid-metadata.exception.ts
 msgid "Name is not synced with label."
-msgstr "Název není synchronizován se štítkem."
+msgstr ""
 
 #. js-lingui-id: Ny5wFU
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-name.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-flat-field-metadata-name.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-flat-field-metadata-name.util.ts
 msgid "Name is not valid: it must start with lowercase letter and contain only alphanumeric letters"
-msgstr "Jméno není platné: musí začínat malým písmenem a obsahovat pouze alfanumerické znaky"
+msgstr ""
 
 #. js-lingui-id: zjh2SJ
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-name.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-flat-field-metadata-name.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-flat-field-metadata-name.util.ts
 msgid "Name is too long"
-msgstr "Jméno je příliš dlouhé"
+msgstr ""
 
 #. js-lingui-id: go/Vg1
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-name.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-flat-field-metadata-name.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-flat-field-metadata-name.util.ts
 msgid "Name is too short"
-msgstr "Jméno je příliš krátké"
+msgstr ""
 
 #. js-lingui-id: HKHHTk
 #: src/engine/metadata-modules/utils/exceptions/invalid-metadata.exception.ts
 msgid "Name must be in camelCase format."
-msgstr "Název musí být ve formátu camelCase."
+msgstr ""
 
 #. js-lingui-id: Dr0xtb
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-name-and-labels.util.ts
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-name-and-labels.util.ts
 msgid "Names are not synced with labels"
-msgstr "Názvy nejsou synchronizovány se štítky"
+msgstr ""
 
 #. js-lingui-id: RJyaoR
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-navigation-menu-item-validator.service.ts
@@ -2648,12 +2637,12 @@ msgstr ""
 #. js-lingui-id: LnV8zi
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "No active subscription found."
-msgstr "Nebylo nalezeno žádné aktivní předplatné."
+msgstr ""
 
 #. js-lingui-id: hQQZse
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "No event name provided in database event trigger"
-msgstr "Nebylo poskytnuto jméno události v databázovém spouštěči událostí"
+msgstr ""
 
 #. js-lingui-id: 6GG2MJ
 #: src/engine/core-modules/search/exceptions/search.exception.ts
@@ -2663,27 +2652,27 @@ msgstr ""
 #. js-lingui-id: 9bu19u
 #: src/modules/workflow/workflow-trigger/utils/assert-form-step-is-valid.util.ts
 msgid "No input provided in form step"
-msgstr "Nebylo poskytnuto žádné zadání ve formulářovém kroku"
+msgstr ""
 
 #. js-lingui-id: MWAUHo
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "No pattern provided in CUSTOM cron trigger"
-msgstr "Nebylo poskytnuto žádné schéma v USER CRON spouštěči"
+msgstr ""
 
 #. js-lingui-id: 2iURlq
 #: src/engine/metadata-modules/object-permission/field-permission/field-permission.service.ts
 msgid "No permissions are set for this role on the selected object. Please set object permissions first."
-msgstr "Pro tuto roli na vybraném objektu nejsou nastavena žádná oprávnění. Nejprve nastavte oprávnění objektu."
+msgstr ""
 
 #. js-lingui-id: D2A/H0
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "No permissions found in datasource."
-msgstr "Ve zdroji dat nebyla nalezena žádná oprávnění."
+msgstr ""
 
 #. js-lingui-id: NcwTz7
 #: src/engine/api/graphql/workspace-query-runner/workspace-query-runner.exception.ts
 msgid "No records were affected."
-msgstr "Žádné záznamy nebyly ovlivněny."
+msgstr ""
 
 #. js-lingui-id: iHQYLb
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
@@ -2693,7 +2682,7 @@ msgstr ""
 #. js-lingui-id: 5ZMHXg
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "No role found for this user in the workspace."
-msgstr "Pro tohoto uživatele nebyla v pracovním prostoru nalezena žádná role."
+msgstr ""
 
 #. js-lingui-id: ISCcTE
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
@@ -2703,27 +2692,27 @@ msgstr ""
 #. js-lingui-id: pOu4u/
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "No schedule provided in cron trigger"
-msgstr "Nebylo poskytnuto žádné schéma v cron spouštěči"
+msgstr ""
 
 #. js-lingui-id: cLUBlS
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "No setting type provided in cron trigger"
-msgstr "Nebylo poskytnuto žádný typ nastavení v cron spouštěči"
+msgstr ""
 
 #. js-lingui-id: QwbSxD
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "No steps provided in workflow version"
-msgstr "Ve verzi pracovního postupu nejsou žádné kroky"
+msgstr ""
 
 #. js-lingui-id: 6dP8sB
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 msgid "No trigger type provided"
-msgstr "Nebyl poskytnut žádný typ spouštěče"
+msgstr ""
 
 #. js-lingui-id: /BipSk
 #: src/engine/metadata-modules/permissions/utils/permission-graphql-api-exception-handler.util.ts
 msgid "No valid authentication context found."
-msgstr "Nebylo nalezeno žádné platné ověřovací kontext."
+msgstr ""
 
 #. js-lingui-id: NpVtef
 #: src/modules/dashboard/chart-data/utils/format-dimension-value.util.ts
@@ -2734,27 +2723,27 @@ msgstr ""
 #. js-lingui-id: t9QlBd
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "November"
-msgstr "Listopad"
+msgstr ""
 
 #. js-lingui-id: 08qKzD
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "OAuth access was denied."
-msgstr "Přístup OAuth byl odepřen."
+msgstr ""
 
 #. js-lingui-id: ECRKYR
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-name-and-labels.util.ts
 msgid "Object already exists"
-msgstr "Objekt již existuje"
+msgstr ""
 
 #. js-lingui-id: wLX74t
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-label.util.ts
 msgid "Object label is too long"
-msgstr "Štítek objektu je příliš dlouhý"
+msgstr ""
 
 #. js-lingui-id: nmhjwk
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-label.util.ts
 msgid "Object label is too short"
-msgstr "Štítek objektu je příliš krátký"
+msgstr ""
 
 #. js-lingui-id: xrblgA
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
@@ -2768,7 +2757,7 @@ msgstr "Štítek objektu je příliš krátký"
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-row-level-permission-predicate-group-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-row-level-permission-predicate-group-validator.service.ts
 msgid "Object metadata not found"
-msgstr "Metadata objektu nenalezena"
+msgstr ""
 
 #. js-lingui-id: rHce90
 #: src/modules/workflow/common/exceptions/workflow-common.exception.ts
@@ -2778,7 +2767,7 @@ msgstr "Metadata objektu nenalezena"
 #: src/engine/metadata-modules/row-level-permission-predicate/exceptions/row-level-permission-predicate-group.exception.ts
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Object metadata not found."
-msgstr "Metadata objektu nenalezena."
+msgstr ""
 
 #. js-lingui-id: AKqp4k
 #: src/engine/metadata-modules/object-metadata/object-metadata.exception.ts
@@ -2787,44 +2776,44 @@ msgstr "Metadata objektu nenalezena."
 #: src/engine/core-modules/record-crud/exceptions/record-crud.exception.ts
 #: src/engine/core-modules/application/application.exception.ts
 msgid "Object not found."
-msgstr "Objekt nenalezen."
+msgstr ""
 
 #. js-lingui-id: Qy6mMO
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Object permission not found."
-msgstr "Oprávnění k objektu nenalezeno."
+msgstr ""
 
 #. js-lingui-id: E8vJ0A
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Object related to field to update not found"
-msgstr "Objekt související s polem k aktualizaci nenalezen"
+msgstr ""
 
 #. js-lingui-id: MnOwTp
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Object related to updated field does not have a label identifier"
-msgstr "Objekt související s aktualizovaným polem nemá identifikátor štítku"
+msgstr ""
 
 #. js-lingui-id: 6unt40
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-relation-creation-payload.util.ts
 msgid "Object targeted by field to create not found"
-msgstr "Objekt, na který směřuje pole pro vytvoření, nenalezen"
+msgstr ""
 
 #. js-lingui-id: KHK54G
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-or-relation-flat-field-metadata.util.ts
 msgid "Object targeted by the relation not found"
-msgstr "Objekt, na který směřuje vztah, nenalezen"
+msgstr ""
 
 #. js-lingui-id: bMeJkW
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
 msgid "Object to delete not found"
-msgstr "Objekt ke smazání nebyl nalezen"
+msgstr ""
 
 #. js-lingui-id: pQ5dZU
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
 msgid "Object to update not found"
-msgstr "Objekt k aktualizaci nebyl nalezen"
+msgstr ""
 
 #. js-lingui-id: KFbNbH
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
@@ -2835,12 +2824,12 @@ msgstr ""
 #. js-lingui-id: 53pIyA
 #: src/engine/metadata-modules/view/exceptions/view.exception.ts
 msgid "ObjectMetadataId is required to create a view."
-msgstr "ObjectMetadataId je vyžadován k vytvoření zobrazení."
+msgstr ""
 
 #. js-lingui-id: dzQfDY
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "October"
-msgstr "Říjen"
+msgstr ""
 
 #. js-lingui-id: Tp2ptT
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-or-relation-flat-field-on-delete.util.ts
@@ -2850,7 +2839,7 @@ msgstr ""
 #. js-lingui-id: eWQQpx
 #: src/engine/metadata-modules/object-permission/object-permission.service.ts
 msgid "One or more objects you are trying to set permissions for could not be found. They may have been deleted."
-msgstr "Jeden nebo více objektů, pro které se pokoušíte nastavit oprávnění, nebyl nalezen. Mohly být smazány."
+msgstr ""
 
 #. js-lingui-id: JZB2eY
 #: src/engine/api/common/common-query-runners/common-merge-many-query-runner.service.ts
@@ -2860,80 +2849,80 @@ msgstr ""
 #. js-lingui-id: eYgzEd
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Only field restrictions are allowed."
-msgstr "Jsou povolena pouze omezení polí."
+msgstr ""
 
 #. js-lingui-id: 2mFkfl
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option id is invalid"
-msgstr "ID možnosti je neplatné"
+msgstr ""
 
 #. js-lingui-id: MniXaX
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option id is required"
-msgstr "ID možnosti je povinné"
+msgstr ""
 
 #. js-lingui-id: //eyK1
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option label \"{sanitizedLabel}\" is beneath 1 character"
-msgstr "Štítek možnosti \"{sanitizedLabel}\" je kratší než jeden znak"
+msgstr ""
 
 #. js-lingui-id: mTFS0z
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option label exceeds 63 characters"
-msgstr "Štítek možnosti přesahuje 63 znaků"
+msgstr ""
 
 #. js-lingui-id: h8lHqX
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option label format not supported"
-msgstr "Formát štítku volby není podporován"
+msgstr ""
 
 #. js-lingui-id: +E9N4m
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option label is required"
-msgstr "Štítek možnosti je vyžadován"
+msgstr ""
 
 #. js-lingui-id: dFudyC
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option label must be a string of at least one character"
-msgstr "Označení možnosti musí být řetězec s alespoň jedním znakem"
+msgstr ""
 
 #. js-lingui-id: nQqNzE
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option value \"{sanitizedValue}\" is beneath 1 character"
-msgstr "Hodnota možnosti \"{sanitizedValue}\" je kratší než jeden znak"
+msgstr ""
 
 #. js-lingui-id: 5m/1Hh
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option value exceeds 63 characters"
-msgstr "Hodnota možnosti přesahuje 63 znaků"
+msgstr ""
 
 #. js-lingui-id: zEGChV
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option value format not supported"
-msgstr "Formát hodnoty možnosti není podporován"
+msgstr ""
 
 #. js-lingui-id: /wsRPd
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option value is required"
-msgstr "Hodnota možnosti je vyžadována"
+msgstr ""
 
 #. js-lingui-id: Kub9t0
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Option value must be a string of at least one character"
-msgstr "Hodnota možnosti musí být řetězec s alespoň jedním znakem"
+msgstr ""
 
 #. js-lingui-id: EabrTR
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Options are required for enum fields"
-msgstr "Pro pole s výčtem možností jsou vyžadovány možnosti"
+msgstr ""
 
 #. js-lingui-id: ZKtamk
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-validator.service.ts
@@ -2943,13 +2932,13 @@ msgstr "Pro pole s výčtem možností jsou vyžadovány možnosti"
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-tab-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-tab-validator.service.ts
 msgid "Page layout not found"
-msgstr "Rozložení stránky nebylo nalezeno"
+msgstr ""
 
 #. js-lingui-id: C4+axZ
 #: src/modules/dashboard/exceptions/dashboard.exception.ts
 #: src/engine/metadata-modules/page-layout/exceptions/page-layout.exception.ts
 msgid "Page layout not found."
-msgstr "Rozložení stránky nebylo nalezeno."
+msgstr ""
 
 #. js-lingui-id: qJ9V6q
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-widget-validator.service.ts
@@ -2959,60 +2948,60 @@ msgstr "Rozložení stránky nebylo nalezeno."
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-tab-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-tab-validator.service.ts
 msgid "Page layout tab not found"
-msgstr "Karta rozložení stránky nebyla nalezena"
+msgstr ""
 
 #. js-lingui-id: pOITp3
 #: src/engine/metadata-modules/page-layout-tab/exceptions/page-layout-tab.exception.ts
 msgid "Page layout tab not found."
-msgstr "Karta rozložení stránky nebyla nalezena."
+msgstr ""
 
 #. js-lingui-id: LTouJ4
 #: src/engine/metadata-modules/flat-page-layout-tab/utils/from-destroy-page-layout-tab-input-to-flat-page-layout-tab-or-throw.util.ts
 msgid "Page layout tab to destroy not found"
-msgstr "Karta rozložení stránky ke zničení nebyla nalezena"
+msgstr ""
 
 #. js-lingui-id: m8tBqi
 #: src/engine/metadata-modules/flat-page-layout-tab/utils/from-update-page-layout-tab-input-to-flat-page-layout-tab-to-update-or-throw.util.ts
 msgid "Page layout tab to update not found"
-msgstr "Karta rozložení stránky k aktualizaci nebyla nalezena"
+msgstr ""
 
 #. js-lingui-id: zrm54u
 #: src/engine/metadata-modules/flat-page-layout/utils/from-destroy-page-layout-input-to-flat-page-layout-or-throw.util.ts
 msgid "Page layout to destroy not found"
-msgstr "Rozložení stránky ke zničení nebylo nalezeno"
+msgstr ""
 
 #. js-lingui-id: /5c/t7
 #: src/engine/metadata-modules/flat-page-layout/utils/from-update-page-layout-input-to-flat-page-layout-to-update-or-throw.util.ts
 msgid "Page layout to update not found"
-msgstr "Rozložení stránky k aktualizaci nebylo nalezeno"
+msgstr ""
 
 #. js-lingui-id: k6Npai
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-widget-validator.service.ts
 msgid "Page layout widget already exists"
-msgstr "Widget rozložení stránky již existuje"
+msgstr ""
 
 #. js-lingui-id: GcU04G
 #: src/engine/metadata-modules/page-layout-widget/exceptions/page-layout-widget.exception.ts
 msgid "Page layout widget not found."
-msgstr "Widget rozložení stránky nenalezen."
+msgstr ""
 
 #. js-lingui-id: 7QlaTN
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-widget-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-widget-validator.service.ts
 msgid "Page layout widget to delete not found"
-msgstr "Widget rozložení stránky k odstranění nebyl nalezen"
+msgstr ""
 
 #. js-lingui-id: v2G/zq
 #: src/engine/metadata-modules/flat-page-layout-widget/utils/from-destroy-page-layout-widget-input-to-flat-page-layout-widget-or-throw.util.ts
 msgid "Page layout widget to destroy not found"
-msgstr "Widget rozložení stránky ke zničení nebyl nalezen"
+msgstr ""
 
 #. js-lingui-id: yCsIxc
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-widget-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-widget-validator.service.ts
 #: src/engine/metadata-modules/flat-page-layout-widget/utils/from-update-page-layout-widget-input-to-flat-page-layout-widget-to-update-or-throw.util.ts
 msgid "Page layout widget to update not found"
-msgstr "Widget rozložení stránky k aktualizaci nebyl nalezen"
+msgstr ""
 
 #. js-lingui-id: hGYqrE
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-widget-validator.service.ts
@@ -3051,17 +3040,17 @@ msgstr ""
 #. js-lingui-id: wT0H4O
 #: src/engine/core-modules/auth/services/sign-in-up.service.ts
 msgid "Password too weak"
-msgstr "Heslo je příliš slabé"
+msgstr ""
 
 #. js-lingui-id: vcvSI3
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Permission not found."
-msgstr "Oprávnění nenalezeno."
+msgstr ""
 
 #. js-lingui-id: rxi3R2
 #: src/engine/core-modules/imap-smtp-caldav-connection/services/imap-smtp-caldav-connection-validator.service.ts
 msgid "Please check your connection settings. Make sure the server host, port, and password are correct."
-msgstr "Zkontrolujte prosím své nastavení připojení. Ujistěte se, že serverový hostitel, port a heslo jsou správné."
+msgstr ""
 
 #. js-lingui-id: mqzu5F
 #: src/engine/core-modules/email-verification/services/email-verification.service.ts
@@ -3077,12 +3066,12 @@ msgstr ""
 #. js-lingui-id: RDvKTq
 #: src/engine/core-modules/imap-smtp-caldav-connection/services/imap-smtp-caldav-connection-validator.service.ts
 msgid "Please provide connection details to configure your email account."
-msgstr "Poskytněte prosím podrobnosti připojení ke konfiguraci svého e-mailového účtu."
+msgstr ""
 
 #. js-lingui-id: 0ldKS0
 #: src/engine/core-modules/imap-smtp-caldav-connection/services/imap-smtp-caldav-connection.service.ts
 msgid "Please select a valid connection type (IMAP, SMTP, or CalDAV) and try again."
-msgstr "Vyberte prosím platný typ připojení (IMAP, SMTP, nebo CalDAV) a zkuste to znovu."
+msgstr ""
 
 #. js-lingui-id: sa9Q+R
 #: src/engine/api/common/common-query-runners/common-merge-many-query-runner.service.ts
@@ -3092,7 +3081,7 @@ msgstr ""
 #. js-lingui-id: RAkwUZ
 #: src/engine/core-modules/approved-access-domain/approved-access-domain.exception.ts
 msgid "Please use a company email domain."
-msgstr "Použijte prosím firemní e-mailovou doménu."
+msgstr ""
 
 #. js-lingui-id: Sguqn/
 #: src/modules/workspace-member/query-hooks/workspace-member-delete-one.pre-query.hook.ts
@@ -3103,7 +3092,7 @@ msgstr ""
 #. js-lingui-id: f8ypJ4
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "Please use single sign-on to authenticate."
-msgstr "K ověření použijte prosím jednotné přihlášení (SSO)."
+msgstr ""
 
 #. js-lingui-id: c7uZDh
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-widget-validator.service.ts
@@ -3142,7 +3131,7 @@ msgstr ""
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-required-properties.util.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-required-properties.util.ts
 msgid "Prompt cannot be empty"
-msgstr "Prompt nesmí být prázdný"
+msgstr ""
 
 #. js-lingui-id: OTJNm9
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-role-required-properties-are-defined.util.ts
@@ -3152,37 +3141,37 @@ msgstr ""
 #. js-lingui-id: dtGxRz
 #: src/engine/core-modules/record-transformer/utils/transform-phones-value.util.ts
 msgid "Provided and inferred calling code are conflicting"
-msgstr "Poskytnutý a odvozený volající kód si odporují"
+msgstr ""
 
 #. js-lingui-id: Vq/afT
 #: src/engine/core-modules/record-transformer/utils/transform-phones-value.util.ts
 msgid "Provided and inferred country code are conflicting"
-msgstr "Poskytnutý a odvozený kód země si odporují"
+msgstr ""
 
 #. js-lingui-id: HZ45ox
 #: src/engine/core-modules/record-transformer/utils/transform-phones-value.util.ts
 msgid "Provided country code and calling code are conflicting"
-msgstr "Poskytnutý kód země a volající kód si odporují"
+msgstr ""
 
 #. js-lingui-id: A4Ohxb
 #: src/engine/core-modules/record-transformer/utils/transform-phones-value.util.ts
 msgid "Provided phone number is invalid {number}"
-msgstr "Poskytnuté telefonní číslo je neplatné {number}"
+msgstr ""
 
 #. js-lingui-id: OL88cI
 #: src/engine/core-modules/public-domain/public-domain.service.ts
 msgid "Public domain already registered"
-msgstr "Veřejná doména již byla zaregistrována."
+msgstr ""
 
 #. js-lingui-id: Vr4xfK
 #: src/engine/core-modules/public-domain/public-domain.exception.ts
 msgid "Public domain not found."
-msgstr "Veřejná doména nenalezena."
+msgstr ""
 
 #. js-lingui-id: Capzni
 #: src/engine/core-modules/dns-manager/services/dns-manager.service.ts
 msgid "Public domain URL is not defined. Please set the PUBLIC_DOMAIN_URL environment variable"
-msgstr "Veřejná doména URL není definována. Nastavte proměnnou prostředí PUBLIC_DOMAIN_URL"
+msgstr ""
 
 #. js-lingui-id: vVCf2E
 #: src/modules/dashboard/chart-data/exceptions/chart-data.exception.ts
@@ -3192,22 +3181,22 @@ msgstr ""
 #. js-lingui-id: 9QTny9
 #: src/engine/core-modules/record-crud/exceptions/record-crud.exception.ts
 msgid "Query failed."
-msgstr "Dotaz selhal."
+msgstr ""
 
 #. js-lingui-id: 6H9kMC
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "Query timed out. Please try again."
-msgstr "Časový limit dotazu vypršel. Zkuste to prosím znovu."
+msgstr ""
 
 #. js-lingui-id: xD2MTL
 #: src/engine/core-modules/throttler/throttler.exception.ts
 msgid "Rate limit reached. Please try again later."
-msgstr "Dosažen limit rychlosti. Zkuste to prosím později."
+msgstr ""
 
 #. js-lingui-id: 8G8dJM
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Raw SQL queries are not allowed."
-msgstr "Nejsou povoleny přímé dotazy SQL."
+msgstr ""
 
 #. js-lingui-id: EESfI5
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
@@ -3217,43 +3206,43 @@ msgstr ""
 #. js-lingui-id: 4R+xJM
 #: src/engine/core-modules/record-crud/exceptions/record-crud.exception.ts
 msgid "Record not found."
-msgstr "Záznam nenalezen."
+msgstr ""
 
 #. js-lingui-id: 1GvzpH
 #: src/modules/connected-account/refresh-tokens-manager/exceptions/connected-account-refresh-tokens.exception.ts
 msgid "Refresh token not found."
-msgstr "Obnovovací token nenalezen."
+msgstr ""
 
 #. js-lingui-id: 2dNwZB
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "Related record not found."
-msgstr "Související záznam nenalezen."
+msgstr ""
 
 #. js-lingui-id: 2LXGtF
 #: src/engine/metadata-modules/field-metadata/field-metadata.exception.ts
 msgid "Relation configuration is invalid."
-msgstr "Konfigurace vztahu je neplatná."
+msgstr ""
 
 #. js-lingui-id: +bFtT5
 #: src/engine/metadata-modules/flat-field-metadata/utils/from-relation-create-field-input-to-flat-field-metadatas.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/utils/from-morph-relation-create-field-input-to-flat-field-metadatas.util.ts
 msgid "Relation creation payload is required"
-msgstr "Je vyžadováno zadání pro vytvoření vztahu"
+msgstr ""
 
 #. js-lingui-id: 5y41wK
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-or-relation-flat-field-metadata.util.ts
 msgid "Relation field target metadata not found"
-msgstr "Metadata vztahu cílového pole nenalezena"
+msgstr ""
 
 #. js-lingui-id: 83atrc
 #: src/engine/metadata-modules/field-metadata/field-metadata.exception.ts
 msgid "Relation is not enabled for this field."
-msgstr "Vztah není pro toto pole povolen."
+msgstr ""
 
 #. js-lingui-id: PWdFkY
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Remote objects are not production ready yet"
-msgstr "Vzdálené objekty nejsou připraveny na produkční prostředí"
+msgstr ""
 
 #. js-lingui-id: yVxtzR
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
@@ -3261,27 +3250,27 @@ msgstr "Vzdálené objekty nejsou připraveny na produkční prostředí"
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
 msgid "Remote objects are not supported yet"
-msgstr "Vzdálené objekty nejsou zatím podporovány"
+msgstr ""
 
 #. js-lingui-id: pCsIQQ
 #: src/engine/core-modules/email-verification/email-verification-exception-filter.util.ts
 msgid "Request has expired, please try again."
-msgstr "Žádost vypršela, zkuste to prosím znovu."
+msgstr ""
 
 #. js-lingui-id: KPIUoa
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-response-format.util.ts
 msgid "Response format type must be either \"text\" or \"json\""
-msgstr "Typ formátu odpovědi musí být buď \"text\", nebo \"json\""
+msgstr ""
 
 #. js-lingui-id: 6Plp3x
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-response-format.util.ts
 msgid "Response format with type \"json\" must include a schema"
-msgstr "Formát odpovědi typu \"json\" musí obsahovat schéma"
+msgstr ""
 
 #. js-lingui-id: JCqfz6
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-response-format.util.ts
 msgid "Response format with type \"text\" should not include a schema"
-msgstr "Formát odpovědi typu \"text\" by neměl obsahovat schéma"
+msgstr ""
 
 #. js-lingui-id: QbW1ho
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-flat-role-target-assignation-availability.util.ts
@@ -3304,12 +3293,12 @@ msgstr ""
 #. js-lingui-id: ViBevc
 #: src/engine/metadata-modules/role/exceptions/role-target.exception.ts
 msgid "Role cannot be assigned to this entity."
-msgstr "Roli nelze přiřadit této entitě."
+msgstr ""
 
 #. js-lingui-id: zeffu9
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Role must have at least one target."
-msgstr "Role musí mít alespoň jeden cíl."
+msgstr ""
 
 #. js-lingui-id: MvTCyk
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-row-level-permission-predicate-validator.service.ts
@@ -3338,7 +3327,7 @@ msgstr ""
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 #: src/engine/metadata-modules/ai/ai-agent/agent.exception.ts
 msgid "Role not found."
-msgstr "Role nenalezena."
+msgstr ""
 
 #. js-lingui-id: K+Gn31
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-role-target-validator.service.ts
@@ -3348,7 +3337,7 @@ msgstr ""
 #. js-lingui-id: ctpIGF
 #: src/engine/metadata-modules/role/exceptions/role-target.exception.ts
 msgid "Role target is missing identifier."
-msgstr "Cíli role chybí identifikátor."
+msgstr ""
 
 #. js-lingui-id: oCyyzG
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-flat-role-target-targets-only-one-entity.util.ts
@@ -3367,7 +3356,7 @@ msgstr ""
 #. js-lingui-id: gz6uii
 #: src/engine/metadata-modules/role/exceptions/role-target.exception.ts
 msgid "Role target not found."
-msgstr "Cíl role nenalezen."
+msgstr ""
 
 #. js-lingui-id: +fwgt2
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-role-target-validator.service.ts
@@ -3377,22 +3366,22 @@ msgstr ""
 #. js-lingui-id: Ub8R48
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "Roles and permissions configuration not found."
-msgstr "Konfigurace rolí a oprávnění nenalezena."
+msgstr ""
 
 #. js-lingui-id: AcyaP/
 #: src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/exceptions/route-trigger.exception.ts
 msgid "Route already exists."
-msgstr "Trasa již existuje."
+msgstr ""
 
 #. js-lingui-id: F35apa
 #: src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/exceptions/route-trigger.exception.ts
 msgid "Route not found."
-msgstr "Trasa nenalezena."
+msgstr ""
 
 #. js-lingui-id: mF5BSU
 #: src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/exceptions/route-trigger.exception.ts
 msgid "Route path already exists."
-msgstr "Cesta trasy již existuje."
+msgstr ""
 
 #. js-lingui-id: /ruB5e
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-row-level-permission-predicate-validator.service.ts
@@ -3465,27 +3454,27 @@ msgstr ""
 #. js-lingui-id: +5kO8P
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "Saturday"
-msgstr "Sobota"
+msgstr ""
 
 #. js-lingui-id: PdVIJC
 #: src/engine/metadata-modules/search-field-metadata/constants/search-vector-field.constants.ts
 msgid "Search vector"
-msgstr "Vyhledávací vektor"
+msgstr ""
 
 #. js-lingui-id: hgvbYY
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "September"
-msgstr "Září"
+msgstr ""
 
 #. js-lingui-id: e1k+No
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "Sign up is disabled."
-msgstr "Registrace je zakázána."
+msgstr ""
 
 #. js-lingui-id: 4AomZC
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "Single sign-on authentication failed."
-msgstr "Ověření pomocí jednotného přihlášení selhalo."
+msgstr ""
 
 #. js-lingui-id: OhD7+a
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-skill-validator.service.ts
@@ -3508,17 +3497,17 @@ msgstr ""
 #. js-lingui-id: RyE+Of
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-role-required-properties-are-defined.util.ts
 msgid "Some of the information provided is invalid. Please check your input and try again."
-msgstr "Byla zadána některá neplatná informace. Zkontrolujte svůj vstup a zkuste to znovu."
+msgstr ""
 
 #. js-lingui-id: 01Sxb6
 #: src/engine/metadata-modules/permission-flag/permission-flag.service.ts
 msgid "Some of the permissions you selected are not valid. Please try again with valid permission settings."
-msgstr "Některá z vybraných oprávnění není platná. Zkuste to prosím znovu s platným nastavením oprávnění."
+msgstr ""
 
 #. js-lingui-id: aPJopM
 #: src/engine/metadata-modules/user-role/user-role.service.ts
 msgid "Some workspace memberships could not be found. They may no longer have access to this workspace."
-msgstr "Některá členství v pracovním prostoru nebyla nalezena. Možná už k tomuto pracovnímu prostoru nemají přístup."
+msgstr ""
 
 #. js-lingui-id: OmgwCE
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-relation-flat-field-metadata.util.ts
@@ -3528,28 +3517,28 @@ msgstr ""
 #. js-lingui-id: IP+RN5
 #: src/engine/core-modules/sso/sso.exception.ts
 msgid "SSO configuration error."
-msgstr "Chyba konfigurace SSO."
+msgstr ""
 
 #. js-lingui-id: NflMcG
 #: src/engine/core-modules/sso/sso.exception.ts
 msgid "SSO is disabled."
-msgstr "SSO je zakázáno."
+msgstr ""
 
 #. js-lingui-id: 7XNKWU
 #: src/engine/metadata-modules/ai/ai-agent/agent.exception.ts
 msgid "Standard agents cannot be modified."
-msgstr "Standardní agenty nelze upravovat."
+msgstr ""
 
 #. js-lingui-id: dc5N0o
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Standard fields cannot be deleted"
-msgstr "Standardní pole nelze smazat"
+msgstr ""
 
 #. js-lingui-id: Ptv+nG
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-object-metadata-validator.service.ts
 msgid "Standard objects cannot be deleted"
-msgstr "Standardní objekty nelze smazat"
+msgstr ""
 
 #. js-lingui-id: H8j7uw
 #: src/engine/metadata-modules/skill/skill.exception.ts
@@ -3559,52 +3548,52 @@ msgstr ""
 #. js-lingui-id: S7DRR+
 #: src/modules/workflow/common/utils/assert-workflow-statuses-not-set.ts
 msgid "Statuses cannot be set manually."
-msgstr "Stav nelze nastavit ručně."
+msgstr ""
 
 #. js-lingui-id: u+rv4L
 #: src/modules/workflow/workflow-runner/workspace-services/workflow-runner.workspace-service.ts
 msgid "Step is not a form"
-msgstr "Krok není formulář"
+msgstr ""
 
 #. js-lingui-id: An2IAh
 #: src/engine/core-modules/workspace/workspace.exception.ts
 msgid "Subdomain not found."
-msgstr "Subdoména nenalezena."
+msgstr ""
 
 #. js-lingui-id: x0Vn7k
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Subscription is not in trial period."
-msgstr "Předplatné není ve zkušebním období."
+msgstr ""
 
 #. js-lingui-id: nnWIIb
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Subscription item not found."
-msgstr "Položka předplatného nenalezena."
+msgstr ""
 
 #. js-lingui-id: uo7UmH
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Subscription not found."
-msgstr "Předplatné nenalezeno."
+msgstr ""
 
 #. js-lingui-id: VNohoc
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Subscription phase not found."
-msgstr "Fáze předplatného nenalezena."
+msgstr ""
 
 #. js-lingui-id: DBC3t5
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "Sunday"
-msgstr "Neděle"
+msgstr ""
 
 #. js-lingui-id: 8UWeLh
 #: src/engine/metadata-modules/page-layout/exceptions/page-layout.exception.ts
 msgid "Tab not found for widget duplication."
-msgstr "Karta pro duplikaci widgetu nenalezena."
+msgstr ""
 
 #. js-lingui-id: 5y3Wbw
 #: src/engine/twenty-orm/utils/compute-relation-connect-query-configs.util.ts
 msgid "Target object metadata not found for {connectFieldName}"
-msgstr "Metadata cílového objektu nebyla nalezena pro {connectFieldName}"
+msgstr ""
 
 #. js-lingui-id: 1ssKrE
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-or-relation-flat-field-metadata.util.ts
@@ -3644,27 +3633,27 @@ msgstr ""
 #: src/utils/__test__/custom-exception.spec.ts
 #: src/utils/__test__/custom-exception.spec.ts
 msgid "Test error"
-msgstr "Testovací chyba"
+msgstr ""
 
 #. js-lingui-id: J+cH9z
 #: src/utils/__test__/custom-exception.spec.ts
 msgid "Test user friendly message"
-msgstr "Testovací zpráva pro uživatele"
+msgstr ""
 
 #. js-lingui-id: mQj02P
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-agent-response-format.util.ts
 msgid "Text response format should not have a schema"
-msgstr "Textový formát odpovědi by neměl mít schéma"
+msgstr ""
 
 #. js-lingui-id: GekZDw
 #: src/engine/metadata-modules/ai/ai-agent/utils/from-update-agent-input-to-flat-agent-to-update.util.ts
 msgid "The agent you are looking for could not be found. It may have been deleted or you may not have access to it."
-msgstr "Agenta, kterého hledáte, nelze nalézt. Mohl být smazán nebo k němu nemáte přístup."
+msgstr ""
 
 #. js-lingui-id: eC8p5b
 #: src/engine/metadata-modules/permissions/permissions.service.ts
 msgid "The API key does not have a valid role assigned. Please check your API key configuration."
-msgstr "Klíč API nemá přiřazenou platnou roli. Zkontrolujte konfiguraci svého klíče API."
+msgstr ""
 
 #. js-lingui-id: IU78DA
 #: src/engine/metadata-modules/permissions/permissions.service.ts
@@ -3674,32 +3663,32 @@ msgstr ""
 #. js-lingui-id: nCXfEw
 #: src/engine/metadata-modules/role/role.service.ts
 msgid "The default role cannot be deleted as it is required for the workspace to function properly."
-msgstr "Výchozí role nelze smazat, protože je nutná pro správnou funkci pracovního prostoru."
+msgstr ""
 
 #. js-lingui-id: 0biWRI
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "The default role cannot be deleted."
-msgstr "Výchozí roli nelze smazat."
+msgstr ""
 
 #. js-lingui-id: 6BBrjb
 #: src/engine/metadata-modules/role/role.service.ts
 msgid "The default role for this workspace could not be found. Please contact support for assistance."
-msgstr "Výchozí role pro tento pracovní prostor nebyla nalezena. Kontaktujte podporu pro pomoc."
+msgstr ""
 
 #. js-lingui-id: 22Peto
 #: src/engine/core-modules/approved-access-domain/approved-access-domain.exception.ts
 msgid "The domain does not match your email domain."
-msgstr "Doména neodpovídá vaší e-mailové doméně."
+msgstr ""
 
 #. js-lingui-id: o6DGfJ
 #: src/engine/core-modules/workspace/services/workspace.service.ts
 msgid "The field \"{field}\" cannot be updated. Please contact your workspace administrator."
-msgstr "Pole \"{field}\" nelze aktualizovat. Kontaktujte prosím svého správce pracovního prostoru."
+msgstr ""
 
 #. js-lingui-id: LdhPiK
 #: src/engine/metadata-modules/object-permission/field-permission/field-permission.service.ts
 msgid "The field you are trying to set permissions for could not be found. It may have been deleted."
-msgstr "Pole, pro které se pokoušíte nastavit oprávnění, nebylo nalezeno. Může být smazáno."
+msgstr ""
 
 #. js-lingui-id: bAGU1r
 #: src/engine/core-modules/file/utils/extract-file-info.utils.ts
@@ -3709,13 +3698,13 @@ msgstr ""
 #. js-lingui-id: EJUSll
 #: src/modules/workflow/common/workspace-services/workflow-version-validation.workspace-service.ts
 msgid "The initial version of a workflow can not be deleted"
-msgstr "Počáteční verzi pracovního postupu nelze smazat"
+msgstr ""
 
 #. js-lingui-id: hx2IZ4
 #: src/engine/metadata-modules/object-permission/object-permission.service.ts
 #: src/engine/metadata-modules/object-permission/field-permission/field-permission.service.ts
 msgid "The object you are trying to set permissions for could not be found. It may have been deleted."
-msgstr "Objekt, pro který se pokoušíte nastavit oprávnění, nebyl nalezen. Může být smazán."
+msgstr ""
 
 #. js-lingui-id: tl8xOZ
 #: src/utils/get-domain-name-by-email.ts
@@ -3730,18 +3719,18 @@ msgstr ""
 #. js-lingui-id: pv+BoZ
 #: src/engine/core-modules/graphql/hooks/use-validate-graphql-query-complexity.hook.ts
 msgid "The request is too complex to process. Please try reducing the amount of requested fields."
-msgstr "Požadavek je příliš složitý na zpracování. Zkuste prosím snížit počet požadovaných polí."
+msgstr ""
 
 #. js-lingui-id: 4LVaa7
 #: src/engine/core-modules/graphql/hooks/use-validate-graphql-query-complexity.hook.ts
 msgid "The request is too complex to process. Please try reducing the amount of requested root resolvers."
-msgstr "Požadavek je příliš složitý na zpracování. Zkuste prosím snížit počet požadovaných kořenových resolverů."
+msgstr ""
 
 #. js-lingui-id: Zi9X+u
 #: src/engine/metadata-modules/flat-role/utils/from-update-role-input-to-flat-role-to-update-or-throw.util.ts
 #: src/engine/metadata-modules/flat-role/utils/from-delete-role-input-to-flat-role-or-throw.util.ts
 msgid "The role you are looking for could not be found. It may have been deleted or you may not have access to it."
-msgstr "Roli, kterou hledáte, nelze nalézt. Mohla být smazána nebo k ní nemáte přístup."
+msgstr ""
 
 #. js-lingui-id: HRcugS
 #: src/engine/metadata-modules/permission-flag/permission-flag.service.ts
@@ -3749,17 +3738,17 @@ msgstr "Roli, kterou hledáte, nelze nalézt. Mohla být smazána nebo k ní nem
 #: src/engine/metadata-modules/object-permission/object-permission.service.ts
 #: src/engine/metadata-modules/object-permission/field-permission/field-permission.service.ts
 msgid "The role you are trying to modify could not be found. It may have been deleted or you may not have access to it."
-msgstr "Nelze najít roli, kterou se pokoušíte upravit. Mohla být smazána nebo k ní nemáte přístup."
+msgstr ""
 
 #. js-lingui-id: H1tAJD
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-label.util.ts
 msgid "The singular and plural labels cannot be the same for an object"
-msgstr "Jediné a množné štítky nemohou být pro objekt stejné"
+msgstr ""
 
 #. js-lingui-id: FOEWHl
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-name.util.ts
 msgid "The singular and plural names cannot be the same for an object"
-msgstr "Jediné a množné názvy nemohou být pro objekt stejné"
+msgstr ""
 
 #. js-lingui-id: mTxjri
 #: src/engine/core-modules/workspace-invitation/workspace-invitation.exception.ts
@@ -3774,7 +3763,7 @@ msgstr ""
 #. js-lingui-id: Kfwq7n
 #: src/engine/core-modules/imap-smtp-caldav-connection/services/imap-smtp-caldav-connection-validator.service.ts
 msgid "There was an issue with your connection settings. Please try again."
-msgstr "Vyskytl se problém s nastavením vašeho připojení. Zkuste to prosím znovu."
+msgstr ""
 
 #. js-lingui-id: Iy9pZw
 #: src/engine/api/graphql/workspace-query-runner/utils/handle-duplicate-key-error.util.ts
@@ -3784,27 +3773,27 @@ msgstr ""
 #. js-lingui-id: Izdz+Y
 #: src/engine/core-modules/api-key/services/api-key.service.ts
 msgid "This API Key has been revoked and can no longer be used."
-msgstr "Tento klíč API byl odvolán a nelze jej dále použít."
+msgstr ""
 
 #. js-lingui-id: K02c+I
 #: src/engine/core-modules/api-key/exceptions/api-key.exception.ts
 msgid "This API key has been revoked."
-msgstr "Tento klíč API byl zneplatněn."
+msgstr ""
 
 #. js-lingui-id: OLL1W0
 #: src/engine/core-modules/api-key/exceptions/api-key.exception.ts
 msgid "This API key has expired."
-msgstr "Tomuto klíči API vypršela platnost."
+msgstr ""
 
 #. js-lingui-id: Jmzgho
 #: src/engine/core-modules/api-key/services/api-key.service.ts
 msgid "This API Key has expired. Please create a new one."
-msgstr "Tento klíč API vypršel. Vytvořte si nový."
+msgstr ""
 
 #. js-lingui-id: 9J2vmW
 #: src/engine/core-modules/api-key/exceptions/api-key.exception.ts
 msgid "This API key has no role assigned."
-msgstr "Tomuto klíči API není přiřazena žádná role."
+msgstr ""
 
 #. js-lingui-id: FY4xDH
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-page-layout-widget-validator.service.ts
@@ -3814,68 +3803,68 @@ msgstr ""
 #. js-lingui-id: ADtO2E
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "This connection is not allowed."
-msgstr "Toto připojení není povoleno."
+msgstr ""
 
 #. js-lingui-id: z7bcpf
 #: src/engine/core-modules/approved-access-domain/approved-access-domain.exception.ts
 msgid "This domain has already been validated."
-msgstr "Tato doména již byla ověřena."
+msgstr ""
 
 #. js-lingui-id: RQbcZC
 #: src/engine/core-modules/approved-access-domain/approved-access-domain.exception.ts
 msgid "This domain has already been verified."
-msgstr "Tato doména již byla ověřena."
+msgstr ""
 
 #. js-lingui-id: 3eKCDz
 #: src/engine/core-modules/public-domain/public-domain.exception.ts
 msgid "This domain is already registered as a custom domain."
-msgstr "Tato doména je již zaregistrována jako vlastní doména."
+msgstr ""
 
 #. js-lingui-id: s6batt
 #: src/engine/core-modules/approved-access-domain/approved-access-domain.exception.ts
 msgid "This domain is already registered."
-msgstr "Tato doména je již zaregistrována."
+msgstr ""
 
 #. js-lingui-id: 8sTsIR
 #: src/engine/core-modules/workspace/workspace.exception.ts
 msgid "This domain is already taken."
-msgstr "Tato doména je již obsazená."
+msgstr ""
 
 #. js-lingui-id: NcQ6eO
 #: src/engine/core-modules/user/user.exception.ts
 msgid "This email is already in use."
-msgstr "Tento e-mail je již používán."
+msgstr ""
 
 #. js-lingui-id: hsi+jf
 #: src/engine/core-modules/workspace/workspace.exception.ts
 msgid "This feature is not enabled."
-msgstr "Tato funkce není povolena."
+msgstr ""
 
 #. js-lingui-id: MKqbeR
 #: src/engine/metadata-modules/field-metadata/field-metadata.exception.ts
 msgid "This field cannot be modified."
-msgstr "Toto pole nelze upravit."
+msgstr ""
 
 #. js-lingui-id: AKIPVa
 #: src/engine/metadata-modules/field-metadata/field-metadata.exception.ts
 msgid "This field name is not available."
-msgstr "Tento název pole není k dispozici."
+msgstr ""
 
 #. js-lingui-id: 6Z/zIt
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "This method is not allowed."
-msgstr "Tato metoda není povolena."
+msgstr ""
 
 #. js-lingui-id: /XKGep
 #: src/engine/metadata-modules/utils/exceptions/invalid-metadata.exception.ts
 #: src/engine/metadata-modules/field-metadata/field-metadata.exception.ts
 msgid "This name is a reserved keyword."
-msgstr "Tento název je rezervované klíčové slovo."
+msgstr ""
 
 #. js-lingui-id: yIUmAs
 #: src/engine/metadata-modules/utils/exceptions/invalid-metadata.exception.ts
 msgid "This name is not available."
-msgstr "Tento název není dostupný."
+msgstr ""
 
 #. js-lingui-id: gPBck6
 #: src/engine/metadata-modules/flat-object-metadata/validators/utils/validate-flat-object-metadata-name.util.ts
@@ -3887,38 +3876,38 @@ msgstr ""
 #. js-lingui-id: R8zIJd
 #: src/engine/metadata-modules/object-metadata/object-metadata.exception.ts
 msgid "This object cannot be modified."
-msgstr "Tento objekt nelze upravit."
+msgstr ""
 
 #. js-lingui-id: 7ZdJO2
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "This operation is not allowed."
-msgstr "Tato operace není povolena."
+msgstr ""
 
 #. js-lingui-id: eitC3W
 #: src/engine/workspace-datasource/workspace-datasource.service.ts
 msgid "This operation is not allowed. Please try a different approach or contact support if you need assistance."
-msgstr "Tato operace není povolena. Zkuste prosím jiný přístup nebo kontaktujte podporu, pokud potřebujete pomoc."
+msgstr ""
 
 #. js-lingui-id: bEhTPN
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-runner/exceptions/workspace-migration-action-execution.exception.ts
 msgid "This operation is not supported."
-msgstr "Tato operace není podporována."
+msgstr ""
 
 #. js-lingui-id: Y5C3uK
 #: src/modules/connected-account/refresh-tokens-manager/exceptions/connected-account-refresh-tokens.exception.ts
 msgid "This provider is not supported."
-msgstr "Tento poskytovatel není podporován."
+msgstr ""
 
 #. js-lingui-id: 8achGR
 #: src/engine/core-modules/public-domain/public-domain.exception.ts
 msgid "This public domain is already registered."
-msgstr "Tato veřejná doména je již zaregistrována."
+msgstr ""
 
 #. js-lingui-id: TjUnO1
 #: src/engine/api/graphql/workspace-query-runner/utils/handle-duplicate-key-error.util.ts
 #: src/engine/api/graphql/workspace-query-runner/utils/handle-duplicate-key-error.util.ts
 msgid "This record already exists. Please check your data and try again."
-msgstr "Tento záznam již existuje. Zkontrolujte svá data a zkuste to znovu."
+msgstr ""
 
 #. js-lingui-id: 0arbc4
 #: src/engine/api/common/common-query-runners/common-update-one-query-runner.service.ts
@@ -3933,22 +3922,22 @@ msgstr ""
 #. js-lingui-id: rExecr
 #: src/engine/metadata-modules/ai/ai-agent/agent.exception.ts
 msgid "This role cannot be assigned to agents."
-msgstr "Tuto roli nelze přiřadit agentům."
+msgstr ""
 
 #. js-lingui-id: UP3ZAj
 #: src/engine/core-modules/api-key/exceptions/api-key.exception.ts
 msgid "This role cannot be assigned to API keys."
-msgstr "Tuto roli nelze přiřadit klíčům API."
+msgstr ""
 
 #. js-lingui-id: c68K+k
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "This role cannot be assigned to users."
-msgstr "Tuto roli nelze přiřadit uživatelům."
+msgstr ""
 
 #. js-lingui-id: 2jnsqJ
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "This role cannot be edited."
-msgstr "Tuto roli nelze upravit."
+msgstr ""
 
 #. js-lingui-id: KoDdqN
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-role-is-editable.util.ts
@@ -3956,12 +3945,12 @@ msgstr "Tuto roli nelze upravit."
 #: src/engine/metadata-modules/object-permission/object-permission.service.ts
 #: src/engine/metadata-modules/object-permission/field-permission/field-permission.service.ts
 msgid "This role cannot be modified because it is a system role. Only custom roles can be edited."
-msgstr "Tuto roli nelze upravit, protože jde o systémovou roli. Lze upravovat pouze vlastní role."
+msgstr ""
 
 #. js-lingui-id: nFIPim
 #: src/engine/core-modules/workspace/workspace.exception.ts
 msgid "This subdomain is already taken."
-msgstr "Tato subdoména je již obsazená."
+msgstr ""
 
 #. js-lingui-id: aXBMTb
 #: src/engine/api/common/common-query-runners/common-merge-many-query-runner.service.ts
@@ -3971,37 +3960,37 @@ msgstr ""
 #. js-lingui-id: GEN5Cv
 #: src/engine/core-modules/workspace-invitation/workspace-invitation.exception.ts
 msgid "This user is already a member of the workspace."
-msgstr "Tento uživatel je již členem pracovního prostoru."
+msgstr ""
 
 #. js-lingui-id: LtsBYU
 #: src/engine/core-modules/twenty-config/twenty-config.exception.ts
 msgid "This variable can only be set via environment."
-msgstr "Tuto proměnnou lze nastavit pouze pomocí proměnných prostředí."
+msgstr ""
 
 #. js-lingui-id: kkDQ8m
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "Thursday"
-msgstr "Čtvrtek"
+msgstr ""
 
 #. js-lingui-id: /ObxXq
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Too many admin candidates found."
-msgstr "Nalezeno příliš mnoho kandidátů na administrátora."
+msgstr ""
 
 #. js-lingui-id: MYdvBz
 #: src/engine/api/graphql/workspace-query-runner/workspace-query-runner.exception.ts
 msgid "Too many records affected."
-msgstr "Ovlivněno příliš mnoho záznamů."
+msgstr ""
 
 #. js-lingui-id: ExheIC
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "Too many records to update at once."
-msgstr "Příliš mnoho záznamů k aktualizaci najednou."
+msgstr ""
 
 #. js-lingui-id: M68C8m
 #: src/engine/core-modules/email-verification/email-verification.exception.ts
 msgid "Too many requests. Please try again later."
-msgstr "Příliš mnoho požadavků. Zkuste to prosím později."
+msgstr ""
 
 #. js-lingui-id: mfqtz7
 #: src/engine/core-modules/workspace-invitation/services/workspace-invitation.service.ts
@@ -4016,32 +4005,32 @@ msgstr ""
 #. js-lingui-id: VD8J6l
 #: src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/exceptions/route-trigger.exception.ts
 msgid "Trigger not found."
-msgstr "Spouštěč nenalezen."
+msgstr ""
 
 #. js-lingui-id: G3myU+
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "Tuesday"
-msgstr "Úterý"
+msgstr ""
 
 #. js-lingui-id: T+yZIr
 #: src/engine/core-modules/two-factor-authentication/two-factor-authentication.exception.ts
 msgid "Two-factor authentication is already set up."
-msgstr "Dvoufaktorové ověřování je již nastaveno."
+msgstr ""
 
 #. js-lingui-id: lNKrNc
 #: src/engine/core-modules/two-factor-authentication/two-factor-authentication.exception.ts
 msgid "Two-factor authentication method not found."
-msgstr "Metoda dvoufaktorového ověřování nenalezena."
+msgstr ""
 
 #. js-lingui-id: 7Z7wx7
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "Two-factor authentication setup is required."
-msgstr "Je vyžadováno nastavení dvoufaktorového ověřování."
+msgstr ""
 
 #. js-lingui-id: VT9cmj
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "Two-factor authentication verification is required."
-msgstr "Je vyžadováno ověření v rámci dvoufaktorového ověřování."
+msgstr ""
 
 #. js-lingui-id: Qx95XY
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-morph-or-relation-flat-field-metadata.util.ts
@@ -4052,37 +4041,37 @@ msgstr ""
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-index-metadata-validator.service.ts
 msgid "Unique index cannot be created for field {fieldName} of type {fieldType}"
-msgstr "Unikátní index nelze vytvořit pro pole {fieldName} typu {fieldType}"
+msgstr ""
 
 #. js-lingui-id: tEncxN
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Unknown operation."
-msgstr "Neznámá operace."
+msgstr ""
 
 #. js-lingui-id: BIxgma
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Unknown permission required."
-msgstr "Vyžadováno neznámé oprávnění."
+msgstr ""
 
 #. js-lingui-id: Md/2jb
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-runner/exceptions/workspace-migration-action-execution.exception.ts
 msgid "Unsupported composite column type."
-msgstr "Nepodporovaný typ složeného sloupce."
+msgstr ""
 
 #. js-lingui-id: 1r7kLp
 #: src/engine/core-modules/twenty-config/twenty-config.exception.ts
 msgid "Unsupported configuration type."
-msgstr "Nepodporovaný typ konfigurace."
+msgstr ""
 
 #. js-lingui-id: EBZdX5
 #: src/modules/workflow/workflow-trigger/utils/compute-cron-pattern-from-schedule.ts
 msgid "Unsupported cron schedule type"
-msgstr "Nepodporovaný typ cron plánu"
+msgstr ""
 
 #. js-lingui-id: crxihq
 #: src/engine/metadata-modules/flat-field-metadata/services/flat-field-metadata-type-validator.service.ts
 msgid "Unsupported field metadata type {fieldType}"
-msgstr "Nepodporovaný typ metadat pole {fieldType}"
+msgstr ""
 
 #. js-lingui-id: B4Eu7x
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-runner/exceptions/workspace-migration-action-execution.exception.ts
@@ -4098,12 +4087,12 @@ msgstr ""
 #. js-lingui-id: lHCFXi
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Update field restrictions only apply to updatable objects."
-msgstr "Omezení aktualizace polí platí pouze pro aktualizovatelné objekty."
+msgstr ""
 
 #. js-lingui-id: r5C2wB
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-field-metadata-validator.service.ts
 msgid "Updated field name is not synced with label"
-msgstr "Název aktualizovaného pole není synchronizován se štítkem"
+msgstr ""
 
 #. js-lingui-id: Gjk0so
 #: src/engine/metadata-modules/flat-page-layout-widget/validators/utils/validate-iframe-url.util.ts
@@ -4118,18 +4107,18 @@ msgstr ""
 #. js-lingui-id: GkcfmO
 #: src/engine/core-modules/auth/services/sign-in-up.service.ts
 msgid "User already exists"
-msgstr "Uživatel již existuje"
+msgstr ""
 
 #. js-lingui-id: 9QHVZ2
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "User already has a role assigned."
-msgstr "Uživatel již má přiřazenou roli."
+msgstr ""
 
 #. js-lingui-id: l9dlVi
 #: src/engine/core-modules/auth/strategies/jwt.auth.strategy.ts
 #: src/engine/core-modules/auth/services/auth.service.ts
 msgid "User does not have access to this workspace"
-msgstr "Uživatel nemá přístup k tomuto pracovnímu prostoru"
+msgstr ""
 
 #. js-lingui-id: kZ0tmK
 #: src/engine/core-modules/auth/strategies/jwt.auth.strategy.spec.ts
@@ -4140,42 +4129,42 @@ msgstr ""
 #. js-lingui-id: Sl1ElS
 #: src/engine/metadata-modules/permissions/utils/permission-graphql-api-exception-handler.util.ts
 msgid "User does not have permission."
-msgstr "Uživatel nemá oprávnění."
+msgstr ""
 
 #. js-lingui-id: EHZMfR
 #: src/utils/__test__/custom-exception.spec.ts
 #: src/utils/__test__/custom-exception.spec.ts
 msgid "User friendly error message"
-msgstr "Uživatelsky přívětivá chybová zpráva"
+msgstr ""
 
 #. js-lingui-id: pMOjQa
 #: src/engine/core-modules/auth/token/services/access-token.service.ts
 #: src/engine/core-modules/auth/strategies/jwt.auth.strategy.ts
 #: src/engine/core-modules/auth/services/auth.service.ts
 msgid "User is not a member of the workspace."
-msgstr "Uživatel není součástí pracovního prostoru."
+msgstr ""
 
 #. js-lingui-id: B43Kks
 #: src/engine/core-modules/auth/services/sign-in-up.service.ts
 msgid "User is not part of the workspace"
-msgstr "Uživatel není součástí pracovního prostoru"
+msgstr ""
 
 #. js-lingui-id: siJgSI
 #: src/engine/core-modules/user/user.exception.ts
 #: src/engine/core-modules/sso/sso.exception.ts
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "User not found."
-msgstr "Uživatel nenalezen."
+msgstr ""
 
 #. js-lingui-id: g5Z6no
 #: src/engine/core-modules/admin-panel/admin-panel.service.ts
 msgid "User not found. Please check the email or ID."
-msgstr "Uživatel nenalezen. Zkontrolujte prosím e-mail nebo ID."
+msgstr ""
 
 #. js-lingui-id: VkcC68
 #: src/engine/core-modules/auth/services/auth.service.ts
 msgid "User was not created with email/password"
-msgstr "Uživatel nebyl vytvořen s e-mailem/heslem"
+msgstr ""
 
 #. js-lingui-id: lUEEso
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
@@ -4184,38 +4173,38 @@ msgstr "Uživatel nebyl vytvořen s e-mailem/heslem"
 #: src/engine/core-modules/auth/auth.exception.ts
 #: src/engine/core-modules/auth/strategies/jwt.auth.strategy.spec.ts
 msgid "User workspace not found."
-msgstr "Pracovní prostor uživatele nenalezen."
+msgstr ""
 
 #. js-lingui-id: 9mCrQp
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "User workspace role configuration not found."
-msgstr "Konfigurace role uživatelského pracovního prostoru nenalezena."
+msgstr ""
 
 #. js-lingui-id: UBPzFQ
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 #: src/engine/metadata-modules/flat-field-metadata/validators/utils/validate-enum-flat-field-metadata.util.ts
 msgid "Value must be in UPPER_CASE and follow snake_case \"{sanitizedValue}\""
-msgstr "Hodnota musí být ve VELKÝCH_PÍSMENECH a má následovat snake_case \"{sanitizedValue}\""
+msgstr ""
 
 #. js-lingui-id: HhN1Bv
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 msgid "View already exists"
-msgstr "Zobrazení již existuje"
+msgstr ""
 
 #. js-lingui-id: kB0dDD
 #: src/engine/metadata-modules/view/exceptions/flat-view.exception.ts
 msgid "View already exists."
-msgstr "Zobrazení již existuje."
+msgstr ""
 
 #. js-lingui-id: pTvQqf
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 msgid "View field already exists"
-msgstr "Zobrazované pole již existuje"
+msgstr ""
 
 #. js-lingui-id: Xm6R6B
 #: src/engine/metadata-modules/view-field/exceptions/view-field.exception.ts
 msgid "View field already exists."
-msgstr "Zobrazovací pole již existuje."
+msgstr ""
 
 #. js-lingui-id: pkIuNd
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-group-validator.service.ts
@@ -4255,7 +4244,7 @@ msgstr ""
 #. js-lingui-id: 7jUWQ+
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 msgid "View field metadata already exists"
-msgstr "Metadata zobrazovaného pole již existují"
+msgstr ""
 
 #. js-lingui-id: mdX5P2
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
@@ -4266,44 +4255,44 @@ msgstr ""
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 msgid "View field position cannot be lower than label identifier view field position"
-msgstr "Pozice pole zobrazení nemůže být nižší než pozice pole zobrazení s identifikátorem štítku"
+msgstr ""
 
 #. js-lingui-id: WZzm3R
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 msgid "View field related view object metadata not found"
-msgstr "Metadata souvisejícího objektu pole zobrazení nenalezena"
+msgstr ""
 
 #. js-lingui-id: XJlyZS
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 #: src/engine/metadata-modules/flat-view-field/utils/from-delete-view-field-input-to-flat-view-field-or-throw.util.ts
 msgid "View field to delete not found"
-msgstr "Zobrazit pole ke smazání nebylo nalezeno"
+msgstr ""
 
 #. js-lingui-id: DXyYuh
 #: src/engine/metadata-modules/flat-view-field/utils/from-destroy-view-field-input-to-flat-view-field-or-throw.util.ts
 msgid "View field to destroy not found"
-msgstr "Zobrazit pole ke zničení nebylo nalezeno"
+msgstr ""
 
 #. js-lingui-id: Fpy/K1
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 #: src/engine/metadata-modules/flat-view-field/utils/from-update-view-field-input-to-flat-view-field-to-update-or-throw.util.ts
 msgid "View field to update not found"
-msgstr "Pole pohledu pro aktualizaci nenalezeno"
+msgstr ""
 
 #. js-lingui-id: AprfQL
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 msgid "View field to update parent view not found"
-msgstr "Pole zobrazení pro aktualizaci nadřazeného pohledu nenalezeno"
+msgstr ""
 
 #. js-lingui-id: sqzMKR
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
 msgid "View field to update parent view object not found"
-msgstr "Pole zobrazení pro aktualizaci nadřazeného objektu nenalezeno"
+msgstr ""
 
 #. js-lingui-id: Zqbr+6
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-validator.service.ts
@@ -4355,22 +4344,22 @@ msgstr ""
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-filter-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-filter-validator.service.ts
 msgid "View filter not found"
-msgstr "Filtr zobrazení nebyl nalezen"
+msgstr ""
 
 #. js-lingui-id: 3l1ppY
 #: src/engine/metadata-modules/flat-view-filter/utils/from-delete-view-filter-input-to-flat-view-filter-or-throw.util.ts
 msgid "View filter to delete not found"
-msgstr "Filtr zobrazení ke smazání nebyl nalezen"
+msgstr ""
 
 #. js-lingui-id: 9gedIx
 #: src/engine/metadata-modules/flat-view-filter/utils/from-destroy-view-filter-input-to-flat-view-filter-or-throw.util.ts
 msgid "View filter to destroy not found"
-msgstr "Zobrazit filtr ke zničení nebyl nalezen"
+msgstr ""
 
 #. js-lingui-id: GzthLy
 #: src/engine/metadata-modules/flat-view-filter/utils/from-update-view-filter-input-to-flat-view-filter-to-update-or-throw.util.ts
 msgid "View filter to update not found"
-msgstr "Zobrazit filtr pro aktualizaci nebyl nalezen"
+msgstr ""
 
 #. js-lingui-id: bM1MKh
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-filter-validator.service.ts
@@ -4380,7 +4369,7 @@ msgstr ""
 #. js-lingui-id: MGbEFN
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-group-validator.service.ts
 msgid "View group metadata already exists"
-msgstr "Metadata skupiny zobrazení již existují"
+msgstr ""
 
 #. js-lingui-id: c1XRE3
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-group-validator.service.ts
@@ -4392,25 +4381,25 @@ msgstr ""
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-group-validator.service.ts
 #: src/engine/metadata-modules/flat-view-group/utils/from-delete-view-group-input-to-flat-view-group-or-throw.util.ts
 msgid "View group to delete not found"
-msgstr "Skupina zobrazení, kterou chcete odstranit, nebyla nalezena"
+msgstr ""
 
 #. js-lingui-id: 34hWb7
 #: src/engine/metadata-modules/flat-view-group/utils/from-destroy-view-group-input-to-flat-view-group-or-throw.util.ts
 msgid "View group to destroy not found"
-msgstr "Skupina zobrazení, kterou chcete zničit, nebyla nalezena"
+msgstr ""
 
 #. js-lingui-id: UP/TXo
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-group-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-group-validator.service.ts
 #: src/engine/metadata-modules/flat-view-group/utils/from-update-view-group-input-to-flat-view-group-to-update-or-throw.util.ts
 msgid "View group to update not found"
-msgstr "Skupina zobrazení, kterou chcete aktualizovat, nebyla nalezena"
+msgstr ""
 
 #. js-lingui-id: P0grPG
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-group-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-group-validator.service.ts
 msgid "View group to update parent view not found"
-msgstr "Skupina zobrazení pro aktualizaci nadřazeného zobrazení nebyla nalezena"
+msgstr ""
 
 #. js-lingui-id: M7KWZV
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
@@ -4418,7 +4407,7 @@ msgstr "Skupina zobrazení pro aktualizaci nadřazeného zobrazení nebyla nalez
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
 msgid "View kanban aggregate field metadata not found"
-msgstr "Agregované metadatové pole kanbanu nelze najít"
+msgstr ""
 
 #. js-lingui-id: F4A9mL
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
@@ -4436,27 +4425,27 @@ msgstr "Agregované metadatové pole kanbanu nelze najít"
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-group-validator.service.ts
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-field-group-validator.service.ts
 msgid "View not found"
-msgstr "Zobrazení nenalezeno"
+msgstr ""
 
 #. js-lingui-id: yheEin
 #: src/engine/metadata-modules/view/exceptions/flat-view.exception.ts
 msgid "View not found."
-msgstr "Zobrazení nenalezeno."
+msgstr ""
 
 #. js-lingui-id: toB/08
 #: src/engine/metadata-modules/flat-view/utils/from-delete-view-input-to-flat-view-or-throw.util.ts
 msgid "View to delete not found"
-msgstr "Zobrazení ke smazání nebylo nalezeno"
+msgstr ""
 
 #. js-lingui-id: NnD3Ti
 #: src/engine/metadata-modules/flat-view/utils/from-destroy-view-input-to-flat-view-or-throw.util.ts
 msgid "View to destroy not found"
-msgstr "Zobrazení ke zničení nebylo nalezeno"
+msgstr ""
 
 #. js-lingui-id: 3+GbNY
 #: src/engine/metadata-modules/flat-view/utils/from-update-view-input-to-flat-view-to-update-or-throw.util.ts
 msgid "View to update not found"
-msgstr "Zobrazení pro aktualizaci nebylo nalezeno"
+msgstr ""
 
 #. js-lingui-id: RvdHYC
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-view-validator.service.ts
@@ -4472,57 +4461,57 @@ msgstr ""
 #. js-lingui-id: l88nXn
 #: src/engine/metadata-modules/view-field/exceptions/view-field.exception.ts
 msgid "ViewId is required to create a view field."
-msgstr "ViewId je vyžadován k vytvoření pole zobrazení."
+msgstr ""
 
 #. js-lingui-id: 9XMTpT
 #: src/engine/metadata-modules/view-filter-group/exceptions/view-filter-group.exception.ts
 msgid "ViewId is required to create a view filter group."
-msgstr "ViewId je vyžadován k vytvoření skupiny filtrů zobrazení."
+msgstr ""
 
 #. js-lingui-id: pCCxli
 #: src/engine/metadata-modules/view-filter/exceptions/view-filter.exception.ts
 msgid "ViewId is required to create a view filter."
-msgstr "ViewId je vyžadován k vytvoření filtru zobrazení."
+msgstr ""
 
 #. js-lingui-id: 1X1RW5
 #: src/engine/metadata-modules/view-group/exceptions/view-group.exception.ts
 msgid "ViewId is required to create a view group."
-msgstr "ViewId je vyžadován k vytvoření skupiny zobrazení."
+msgstr ""
 
 #. js-lingui-id: uGUFcy
 #: src/engine/metadata-modules/view-sort/exceptions/view-sort.exception.ts
 msgid "ViewId is required to create a view sort."
-msgstr "ViewId je vyžadován k vytvoření třídění zobrazení."
+msgstr ""
 
 #. js-lingui-id: xvV2NJ
 #: src/engine/twenty-orm/error-handling/compute-twenty-orm-exception.ts
 msgid "We are experiencing a temporary issue with our database. Please try again later."
-msgstr "Máme dočasný problém s naší databází. Zkuste to prosím znovu později."
+msgstr ""
 
 #. js-lingui-id: B3CG/U
 #: src/engine/core-modules/imap-smtp-caldav-connection/services/imap-smtp-caldav-connection.service.ts
 msgid "We couldn't connect to your CalDAV server. Please check your server settings and try again."
-msgstr "Nemohli jsme se připojit k vašemu CalDAV serveru. Zkontrolujte prosím nastavení serveru a zkuste to znovu."
+msgstr ""
 
 #. js-lingui-id: ax8unE
 #: src/engine/core-modules/imap-smtp-caldav-connection/services/imap-smtp-caldav-connection.service.ts
 msgid "We couldn't connect to your email server. Please check your server settings and try again."
-msgstr "Nemohli jsme se připojit k vašemu e-mailovému serveru. Zkontrolujte prosím nastavení serveru a zkuste to znovu."
+msgstr ""
 
 #. js-lingui-id: g4rOV3
 #: src/engine/core-modules/imap-smtp-caldav-connection/services/imap-smtp-caldav-connection.service.ts
 msgid "We couldn't connect to your outgoing email server. Please check your SMTP settings and try again."
-msgstr "Nemohli jsme se připojit k vašemu odchozímu e-mailovému serveru. Zkontrolujte prosím nastavení SMTP a zkuste to znovu."
+msgstr ""
 
 #. js-lingui-id: v8UNEA
 #: src/engine/core-modules/imap-smtp-caldav-connection/services/imap-smtp-caldav-connection.service.ts
 msgid "We couldn't log in to your email account. Please check your email address and password, then try again."
-msgstr "Nemohli jsme se přihlásit k vašemu e-mailovému účtu. Zkontrolujte prosím e-mailovou adresu a heslo, poté zkuste znovu."
+msgstr ""
 
 #. js-lingui-id: YxBvFz
 #: src/engine/core-modules/imap-smtp-caldav-connection/services/imap-smtp-caldav-connection.service.ts
 msgid "We encountered an issue connecting to your email account. Please check your settings and try again."
-msgstr "Narazili jsme na problém s připojením ke vašemu e-mailovému účtu. Zkontrolujte prosím nastavení a zkuste to znovu."
+msgstr ""
 
 #. js-lingui-id: mnANRQ
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/services/flat-webhook-validator.service.ts
@@ -4535,17 +4524,17 @@ msgstr ""
 #. js-lingui-id: b8g3PG
 #: src/engine/metadata-modules/webhook/webhook.exception.ts
 msgid "Webhook not found."
-msgstr "Webhook nenalezen."
+msgstr ""
 
 #. js-lingui-id: VAcXNz
 #: src/engine/api/graphql/graphql-query-runner/group-by/resolvers/utils/format-result-with-group-by-dimension-values.util.ts
 msgid "Wednesday"
-msgstr "Středa"
+msgstr ""
 
 #. js-lingui-id: TVkCrJ
 #: src/engine/core-modules/email-verification/services/email-verification.service.ts
 msgid "Welcome to Twenty: Please Confirm Your Email"
-msgstr "Vítejte v Twenty: Prosím potvrďte svůj e-mail"
+msgstr ""
 
 #. js-lingui-id: OHlJ1X
 #: src/engine/metadata-modules/page-layout-widget/utils/validate-widget-grid-position.util.ts
@@ -4652,7 +4641,7 @@ msgstr ""
 #. js-lingui-id: KSK8fH
 #: src/modules/workflow/common/exceptions/workflow-version-edge.exception.ts
 msgid "Workflow edge not found."
-msgstr "Hrana pracovního postupu nenalezena."
+msgstr ""
 
 #. js-lingui-id: R67jts
 #: src/modules/workflow/workflow-trigger/exceptions/workflow-trigger.exception.ts
@@ -4662,7 +4651,7 @@ msgstr ""
 #. js-lingui-id: ysb9m+
 #: src/modules/workflow/workflow-runner/exceptions/workflow-run.exception.ts
 msgid "Workflow root step not found."
-msgstr "Kořenový krok pracovního postupu nenalezen."
+msgstr ""
 
 #. js-lingui-id: TgOSaQ
 #: src/modules/workflow/workflow-runner/workspace-services/workflow-runner.workspace-service.ts
@@ -4672,34 +4661,34 @@ msgstr ""
 #. js-lingui-id: AzylSS
 #: src/modules/workflow/workflow-runner/exceptions/workflow-run.exception.ts
 msgid "Workflow run limit reached."
-msgstr "Dosažen limit počtu spuštění pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: daijCZ
 #: src/modules/workflow/workflow-runner/exceptions/workflow-run.exception.ts
 msgid "Workflow run not found."
-msgstr "Spuštění pracovního postupu nenalezeno."
+msgstr ""
 
 #. js-lingui-id: dD9Vpa
 #: src/modules/workflow/workflow-executor/exceptions/workflow-step-executor.exception.ts
 #: src/modules/workflow/common/exceptions/workflow-version-step.exception.ts
 msgid "Workflow step not found."
-msgstr "Krok pracovního postupu nenalezen."
+msgstr ""
 
 #. js-lingui-id: n4/IOE
 #: src/modules/workflow/common/utils/assert-workflow-version-has-steps.ts
 msgid "Workflow version does not contain at least one step"
-msgstr "Verze pracovního postupu neobsahuje alespoň jeden krok"
+msgstr ""
 
 #. js-lingui-id: k4DPlQ
 #: src/modules/workflow/workflow-trigger/utils/assert-version-can-be-activated.util.ts
 #: src/modules/workflow/common/utils/assert-workflow-version-trigger-is-defined.util.ts
 msgid "Workflow version does not contain trigger"
-msgstr "Verze pracovního postupu neobsahuje spouštěč"
+msgstr ""
 
 #. js-lingui-id: bqFL4g
 #: src/modules/workflow/common/utils/assert-workflow-version-is-draft.util.ts
 msgid "Workflow version is not in draft status"
-msgstr "Verze pracovního postupu není ve statusu návrhu"
+msgstr ""
 
 #. js-lingui-id: bK8AyJ
 #: src/engine/core-modules/billing-webhook/services/billing-webhook-subscription.service.ts
@@ -4711,7 +4700,7 @@ msgstr ""
 #: src/engine/core-modules/auth/services/sign-in-up.service.ts
 #: src/engine/core-modules/auth/services/sign-in-up.service.ts
 msgid "Workspace creation is restricted to admins"
-msgstr "Vytváření pracovního prostoru je omezeno pro administrátory"
+msgstr ""
 
 #. js-lingui-id: qSQPRS
 #: src/engine/core-modules/auth/services/auth.service.ts
@@ -4721,17 +4710,17 @@ msgstr ""
 #. js-lingui-id: oLh4c+
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Workspace ID and role mismatch."
-msgstr "Nesoulad ID pracovního prostoru a role."
+msgstr ""
 
 #. js-lingui-id: rklt6M
 #: src/engine/core-modules/auth/services/sign-in-up.service.ts
 msgid "Workspace is not ready to welcome new members"
-msgstr "Pracovní prostor není připraven přivítat nové členy"
+msgstr ""
 
 #. js-lingui-id: rnnLQA
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "Workspace member not found."
-msgstr "Člen pracovního prostoru nenalezen."
+msgstr ""
 
 #. js-lingui-id: JYc1v3
 #: src/engine/core-modules/user-workspace/guards/upload-profile-picture-permission.guard.ts
@@ -4741,12 +4730,12 @@ msgstr ""
 #. js-lingui-id: eQwIyW
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Workspace not found for customer event."
-msgstr "Pracovní prostor pro zákaznickou událost nenalezen."
+msgstr ""
 
 #. js-lingui-id: 5Io9Sh
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "Workspace not found for subscription event."
-msgstr "Pracovní prostor pro událost předplatného nenalezen."
+msgstr ""
 
 #. js-lingui-id: EhVOPs
 #: src/modules/workflow/workflow-executor/exceptions/workflow-step-executor.exception.ts
@@ -4757,42 +4746,42 @@ msgstr "Pracovní prostor pro událost předplatného nenalezen."
 #: src/engine/core-modules/logic-function/logic-function-trigger/triggers/route/exceptions/route-trigger.exception.ts
 #: src/engine/core-modules/auth/auth.exception.ts
 msgid "Workspace not found."
-msgstr "Pracovní prostor nenalezen."
+msgstr ""
 
 #. js-lingui-id: 7wxAZI
 #: src/engine/twenty-orm/exceptions/twenty-orm.exception.ts
 msgid "Workspace schema not found."
-msgstr "Schéma pracovního prostoru nenalezeno."
+msgstr ""
 
 #. js-lingui-id: kjLpTn
 #: src/engine/metadata-modules/view-field/exceptions/view-field.exception.ts
 msgid "WorkspaceId is required to create a view field."
-msgstr "WorkspaceId je vyžadován k vytvoření pole zobrazení."
+msgstr ""
 
 #. js-lingui-id: zWj6VZ
 #: src/engine/metadata-modules/view-filter-group/exceptions/view-filter-group.exception.ts
 msgid "WorkspaceId is required to create a view filter group."
-msgstr "WorkspaceId je vyžadován k vytvoření skupiny filtrů zobrazení."
+msgstr ""
 
 #. js-lingui-id: jQMXtD
 #: src/engine/metadata-modules/view-filter/exceptions/view-filter.exception.ts
 msgid "WorkspaceId is required to create a view filter."
-msgstr "WorkspaceId je vyžadován k vytvoření filtru zobrazení."
+msgstr ""
 
 #. js-lingui-id: NAoJAX
 #: src/engine/metadata-modules/view-group/exceptions/view-group.exception.ts
 msgid "WorkspaceId is required to create a view group."
-msgstr "WorkspaceId je vyžadován k vytvoření skupiny zobrazení."
+msgstr ""
 
 #. js-lingui-id: hU1QaN
 #: src/engine/metadata-modules/view-sort/exceptions/view-sort.exception.ts
 msgid "WorkspaceId is required to create a view sort."
-msgstr "WorkspaceId je vyžadován k vytvoření třídění zobrazení."
+msgstr ""
 
 #. js-lingui-id: jtb/lI
 #: src/engine/metadata-modules/view/exceptions/view.exception.ts
 msgid "WorkspaceId is required to create a view."
-msgstr "WorkspaceId je vyžadován k vytvoření zobrazení."
+msgstr ""
 
 #. js-lingui-id: VddeYt
 #: src/engine/core-modules/file-storage/interfaces/file-storage-exception.ts
@@ -4802,7 +4791,7 @@ msgstr ""
 #. js-lingui-id: fV2Bu6
 #: src/engine/core-modules/auth/services/sign-in-up.service.ts
 msgid "Wrong password"
-msgstr "Špatné heslo"
+msgstr ""
 
 #. js-lingui-id: RksBK0
 #: src/engine/core-modules/auth/services/auth.service.ts
@@ -4837,43 +4826,43 @@ msgstr ""
 #. js-lingui-id: 1SQnFB
 #: src/engine/metadata-modules/role/role.resolver.ts
 msgid "You cannot change your own role. Please ask another administrator to update your role."
-msgstr "Nemůžete změnit svou vlastní roli. Požádejte jiného správce o aktualizaci vaší role."
+msgstr ""
 
 #. js-lingui-id: y5haJ4
 #: src/engine/workspace-manager/workspace-migration/workspace-migration-builder/validators/utils/validate-role-read-write-permissions-consistency.util.ts
 #: src/engine/metadata-modules/object-permission/object-permission.service.ts
 msgid "You cannot grant edit permissions without also granting read permissions. Please enable read access first."
-msgstr "Nemůžete udělit oprávnění k úpravám bez udělení oprávnění ke čtení. Nejdříve zapněte přístup pro čtení."
+msgstr ""
 
 #. js-lingui-id: 8wovNr
 #: src/engine/metadata-modules/user-role/user-role.service.ts
 msgid "You cannot remove the admin role from the last administrator. Please assign another administrator first."
-msgstr "Nemůžete odebrat roli správce poslednímu administrátorovi. Nejdříve přiřaďte jiného administrátora."
+msgstr ""
 
 #. js-lingui-id: WUcQVb
 #: src/engine/metadata-modules/object-permission/field-permission/field-permission.service.ts
 msgid "You cannot set field permissions on system objects as they are managed by the platform."
-msgstr "Nemůžete nastavit oprávnění na systémové objekty, protože jsou spravovány platformou."
+msgstr ""
 
 #. js-lingui-id: SI6USg
 #: src/engine/metadata-modules/object-permission/object-permission.service.ts
 msgid "You cannot set permissions on system objects as they are managed by the platform."
-msgstr "Nemůžete nastavit oprávnění na systémové objekty, protože jsou spravovány platformou."
+msgstr ""
 
 #. js-lingui-id: bAPURS
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
 msgid "You cannot update your own role."
-msgstr "Nemůžete aktualizovat svou vlastní roli."
+msgstr ""
 
 #. js-lingui-id: EFQeXU
 #: src/engine/guards/settings-permission.guard.ts
 msgid "You do not have permission to access this feature. Please contact your workspace administrator for access."
-msgstr "Nemáte oprávnění k přístupu k této funkci. Kontaktujte prosím svého správce pracovního prostoru pro přístup."
+msgstr ""
 
 #. js-lingui-id: nPwrik
 #: src/modules/workflow/workflow-trigger/exceptions/workflow-trigger.exception.ts
 msgid "You do not have permission to access this workflow."
-msgstr "Nemáte oprávnění pro přístup k tomuto pracovnímu postupu."
+msgstr ""
 
 #. js-lingui-id: sjYS9x
 #: src/engine/metadata-modules/navigation-menu-item/services/navigation-menu-item-access.service.ts
@@ -4883,7 +4872,7 @@ msgstr ""
 #. js-lingui-id: P69VwK
 #: src/engine/core-modules/user/user.resolver.ts
 msgid "You do not have permission to delete this user from the workspace. Please contact your workspace administrator for access."
-msgstr "Nemáte oprávnění odstranit tohoto uživatele z pracovního prostoru. Kontaktujte prosím svého správce pracovního prostoru pro přístup."
+msgstr ""
 
 #. js-lingui-id: NuG0g3
 #: src/engine/metadata-modules/navigation-menu-item/services/navigation-menu-item-access.service.ts
@@ -4893,7 +4882,7 @@ msgstr ""
 #. js-lingui-id: +2vVRB
 #: src/engine/guards/impersonate-permission.guard.ts
 msgid "You do not have permission to impersonate users. Please contact your workspace administrator for access."
-msgstr "Nemáte oprávnění k napodobení uživatelů. Kontaktujte prosím svého správce pracovního prostoru pro přístup."
+msgstr ""
 
 #. js-lingui-id: q5OVn+
 #: src/engine/metadata-modules/permissions/permissions.exception.ts
@@ -4901,17 +4890,17 @@ msgstr "Nemáte oprávnění k napodobení uživatelů. Kontaktujte prosím své
 #: src/engine/core-modules/auth/auth.exception.ts
 #: src/engine/core-modules/application/application.exception.ts
 msgid "You do not have permission to perform this action."
-msgstr "Nemáte oprávnění k provedení této akce."
+msgstr ""
 
 #. js-lingui-id: C9jd/U
 #: src/modules/workflow/common/exceptions/workflow-query-validation.exception.ts
 msgid "You do not have permission to perform this workflow action."
-msgstr "Nemáte oprávnění k provedení této akce pracovního postupu."
+msgstr ""
 
 #. js-lingui-id: 1dsy9v
 #: src/engine/core-modules/workspace/services/workspace.service.ts
 msgid "You do not have permission to update these fields: {fieldsList}. Please contact your workspace administrator."
-msgstr "Nemáte oprávnění k aktualizaci těchto polí: {fieldsList}. Kontaktujte prosím svého správce pracovního prostoru."
+msgstr ""
 
 #. js-lingui-id: RZzKii
 #: src/engine/metadata-modules/navigation-menu-item/services/navigation-menu-item-access.service.ts
@@ -4926,33 +4915,33 @@ msgstr ""
 #. js-lingui-id: M1he8p
 #: src/engine/metadata-modules/view/exceptions/view.exception.ts
 msgid "You don't have permission to create workspace-level views."
-msgstr "Nemáte oprávnění k vytváření zobrazení na úrovni pracovního prostoru."
+msgstr ""
 
 #. js-lingui-id: QmL9y9
 #: src/engine/metadata-modules/view/exceptions/view.exception.ts
 msgid "You don't have permission to modify this view."
-msgstr "Nemáte oprávnění k úpravě tohoto zobrazení."
+msgstr ""
 
 #. js-lingui-id: hMX1AE
 #: src/engine/core-modules/billing/billing.exception.ts
 msgid "You have exhausted your credits. Please upgrade your plan to continue."
-msgstr "Vyčerpali jste své kredity. Chcete-li pokračovat, přejděte na vyšší tarif."
+msgstr ""
 
 #. js-lingui-id: z+7x/s
 #: src/engine/core-modules/auth/auth.exception.ts
 #: src/engine/core-modules/auth/utils/auth-graphql-api-exception-handler.util.ts
 msgid "You must be authenticated to perform this action."
-msgstr "Musíte být autentifikováni, abyste mohli provést tuto akci."
+msgstr ""
 
 #. js-lingui-id: 8pqpv/
 #: src/engine/core-modules/graphql/hooks/use-graphql-error-handler.hook.ts
 msgid "Your app version is out of date. Please refresh the page to continue."
-msgstr "Vaše verze aplikace je zastaralá. Prosím, obnovte stránku, abyste mohli pokračovat."
+msgstr ""
 
 #. js-lingui-id: J5Vm4Q
 #: src/engine/core-modules/billing/billing.validate.ts
 msgid "Your billing subscription is corrupted. Please contact support."
-msgstr "Vaše fakturační předplatné je poškozené. Kontaktujte podporu."
+msgstr ""
 
 #. js-lingui-id: hDEOuv
 #: src/engine/core-modules/imap-smtp-caldav-connection/services/imap-smtp-caldav-connection.service.ts
@@ -4962,16 +4951,16 @@ msgstr ""
 #. js-lingui-id: bTyBrW
 #: src/engine/core-modules/auth/services/auth.service.ts
 msgid "Your Password Has Been Successfully Changed"
-msgstr "Vaše heslo bylo úspěšně změněno"
+msgstr ""
 
 #. js-lingui-id: XxkUFT
 #: src/engine/metadata-modules/user-role/user-role.service.ts
 #: src/engine/metadata-modules/permissions/permissions.service.ts
 #: src/engine/metadata-modules/permissions/permissions.service.ts
 msgid "Your role in this workspace could not be found. Please contact your workspace administrator."
-msgstr "Vaše role v tomto pracovním prostoru nebyla nalezena. Kontaktujte prosím svého správce pracovního prostoru."
+msgstr ""
 
 #. js-lingui-id: ej/tZF
 #: src/engine/core-modules/graphql/hooks/use-graphql-error-handler.hook.ts
 msgid "Your workspace has been updated with a new data model. Please refresh the page."
-msgstr "Váš pracovní prostor byl aktualizován novým datovým modelem. Prosím, obnovte stránku."
+msgstr ""
