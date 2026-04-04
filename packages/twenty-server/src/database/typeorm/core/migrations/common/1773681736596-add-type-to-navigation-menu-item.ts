@@ -15,11 +15,15 @@ export class AddTypeToNavigationMenuItem1773681736596
     );
 
     await queryRunner.query(
-      `UPDATE core."navigationMenuItem" SET "type" = 'VIEW' WHERE "workspaceId" = '3b8e6458-5fc1-4e63-8563-008ccddaa6db' and viewId IS NOT NULL`,
+      `UPDATE core."navigationMenuItem" SET "type" = 'OBJECT' WHERE "navigationMenuItem"."targetMetadataObjectId" IS NOT NULL`,
     );
 
     await queryRunner.query(
-      `UPDATE core."navigationMenuItem" set "type" = 'FOLDER' WHERE "workspaceId" = '3b8e6458-5fc1-4e63-8563-008ccddaa6db' and core."navigationMenuItem"."name" IN ('High Value', 'Workflows')`,
+      `UPDATE core."navigationMenuItem" SET "type" = 'VIEW' WHERE "navigationMenuItem"."viewId" IS NOT NULL`,
+    );
+
+    await queryRunner.query(
+      `UPDATE core."navigationMenuItem" set "type" = 'FOLDER' WHERE core."navigationMenuItem"."name" IS NOT NULL`,
     );
 
     await queryRunner.query(
