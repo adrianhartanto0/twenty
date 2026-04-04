@@ -107,6 +107,7 @@ export class PermissionsService {
         [PermissionFlagType.VIEWS]: false,
         [PermissionFlagType.BILLING]: false,
         [PermissionFlagType.AI_SETTINGS]: false,
+        [PermissionFlagType.PERSONAL_VIEWS]: true,
         [PermissionFlagType.AI]: false,
         [PermissionFlagType.UPLOAD_FILE]: false,
         [PermissionFlagType.DOWNLOAD_FILE]: false,

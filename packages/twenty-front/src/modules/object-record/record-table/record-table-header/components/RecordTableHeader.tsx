@@ -8,7 +8,9 @@ import { RecordTableHeaderFirstCell } from '@/object-record/record-table/record-
 import { RecordTableHeaderFirstScrollableCell } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderFirstScrollableCell';
 import { RecordTableHeaderLastEmptyColumn } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderLastEmptyColumn';
 import { useResizeTableHeader } from '@/object-record/record-table/record-table-header/hooks/useResizeTableHeader';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { filterOutByProperty } from 'twenty-shared/utils';
+import { PermissionFlagType } from '~/generated-metadata/graphql';
 
 export const RecordTableHeader = () => {
   const { visibleRecordFields } = useRecordTableContextOrThrow();
@@ -25,6 +27,10 @@ export const RecordTableHeader = () => {
 
   useResizeTableHeader();
 
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
+  );
+
   return (
     <>
       <RecordTableHeaderDragDropColumn />
@@ -40,7 +46,9 @@ export const RecordTableHeader = () => {
           />
         ),
       )}
-      <RecordTableHeaderAddColumnButton />
+      {
+        canEditPersonalViews && <RecordTableHeaderAddColumnButton />
+      }
       <RecordTableHeaderLastEmptyColumn />
     </>
   );
