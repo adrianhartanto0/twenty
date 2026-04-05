@@ -15,7 +15,7 @@ export class AddTypeToNavigationMenuItem1773681736596
     );
 
     await queryRunner.query(
-      `UPDATE core."navigationMenuItem" SET "type" = 'OBJECT' WHERE "navigationMenuItem"."targetMetadataObjectId" IS NOT NULL`,
+      `UPDATE core."navigationMenuItem" SET "type" = 'OBJECT' WHERE "navigationMenuItem"."targetObjectMetadataId" IS NOT NULL`,
     );
 
     await queryRunner.query(
