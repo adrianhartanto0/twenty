@@ -614,11 +614,14 @@ msgstr "Δυνατότητα προσθήκης περισσότερων από 
 msgid "Ability to edit all settings"
 msgstr "Δυνατότητα επεξεργασίας όλων των ρυθμίσεων"
 
+<<<<<<< HEAD
 #. js-lingui-id: MjUIIf
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 msgid "Ability to filter the records a user can interact with"
 msgstr "Δυνατότητα φιλτραρίσματος των εγγραφών με τις οποίες μπορεί να αλληλεπιδρά ο χρήστης"
 
+=======
+>>>>>>> add-reverse-proxy
 #. js-lingui-id: 7J3Y++
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 msgid "Ability to filter the records a user can interact with."
@@ -883,7 +886,11 @@ msgid "Add BCC"
 msgstr "Προσθήκη κρυφής κοινοποίησης"
 
 #. js-lingui-id: We0vOO
+<<<<<<< HEAD
 #: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardEditorSideMenu.tsx
+=======
+#: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardBlockDragHandleMenu.tsx
+>>>>>>> add-reverse-proxy
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 msgid "Add Block"
 msgstr "Προσθήκη Μπλοκ"
@@ -2858,7 +2865,11 @@ msgid "CC"
 msgstr "Κοινοποίηση"
 
 #. js-lingui-id: tHntRt
+<<<<<<< HEAD
 #: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardEditorSideMenu.tsx
+=======
+#: src/modules/page-layout/widgets/standalone-rich-text/components/DashboardBlockDragHandleMenu.tsx
+>>>>>>> add-reverse-proxy
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 msgid "Change Color"
 msgstr "Αλλαγή Χρώματος"
@@ -3527,10 +3538,16 @@ msgid "Context size"
 msgstr "Μέγεθος πλαισίου"
 
 #. js-lingui-id: LXIm4m
+<<<<<<< HEAD
 #: src/pages/settings/admin-panel/SettingsAdminNewAiModel.tsx
 #: src/modules/ai/components/internal/AIChatContextUsageButton.tsx
 msgid "Context window"
 msgstr "Παράθυρο πλαισίου"
+=======
+#: src/modules/ai/components/internal/AIChatContextUsageButton.tsx
+msgid "Context window"
+msgstr ""
+>>>>>>> add-reverse-proxy
 
 #. js-lingui-id: xGVfLh
 #: src/pages/onboarding/SyncEmails.tsx
@@ -3864,6 +3881,11 @@ msgstr "Δημιουργία Χώρου Εργασίας"
 #: src/modules/settings/roles/role-permissions/permission-flags/hooks/useSettingsRolePermissionFlagConfig.ts
 msgid "Create and configure AI agents"
 msgstr "Δημιουργία και διαμόρφωση πρακτόρων AI"
+
+#. js-lingui-id: Gv60fT
+#: src/modules/settings/roles/role-permissions/permission-flags/hooks/useActionRolePermissionFlagConfig.ts
+msgid "Create and edit own personal views"
+msgstr ""
 
 #. js-lingui-id: uXGLuq
 #: src/pages/settings/workspace/SettingsApiWebhooks.tsx
@@ -4613,7 +4635,10 @@ msgstr "διαγραφή"
 #: src/modules/views/view-picker/components/ViewPickerOptionDropdown.tsx
 #: src/modules/views/view-picker/components/ViewPickerEditButton.tsx
 #: src/modules/views/view-picker/components/ViewPickerCreateButton.tsx
+<<<<<<< HEAD
 #: src/modules/side-panel/pages/page-layout/components/SidePanelPageLayoutTabSettingsContent.tsx
+=======
+>>>>>>> add-reverse-proxy
 #: src/modules/settings/security/components/SSO/SettingsSecuritySSORowDropdownMenu.tsx
 #: src/modules/settings/logic-functions/components/tabs/SettingsLogicFunctionTabEnvironmentVariableTableRow.tsx
 #: src/modules/settings/emailing-domains/components/SettingsEmailingDomainRowDropdownMenu.tsx
@@ -4630,12 +4655,18 @@ msgstr "διαγραφή"
 #: src/modules/page-layout/widgets/fields/components/FieldsConfigurationGroupDropdown.tsx
 #: src/modules/object-record/record-field-list/record-detail-section/relation/components/RecordDetailRelationRecordsListItem.tsx
 #: src/modules/object-record/record-field/ui/meta-types/input/components/MultiItemFieldMenuItem.tsx
+<<<<<<< HEAD
 #: src/modules/navigation-menu-item/display/folder/components/NavigationMenuItemFolderNavigationDrawerItemDropdown.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/record/constants/DefaultRecordCommandMenuItemsConfig.tsx
 #: src/modules/command-menu-item/mock/command-menu-items.mock.tsx
 #: src/modules/command-menu-item/mock/command-menu-items.mock.tsx
+=======
+#: src/modules/navigation-menu-item/components/NavigationMenuItemFolderNavigationDrawerItemDropdown.tsx
+#: src/modules/favorites/components/FavoriteFolderNavigationDrawerItemDropdown.tsx
+#: src/modules/command-menu/pages/page-layout/components/CommandMenuPageLayoutTabSettings.tsx
+>>>>>>> add-reverse-proxy
 #: src/modules/blocknote-editor/components/CustomSideMenu.tsx
 #: src/modules/activities/files/components/AttachmentDropdown.tsx
 msgid "Delete"
@@ -5354,6 +5385,11 @@ msgstr ""
 #: src/modules/settings/billing/components/SettingsBillingContent.tsx
 msgid "Edit payment method, see your invoices and more"
 msgstr "Επεξεργασία τρόπου πληρωμής, προβολή των τιμολογίων σου και άλλα"
+
+#. js-lingui-id: zrGZwD
+#: src/modules/settings/roles/role-permissions/permission-flags/hooks/useActionRolePermissionFlagConfig.ts
+msgid "Edit Personal Views"
+msgstr ""
 
 #. js-lingui-id: QJQd1J
 #: src/modules/settings/roles/role-permissions/permission-flags/hooks/useActionRolePermissionFlagConfig.ts
@@ -10812,9 +10848,14 @@ msgid "Ordered List"
 msgstr ""
 
 #. js-lingui-id: ucgZ0o
+<<<<<<< HEAD
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 #: src/modules/settings/billing/hooks/useBillingWording.ts
 #: src/modules/settings/billing/components/internal/PlansTags.tsx
+=======
+#: src/modules/billing/hooks/useBillingWording.ts
+#: src/modules/billing/components/internal/PlansTags.tsx
+>>>>>>> add-reverse-proxy
 msgid "Organization"
 msgstr "Οργανωτικός"
 
@@ -11773,7 +11814,6 @@ msgstr "Τύπος εγγραφής"
 
 #. js-lingui-id: uMOyEH
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
-#: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 msgid "Record-level"
 msgstr "Επίπεδο εγγραφής"
 
@@ -12723,7 +12763,11 @@ msgstr "Έγινε αναζήτηση στον ιστό"
 #. js-lingui-id: J7YRXR
 #: src/modules/ai/utils/getToolDisplayMessage.ts
 msgid "Searched the web for {query}"
+<<<<<<< HEAD
 msgstr "Έγινε αναζήτηση στον ιστό για {query}"
+=======
+msgstr ""
+>>>>>>> add-reverse-proxy
 
 #. js-lingui-id: AyoeWR
 #: src/modules/ai/utils/getToolDisplayMessage.ts
@@ -12733,7 +12777,11 @@ msgstr "Γίνεται αναζήτηση στον ιστό"
 #. js-lingui-id: BOCV5/
 #: src/modules/ai/utils/getToolDisplayMessage.ts
 msgid "Searching the web for {query}"
+<<<<<<< HEAD
 msgstr "Γίνεται αναζήτηση στον ιστό για {query}"
+=======
+msgstr ""
+>>>>>>> add-reverse-proxy
 
 #. js-lingui-id: 8sgZS9
 #: src/modules/settings/enterprise/components/EnterprisePlanModal.tsx
@@ -14444,11 +14492,14 @@ msgstr "Αυτή η εφαρμογή δεν είναι καταχωρημένη 
 msgid "This database value overrides environment settings. "
 msgstr "Αυτή η τιμή βάσης δεδομένων υπερισχύει των ρυθμίσεων περιβάλλοντος."
 
+<<<<<<< HEAD
 #. js-lingui-id: 8IRnd6
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 msgid "This feature is part of the Enterprise Plan"
 msgstr "Αυτή η δυνατότητα περιλαμβάνεται στο Πλάνο Enterprise"
 
+=======
+>>>>>>> add-reverse-proxy
 #. js-lingui-id: own57K
 #: src/modules/activities/files/components/DocumentViewer.tsx
 msgid "This file cannot be previewed because it is hosted locally."
@@ -15185,6 +15236,10 @@ msgstr ""
 #: src/modules/object-record/components/RecordChip.tsx
 #: src/modules/object-record/components/RecordChip.tsx
 #: src/modules/mention/components/MentionRecordChip.tsx
+<<<<<<< HEAD
+=======
+#: src/modules/command-menu/components/CommandMenuContextChip.tsx
+>>>>>>> add-reverse-proxy
 #: src/modules/ai/components/RecordLink.tsx
 #: src/modules/ai/components/AIChatThreadGroup.tsx
 #: src/modules/ai/components/internal/AgentChatFilePreview.tsx
@@ -15287,9 +15342,14 @@ msgid "Updates"
 msgstr "Ενημερώσεις"
 
 #. js-lingui-id: kwkhPe
+<<<<<<< HEAD
 #: src/modules/settings/roles/role-permissions/object-level-permissions/record-level-permissions/components/SettingsRolePermissionsObjectLevelRecordLevelSection.tsx
 #: src/modules/settings/billing/components/internal/MeteredPriceSelector.tsx
 #: src/modules/settings/billing/components/internal/MeteredPriceSelector.tsx
+=======
+#: src/modules/billing/components/internal/MeteredPriceSelector.tsx
+#: src/modules/billing/components/internal/MeteredPriceSelector.tsx
+>>>>>>> add-reverse-proxy
 msgid "Upgrade"
 msgstr "Αναβάθμιση"
 
@@ -15298,6 +15358,7 @@ msgstr "Αναβάθμιση"
 msgid "Upgrade Plan"
 msgstr "Αναβάθμιση προγράμματος"
 
+<<<<<<< HEAD
 #. js-lingui-id: pKCx2F
 #: src/pages/settings/applications/SettingsAvailableApplicationDetails.tsx
 #: src/pages/settings/applications/components/SettingsApplicationVersionContainer.tsx
@@ -15319,6 +15380,12 @@ msgstr ""
 #: src/pages/settings/applications/components/SettingsApplicationVersionContainer.tsx
 msgid "Upgrading..."
 msgstr "Γίνεται αναβάθμιση..."
+=======
+#. js-lingui-id: jmVW3I
+#: src/pages/settings/security/SettingsSecurity.tsx
+msgid "Upgrade to Enterprise to access audit logs"
+msgstr ""
+>>>>>>> add-reverse-proxy
 
 #. js-lingui-id: ONWvwQ
 #: src/modules/ui/input/components/ImageInput.tsx

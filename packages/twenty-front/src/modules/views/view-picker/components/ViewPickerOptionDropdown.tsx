@@ -12,7 +12,6 @@ import { viewPickerReferenceViewIdComponentState } from '@/views/view-picker/sta
 import { useLingui } from '@lingui/react/macro';
 import { NavigationMenuItemType } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { v4 as uuidv4 } from 'uuid';
 import {
   IconHeart,
   IconLock,
@@ -21,6 +20,7 @@ import {
   useIcons,
 } from 'twenty-ui/display';
 import { MenuItem } from 'twenty-ui/navigation';
+import { v4 as uuidv4 } from 'uuid';
 import {
   PermissionFlagType,
   ViewVisibility,
@@ -33,7 +33,7 @@ type ViewPickerOptionDropdownProps = {
     View,
     'id' | 'name' | 'icon' | 'visibility' | 'createdByUserWorkspaceId'
   >;
-  onEdit: (event: React.MouseEvent<HTMLElement>, viewId: string) => void;
+  onEdit?: (event: React.MouseEvent<HTMLElement>, viewId: string) => void;
   handleViewSelect: (viewId: string) => void;
 };
 
@@ -62,7 +62,8 @@ export const ViewPickerOptionDropdown = ({
   // Users with VIEWS permission can edit all views
   // Users without VIEWS permission can only edit unlisted views (which are always their own, filtered by backend)
   const canEditView =
-    hasViewsPermission || view.visibility === ViewVisibility.UNLISTED;
+    (hasViewsPermission || view.visibility === ViewVisibility.UNLISTED) &&
+    onEdit !== undefined;
 
   const isFavorite = navigationMenuItems.some(
     (item) =>

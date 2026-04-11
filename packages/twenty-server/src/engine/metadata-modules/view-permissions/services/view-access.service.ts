@@ -85,6 +85,15 @@ export class ViewAccessService {
         this.throwCreatePermissionDenied();
       }
 
+      const canEditPersonalViews = await this.hasPersonalViewsPermission(
+        userWorkspaceId,
+        workspaceId,
+      );
+
+      if (!canEditPersonalViews) {
+        this.throwCreatePermissionDenied();
+      }
+
       return true;
     }
 
@@ -124,10 +133,39 @@ export class ViewAccessService {
       view.createdByUserWorkspaceId === userWorkspaceId;
 
     if (isOwnUnlistedView) {
-      return true;
+      const canEditPersonalViews = await this.hasPersonalViewsPermission(
+        userWorkspaceId,
+        workspaceId,
+        apiKeyId,
+      );
+
+      if (canEditPersonalViews) {
+        return true;
+      }
     }
 
     this.throwModifyPermissionDenied();
+  }
+
+  private async hasPersonalViewsPermission(
+    userWorkspaceId: string | undefined,
+    workspaceId: string,
+    apiKeyId?: string,
+  ): Promise<boolean> {
+    // API keys cannot own personal views
+    if (!isDefined(userWorkspaceId)) {
+      return false;
+    }
+
+    const permissions =
+      await this.permissionsService.getUserWorkspacePermissions({
+        userWorkspaceId,
+        workspaceId,
+      });
+
+    // Default to true for backward compatibility — existing roles without
+    // this flag set should continue to allow personal view editing
+    return permissions.permissionFlags[PermissionFlagType.PERSONAL_VIEWS] ?? true;
   }
 
   private async hasViewsPermission(

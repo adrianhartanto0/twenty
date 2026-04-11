@@ -183,6 +183,15 @@ export class ConfigVariables {
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.MICROSOFT_AUTH,
     isSensitive: false,
+    description: 'Tenant Id for Microsoft authentication',
+    type: ConfigVariableType.STRING,
+  })
+  @ValidateIf((env) => env.AUTH_MICROSOFT_TENANT_ID)
+  AUTH_MICROSOFT_TENANT_ID: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.MICROSOFT_AUTH,
+    isSensitive: false,
     description: 'Client ID for Microsoft authentication',
     type: ConfigVariableType.STRING,
   })
