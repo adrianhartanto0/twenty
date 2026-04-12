@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 import { PermissionFlagType } from 'twenty-shared/constants';
-import { isDefined } from 'twenty-shared/utils';
 import { ViewVisibility } from 'twenty-shared/types';
+import { isDefined } from 'twenty-shared/utils';
 
 import { PermissionsService } from 'src/engine/metadata-modules/permissions/permissions.service';
 import { type ViewEntity } from 'src/engine/metadata-modules/view/entities/view.entity';
@@ -165,7 +165,7 @@ export class ViewAccessService {
 
     // Default to true for backward compatibility — existing roles without
     // this flag set should continue to allow personal view editing
-    return permissions.permissionFlags[PermissionFlagType.PERSONAL_VIEWS] ?? true;
+    return permissions.permissionFlags[PermissionFlagType.PERSONAL_VIEWS] ?? false;
   }
 
   private async hasViewsPermission(

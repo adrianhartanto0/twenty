@@ -1,4 +1,5 @@
 import { useObjectOptionsDropdown } from '@/object-record/object-options-dropdown/hooks/useObjectOptionsDropdown';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownMenuHeader } from '@/ui/layout/dropdown/components/DropdownMenuHeader/DropdownMenuHeader';
 import { DropdownMenuHeaderLeftComponent } from '@/ui/layout/dropdown/components/DropdownMenuHeader/internal/DropdownMenuHeaderLeftComponent';
@@ -8,10 +9,16 @@ import { ViewFieldsVisibleDropdownSection } from '@/views/components/ViewFieldsV
 import { useLingui } from '@lingui/react/macro';
 import { IconChevronLeft, IconEyeOff } from 'twenty-ui/display';
 import { MenuItemNavigate } from 'twenty-ui/navigation';
+import { PermissionFlagType } from '~/generated-metadata/graphql';
+
 
 export const ObjectOptionsDropdownFieldsContent = () => {
   const { t } = useLingui();
   const { onContentChange, resetContent } = useObjectOptionsDropdown();
+
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
+  );
 
   return (
     <DropdownContent>
@@ -27,13 +34,20 @@ export const ObjectOptionsDropdownFieldsContent = () => {
       </DropdownMenuHeader>
       <ViewFieldsVisibleDropdownSection />
       <DropdownMenuSeparator />
-      <DropdownMenuItemsContainer scrollable={false}>
-        <MenuItemNavigate
-          onClick={() => onContentChange('hiddenFields')}
-          LeftIcon={IconEyeOff}
-          text={t`Hidden Fields`}
-        />
-      </DropdownMenuItemsContainer>
+
+      {
+        (canEditPersonalViews) && (
+          <DropdownMenuItemsContainer scrollable={false}>
+            <MenuItemNavigate
+              onClick={() => onContentChange('hiddenFields')}
+              LeftIcon={IconEyeOff}
+              text={t`Hidden Fields`}
+            />
+          </DropdownMenuItemsContainer>
+        )
+      }
+
+
     </DropdownContent>
   );
 };

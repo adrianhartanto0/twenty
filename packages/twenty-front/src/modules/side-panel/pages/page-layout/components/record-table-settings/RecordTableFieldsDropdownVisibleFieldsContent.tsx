@@ -4,6 +4,7 @@ import { getLabelIdentifierFieldMetadataItem } from '@/object-metadata/utils/get
 import { useReorderVisibleRecordFields } from '@/object-record/record-field/hooks/useReorderVisibleRecordFields';
 import { useUpdateRecordField } from '@/object-record/record-field/hooks/useUpdateRecordField';
 import { visibleRecordFieldsComponentSelector } from '@/object-record/record-field/states/visibleRecordFieldsComponentSelector';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { DraggableItem } from '@/ui/layout/draggable-list/components/DraggableItem';
 import { DraggableList } from '@/ui/layout/draggable-list/components/DraggableList';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
@@ -15,6 +16,7 @@ import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
 import { IconEyeOff, useIcons } from 'twenty-ui/display';
 import { MenuItemDraggable, MenuItemNavigate } from 'twenty-ui/navigation';
+import { PermissionFlagType } from '~/generated-metadata/graphql';
 import { sortByProperty } from '~/utils/array/sortByProperty';
 
 type RecordTableFieldsDropdownVisibleFieldsContentProps = {
@@ -81,6 +83,10 @@ export const RecordTableFieldsDropdownVisibleFieldsContent = ({
     updateRecordField(fieldMetadataId, { isVisible: false });
   };
 
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
+  );
+
   return (
     <DropdownContent>
       <DropdownMenuItemsContainer>
@@ -137,13 +143,18 @@ export const RecordTableFieldsDropdownVisibleFieldsContent = ({
         )}
       </DropdownMenuItemsContainer>
       <DropdownMenuSeparator />
-      <DropdownMenuItemsContainer scrollable={false}>
-        <MenuItemNavigate
-          onClick={onShowHiddenFields}
-          LeftIcon={IconEyeOff}
-          text={t`Hidden Fields`}
-        />
-      </DropdownMenuItemsContainer>
+
+      {
+        canEditPersonalViews && (
+          <DropdownMenuItemsContainer scrollable={false}>
+            <MenuItemNavigate
+              onClick={onShowHiddenFields}
+              LeftIcon={IconEyeOff}
+              text={t`Hidden Fields`}
+            />
+          </DropdownMenuItemsContainer>
+        )
+      }
     </DropdownContent>
   );
 };
