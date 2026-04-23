@@ -3,6 +3,11 @@ import { useContext } from 'react';
 import { type IconComponent, IconX } from 'twenty-ui/display';
 import { ThemeContext, themeCssVariables } from 'twenty-ui/theme-constants';
 
+import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
+import { useWorkspaceMemberRoles } from '@/settings/members/hooks/useWorkspaceMemberRoles';
+import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import { useStore } from 'jotai';
+
 const StyledChip = styled.div<{ variant: SortOrFilterChipVariant }>`
   align-items: center;
   background-color: ${({ variant }) => {
@@ -126,14 +131,40 @@ export const SortOrFilterChip = ({
   type,
 }: SortOrFilterChipProps) => {
   const { theme } = useContext(ThemeContext);
+  const store = useStore();
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onRemove();
   };
 
+  const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
+
+  let hasAdminRole = false
+
+  if (currentWorkspaceMember && currentWorkspaceMember.id) {
+    const {
+      roles,
+      allRoles,
+      loading: rolesLoading,
+    } = useWorkspaceMemberRoles(currentWorkspaceMember?.id);
+
+    if (!rolesLoading && roles) {
+      const adminRoles = roles.filter(role => role.label === "Admin")
+      hasAdminRole = adminRoles.length > 0
+    }
+  }
+
+  const onClickFilter = () => {
+    if (hasAdminRole && onClick) {
+      onClick()
+    }
+  }
+
+  const hasMeFilter = labelValue.search("Me") < 0
+
   return (
-    <StyledChip onClick={onClick} variant={variant}>
+    <StyledChip onClick={onClickFilter} variant={variant}>
       {Icon && (
         <StyledIcon>
           <Icon size={theme.icon.size.sm} />
@@ -147,13 +178,17 @@ export const SortOrFilterChip = ({
           <StyledFilterValue>{labelValue}</StyledFilterValue>
         )}
       </StyledKeyLabelContainer>
-      <StyledDelete
-        variant={variant}
-        onClick={handleDeleteClick}
-        data-testid={'remove-icon-' + testId}
-      >
-        <IconX size={theme.icon.size.sm} stroke={theme.icon.stroke.sm} />
-      </StyledDelete>
+      {
+        hasMeFilter && (
+          <StyledDelete
+            variant={variant}
+            onClick={handleDeleteClick}
+            data-testid={'remove-icon-' + testId}
+          >
+            <IconX size={theme.icon.size.sm} stroke={theme.icon.stroke.sm} />
+          </StyledDelete>
+        )
+      }
     </StyledChip>
   );
 };
