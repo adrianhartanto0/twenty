@@ -21,18 +21,6 @@ const StyledCardContainer = styled.div`
   overflow: hidden;
 `;
 
-const StyledPillContainer = styled.span`
-  align-items: center;
-  background: ${themeCssVariables.background.secondary};
-  border: 1px solid ${themeCssVariables.border.color.light};
-  border-radius: 40px;
-  color: ${themeCssVariables.font.color.tertiary};
-  display: inline-flex;
-  font-weight: ${themeCssVariables.font.weight.medium};
-  gap: ${themeCssVariables.spacing[1]};
-  padding: ${themeCssVariables.spacing[1]} ${themeCssVariables.spacing[2]};
-`;
-
 type SettingsRolePermissionsObjectLevelRecordLevelSectionProps = {
   objectMetadataItem: EnrichedObjectMetadataItem;
   roleId: string;
@@ -54,27 +42,33 @@ export const SettingsRolePermissionsObjectLevelRecordLevelSection = ({
   //       <H2Title
   //         title={t`Record-level`}
   //         description={t`Ability to filter the records a user can interact with`}
-  //         adornment={<StyledPill label={t`Organization`} Icon={IconLock} />}
+  //         adornment={<OrganizationAdornment />}
   //       />
-  //       <StyledCard rounded>
-  //         <SettingsOptionCardContentButton
-  //           Icon={IconLock}
-  //           title={t`Upgrade to access`}
-  //           description={t`This feature is part of the Organization Plan`}
-  //           Button={
-  //             isBillingEnabled && (
+  //       <StyledCardContainer>
+  //         <Card rounded>
+  //           <SettingsOptionCardContentButton
+  //             Icon={IconLock}
+  //             title={t`Upgrade to access`}
+  //             description={t`This feature is part of the Enterprise Plan`}
+  //             Button={
   //               <Button
   //                 title={t`Upgrade`}
   //                 variant="primary"
   //                 accent="blue"
   //                 size="small"
   //                 Icon={IconArrowUp}
-  //                 onClick={() => navigateSettings(SettingsPath.Billing)}
+  //                 onClick={() =>
+  //                   navigateSettings(
+  //                     isBillingEnabled
+  //                       ? SettingsPath.Billing
+  //                       : SettingsPath.AdminPanelEnterprise,
+  //                   )
+  //                 }
   //               />
-  //             )
-  //           }
-  //         />
-  //       </StyledCard>
+  //             }
+  //           />
+  //         </Card>
+  //       </StyledCardContainer>
   //     </Section>
   //   );
   // }

@@ -1,50 +1,82 @@
-import { styled } from '@linaria/react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { SettingsOptionCardContentButton } from '@/settings/components/SettingsOptions/SettingsOptionCardContentButton';
+import { usePersistLogicFunction } from '@/logic-functions/hooks/usePersistLogicFunction';
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
+import { useSnackBar } from '@/ui/feedback/snack-bar-manager/hooks/useSnackBar';
 import { SubMenuTopBarContainer } from '@/ui/layout/page/components/SubMenuTopBarContainer';
 import { TabList } from '@/ui/layout/tab-list/components/TabList';
 import { activeTabIdComponentState } from '@/ui/layout/tab-list/states/activeTabIdComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { FeatureFlagKey, SettingsPath } from 'twenty-shared/types';
-import { getSettingsPath } from 'twenty-shared/utils';
+import { SettingsPath } from 'twenty-shared/types';
+import { getSettingsPath, isDefined } from 'twenty-shared/utils';
 
-import { useIsFeatureEnabled } from '@/workspace/hooks/useIsFeatureEnabled';
 import { t } from '@lingui/core/macro';
 import {
-  H2Title,
   IconChartBar,
   IconCpu,
-  IconFileText,
+  IconPlus,
   IconSettingsBolt,
   IconSparkles,
   IconTool,
 } from 'twenty-ui/display';
 import { Button } from 'twenty-ui/input';
-import { Card, Section } from 'twenty-ui/layout';
-import { SettingsAIMCP } from './components/SettingsAIMCP';
-import { SettingsAIModelsTab } from './components/SettingsAIModelsTab';
-import { SettingsAIUsageTab } from './components/SettingsAIUsageTab';
+import { UndecoratedLink } from 'twenty-ui/navigation';
+import { SettingsAiMoreTab } from '~/pages/settings/ai/components/SettingsAiMoreTab';
+import { SettingsAgentToolsTab } from '~/pages/settings/ai/components/SettingsAgentToolsTab';
+import { SettingsAiModelsTab } from './components/SettingsAiModelsTab';
+import { SettingsAiUsageTab } from './components/SettingsAiUsageTab';
 import { SettingsAgentSkills } from './components/SettingsAgentSkills';
-import { SettingsToolsTable } from './components/SettingsToolsTable';
 import { SETTINGS_AI_TABS } from './constants/SettingsAiTabs';
 
-const StyledLinkContainer = styled.div`
-  > a {
-    text-decoration: none;
-  }
-`;
-
 export const SettingsAI = () => {
+  const navigate = useNavigate();
+  const { enqueueSuccessSnackBar, enqueueErrorSnackBar } = useSnackBar();
+  const { createLogicFunction } = usePersistLogicFunction();
+  const [isCreatingTool, setIsCreatingTool] = useState(false);
+
   const activeTabId = useAtomComponentStateValue(
     activeTabIdComponentState,
     SETTINGS_AI_TABS.COMPONENT_INSTANCE_ID,
   );
 
-  const isUsageAnalyticsEnabled = useIsFeatureEnabled(
-    FeatureFlagKey.IS_USAGE_ANALYTICS_ENABLED,
-  );
+  const handleCreateTool = async () => {
+    setIsCreatingTool(true);
+    try {
+      const result = await createLogicFunction({
+        input: {
+          name: 'new-tool',
+          isTool: true,
+        },
+      });
+
+      if (result.status === 'successful' && isDefined(result.response?.data)) {
+        const newLogicFunction = result.response.data.createOneLogicFunction;
+        enqueueSuccessSnackBar({ message: t`Tool created` });
+
+        const applicationId = (newLogicFunction as { applicationId?: string })
+          .applicationId;
+        if (isDefined(applicationId)) {
+          navigate(
+            getSettingsPath(SettingsPath.ApplicationLogicFunctionDetail, {
+              applicationId,
+              logicFunctionId: newLogicFunction.id,
+            }),
+          );
+        } else {
+          navigate(
+            getSettingsPath(SettingsPath.LogicFunctionDetail, {
+              logicFunctionId: newLogicFunction.id,
+            }),
+          );
+        }
+      } else {
+        enqueueErrorSnackBar({ message: t`Failed to create tool` });
+      }
+    } finally {
+      setIsCreatingTool(false);
+    }
+  };
 
   const tabs = [
     {
@@ -62,15 +94,11 @@ export const SettingsAI = () => {
       title: t`Tools`,
       Icon: IconTool,
     },
-    ...(isUsageAnalyticsEnabled
-      ? [
-          {
-            id: SETTINGS_AI_TABS.TABS_IDS.USAGE,
-            title: t`Usage`,
-            Icon: IconChartBar,
-          },
-        ]
-      : []),
+    {
+      id: SETTINGS_AI_TABS.TABS_IDS.USAGE,
+      title: t`Usage`,
+      Icon: IconChartBar,
+    },
     {
       id: SETTINGS_AI_TABS.TABS_IDS.MORE,
       title: t`More`,
@@ -87,6 +115,27 @@ export const SettingsAI = () => {
   return (
     <SubMenuTopBarContainer
       title={t`AI`}
+      actionButton={
+        isSkillsTab ? (
+          <UndecoratedLink to={getSettingsPath(SettingsPath.AiNewSkill)}>
+            <Button
+              Icon={IconPlus}
+              title={t`New Skill`}
+              accent="blue"
+              size="small"
+            />
+          </UndecoratedLink>
+        ) : isToolsTab ? (
+          <Button
+            Icon={IconPlus}
+            title={t`New Tool`}
+            accent="blue"
+            size="small"
+            onClick={handleCreateTool}
+            disabled={isCreatingTool}
+          />
+        ) : undefined
+      }
       links={[
         {
           children: t`Workspace`,
@@ -100,39 +149,11 @@ export const SettingsAI = () => {
           tabs={tabs}
           componentInstanceId={SETTINGS_AI_TABS.COMPONENT_INSTANCE_ID}
         />
-        {isModelsTab && <SettingsAIModelsTab />}
+        {isModelsTab && <SettingsAiModelsTab />}
         {isSkillsTab && <SettingsAgentSkills />}
-        {isToolsTab && <SettingsToolsTable />}
-        {isUsageTab && <SettingsAIUsageTab />}
-        {isMoreTab && (
-          <>
-            <Section>
-              <H2Title
-                title={t`System Prompt`}
-                description={t`View and customize AI instructions`}
-              />
-              <Card rounded>
-                <SettingsOptionCardContentButton
-                  Icon={IconFileText}
-                  title={t`System Prompt`}
-                  description={t`View the AI system prompt and add custom instructions`}
-                  Button={
-                    <StyledLinkContainer>
-                      <Link to={getSettingsPath(SettingsPath.AIPrompts)}>
-                        <Button
-                          title={t`Configure`}
-                          variant="secondary"
-                          size="small"
-                        />
-                      </Link>
-                    </StyledLinkContainer>
-                  }
-                />
-              </Card>
-            </Section>
-            <SettingsAIMCP />
-          </>
-        )}
+        {isToolsTab && <SettingsAgentToolsTab />}
+        {isUsageTab && <SettingsAiUsageTab />}
+        {isMoreTab && <SettingsAiMoreTab />}
       </SettingsPageContainer>
     </SubMenuTopBarContainer>
   );

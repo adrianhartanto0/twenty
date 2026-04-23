@@ -3,6 +3,8 @@ export { LinkButton } from './Button/LinkButton';
 export { SubmitButton } from './Button/SubmitButton';
 export { Container } from './Container/Container';
 export { Eyebrow } from './Eyebrow/Eyebrow';
+export { GuideCrosshair } from './GuideCrosshair/GuideCrosshair';
 export { Heading } from './Heading/Heading';
 export { IconButton } from './IconButton/IconButton';
 export { Image } from './Image/Image';
+export { StepperProgressRail } from './StepperProgressRail/StepperProgressRail';

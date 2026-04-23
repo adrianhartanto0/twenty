@@ -79,7 +79,7 @@ export class AiAgentWorkflowAction implements WorkflowAction {
         ? executionContext.authContext.userWorkspaceId
         : null;
 
-    const { result, usage, cacheCreationTokens } =
+    const { result, usage, cacheCreationTokens, nativeWebSearchCallCount } =
       await this.aiAgentExecutionService.executeAgent({
         agent,
         userPrompt: resolveInput(prompt, context) as string,
@@ -96,6 +96,14 @@ export class AiAgentWorkflowAction implements WorkflowAction {
       workspaceId,
       UsageOperationType.AI_WORKFLOW_TOKEN,
       agent?.id || null,
+      userWorkspaceId,
+    );
+
+    // billNativeWebSearchUsage short-circuits when count <= 0, so calling
+    // unconditionally is safe regardless of whether native search fired.
+    this.aiBillingService.billNativeWebSearchUsage(
+      nativeWebSearchCallCount,
+      workspaceId,
       userWorkspaceId,
     );
 

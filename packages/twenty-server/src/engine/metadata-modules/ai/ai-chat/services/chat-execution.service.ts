@@ -17,12 +17,12 @@ import { getAppPath, isDefined } from 'twenty-shared/utils';
 
 import { UsageOperationType } from 'src/engine/core-modules/usage/enums/usage-operation-type.enum';
 
-import { type CodeExecutionStreamEmitter } from 'src/engine/core-modules/tool-provider/interfaces/tool-provider.interface';
+import { type CodeExecutionStreamEmitter } from 'src/engine/core-modules/tool-provider/interfaces/code-execution-stream-emitter.type';
 
+import { CodeInterpreterService } from 'src/engine/core-modules/code-interpreter/code-interpreter.service';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
 import { ExceptionHandlerService } from 'src/engine/core-modules/exception-handler/exception-handler.service';
 import { COMMON_PRELOAD_TOOLS } from 'src/engine/core-modules/tool-provider/constants/common-preload-tools.const';
-import { wrapToolsWithOutputSerialization } from 'src/engine/core-modules/tool-provider/output-serialization/wrap-tools-with-output-serialization.util';
 import { ToolRegistryService } from 'src/engine/core-modules/tool-provider/services/tool-registry.service';
 import {
   createExecuteToolTool,
@@ -38,7 +38,9 @@ import { AGENT_CONFIG } from 'src/engine/metadata-modules/ai/ai-agent/constants/
 import { type BrowsingContextType } from 'src/engine/metadata-modules/ai/ai-agent/types/browsingContext.type';
 import { repairToolCall } from 'src/engine/metadata-modules/ai/ai-agent/utils/repair-tool-call.util';
 import { AiBillingService } from 'src/engine/metadata-modules/ai/ai-billing/services/ai-billing.service';
+import { countNativeWebSearchCallsFromSteps } from 'src/engine/metadata-modules/ai/ai-billing/utils/count-native-web-search-calls-from-steps.util';
 import { extractCacheCreationTokensFromSteps } from 'src/engine/metadata-modules/ai/ai-billing/utils/extract-cache-creation-tokens.util';
+import { MessagePruningService } from 'src/engine/metadata-modules/ai/ai-chat/services/message-pruning.service';
 import { SystemPromptBuilderService } from 'src/engine/metadata-modules/ai/ai-chat/services/system-prompt-builder.service';
 import {
   extractCodeInterpreterFiles,
@@ -50,12 +52,12 @@ import {
   AI_SDK_OPENAI,
 } from 'src/engine/metadata-modules/ai/ai-models/constants/ai-sdk-package.const';
 import { AI_TELEMETRY_CONFIG } from 'src/engine/metadata-modules/ai/ai-models/constants/ai-telemetry.const';
-import { type AIModelConfig } from 'src/engine/metadata-modules/ai/ai-models/types/ai-model-config.type';
 import {
   AiModelRegistryService,
-  type RegisteredAIModel,
+  type RegisteredAiModel,
 } from 'src/engine/metadata-modules/ai/ai-models/services/ai-model-registry.service';
 import { SdkProviderFactoryService } from 'src/engine/metadata-modules/ai/ai-models/services/sdk-provider-factory.service';
+import { type AiModelConfig } from 'src/engine/metadata-modules/ai/ai-models/types/ai-model-config.type';
 import { SkillService } from 'src/engine/metadata-modules/skill/skill.service';
 
 export type ChatExecutionOptions = {
@@ -64,13 +66,15 @@ export type ChatExecutionOptions = {
   messages: UIMessage<unknown, UIDataTypes, UITools>[];
   browsingContext: BrowsingContextType | null;
   onCodeExecutionUpdate?: CodeExecutionStreamEmitter;
+  onCompaction?: () => void;
   modelId?: string;
   abortSignal?: AbortSignal;
+  conversationSizeTokens: number;
 };
 
 export type ChatExecutionResult = {
   stream: ReturnType<typeof streamText>;
-  modelConfig: AIModelConfig;
+  modelConfig: AiModelConfig;
 };
 
 @Injectable()
@@ -84,9 +88,11 @@ export class ChatExecutionService {
     private readonly aiBillingService: AiBillingService,
     private readonly agentActorContextService: AgentActorContextService,
     private readonly workspaceDomainsService: WorkspaceDomainsService,
+    private readonly codeInterpreterService: CodeInterpreterService,
     private readonly systemPromptBuilder: SystemPromptBuilderService,
     private readonly exceptionHandlerService: ExceptionHandlerService,
     private readonly sdkProviderFactory: SdkProviderFactoryService,
+    private readonly messagePruningService: MessagePruningService,
   ) {}
 
   async streamChat({
@@ -95,8 +101,10 @@ export class ChatExecutionService {
     messages,
     browsingContext,
     onCodeExecutionUpdate,
+    onCompaction,
     modelId,
     abortSignal,
+    conversationSizeTokens,
   }: ChatExecutionOptions): Promise<ChatExecutionResult> {
     const { actorContext, roleId, userId, userContext } =
       await this.agentActorContextService.buildUserAndAgentActorContext(
@@ -131,9 +139,15 @@ export class ChatExecutionService {
       `Built tool catalog with ${toolCatalog.length} tools, ${skillCatalog.length} skills available`,
     );
 
+    // Preload Exa when the workspace has it enabled; ActionToolProvider
+    // only emits the exa_web_search descriptor when isEnabled() is true,
+    // so getToolsByName silently skips it otherwise.
+    const toolNamesToPreload = [...COMMON_PRELOAD_TOOLS, 'exa_web_search'];
+
     const preloadedTools = await this.toolRegistry.getToolsByName(
-      COMMON_PRELOAD_TOOLS,
+      toolNamesToPreload,
       toolContext,
+      { serializeOutput: true },
     );
 
     const resolvedModelId = modelId ?? workspace.smartModel;
@@ -152,13 +166,17 @@ export class ChatExecutionService {
       registeredModel.modelId,
     );
 
+    // Native web_search is returned when the resolved model's SDK provider
+    // exposes it (Anthropic, OpenAI). Coexists with exa_web_search when both
+    // are available — the model picks based on tool descriptions.
     const { tools: nativeSearchTools, callableToolNames: searchToolNames } =
       this.getNativeWebSearchTools(registeredModel);
 
-    // Direct tools: native provider tools + preloaded tools.
-    // These are callable directly AND as fallback through execute_tool.
+    // Tools the model can call directly: preloaded registry tools (already
+    // serialized by the hydrator) plus SDK-native tools (opaque, never
+    // serialized). execute_tool routes discovered tools through the registry.
     const directTools: ToolSet = {
-      ...wrapToolsWithOutputSerialization(preloadedTools),
+      ...preloadedTools,
       ...nativeSearchTools,
     };
 
@@ -168,7 +186,7 @@ export class ChatExecutionService {
     ];
 
     // ToolSet is constant for the entire conversation — no mutation.
-    // learn_tools returns schemas as text; execute_tool dispatches to cached tools.
+    // learn_tools returns schemas as text; execute_tool dispatches via the registry.
     const activeTools: ToolSet = {
       ...directTools,
       [LEARN_TOOLS_TOOL_NAME]: createLearnToolsTool(
@@ -178,26 +196,39 @@ export class ChatExecutionService {
       [EXECUTE_TOOL_TOOL_NAME]: createExecuteToolTool(
         this.toolRegistry,
         toolContext,
-        directTools,
+        { serializeOutput: true },
       ),
-      [LOAD_SKILL_TOOL_NAME]: createLoadSkillTool((skillNames) =>
-        this.skillService.findFlatSkillsByNames(skillNames, workspace.id),
+      [LOAD_SKILL_TOOL_NAME]: createLoadSkillTool(
+        (skillNames) =>
+          this.skillService.findFlatSkillsByNames(skillNames, workspace.id),
+        async () => {
+          const allSkills = await this.skillService.findAllFlatSkills(
+            workspace.id,
+          );
+
+          return allSkills.map((skill) => skill.name);
+        },
       ),
     };
 
-    const { processedMessages, extractedFiles } =
-      extractCodeInterpreterFiles(messages);
+    let processedMessages: UIMessage[] = messages;
 
     let storedFiles: Array<{
       filename: string;
       fileId: string;
     }> = [];
 
-    if (extractedFiles.length > 0) {
-      storedFiles = await this.storeExtractedFiles(
-        extractedFiles,
-        workspace.id,
-      );
+    if (this.codeInterpreterService.isEnabled()) {
+      const extracted = extractCodeInterpreterFiles(messages);
+
+      processedMessages = extracted.processedMessages;
+
+      if (extracted.extractedFiles.length > 0) {
+        storedFiles = await this.storeExtractedFiles(
+          extracted.extractedFiles,
+          workspace.id,
+        );
+      }
     }
 
     const systemPrompt = this.systemPromptBuilder.buildFullPrompt(
@@ -225,7 +256,26 @@ export class ChatExecutionService {
             : undefined,
     };
 
-    const modelMessages = await convertToModelMessages(processedMessages);
+    const rawModelMessages = await convertToModelMessages(processedMessages);
+
+    const pruningResult =
+      this.messagePruningService.pruneIfOverContextWindowLimit(
+        rawModelMessages,
+        modelConfig.contextWindowTokens,
+        conversationSizeTokens,
+      );
+
+    if (pruningResult.isStillOverLimit) {
+      throw new Error(
+        'This conversation is too long for the model to process. Please start a new thread.',
+      );
+    }
+
+    if (pruningResult.wasPruned) {
+      onCompaction?.();
+    }
+
+    const modelMessages = pruningResult.messages;
 
     const billUsageFromSteps = (steps: StepResult<ToolSet>[]) => {
       const usage = steps.reduce<LanguageModelUsage>(
@@ -275,6 +325,14 @@ export class ChatExecutionService {
         workspace.id,
         UsageOperationType.AI_CHAT_TOKEN,
         null,
+        userWorkspaceId,
+      );
+
+      // billNativeWebSearchUsage short-circuits when count <= 0, so calling
+      // unconditionally is safe regardless of whether native search fired.
+      this.aiBillingService.billNativeWebSearchUsage(
+        countNativeWebSearchCallsFromSteps(steps),
+        workspace.id,
         userWorkspaceId,
       );
     };
@@ -392,7 +450,7 @@ export class ChatExecutionService {
     return context;
   }
 
-  private getNativeWebSearchTools(model: RegisteredAIModel): {
+  private getNativeWebSearchTools(model: RegisteredAiModel): {
     tools: ToolSet;
     callableToolNames: string[];
   } {
@@ -417,21 +475,8 @@ export class ChatExecutionService {
           callableToolNames: ['web_search'],
         };
       }
-      case AI_SDK_BEDROCK: {
-        const provider =
-          this.sdkProviderFactory.getRawBedrockProvider(providerName);
-
-        if (!provider) {
-          return empty;
-        }
-
-        return {
-          tools: {
-            web_search: provider.tools.webSearch_20250305() as ToolSet[string],
-          },
-          callableToolNames: ['web_search'],
-        };
-      }
+      case AI_SDK_BEDROCK:
+        return empty;
       case AI_SDK_OPENAI: {
         const provider =
           this.sdkProviderFactory.getRawOpenAIProvider(providerName);
