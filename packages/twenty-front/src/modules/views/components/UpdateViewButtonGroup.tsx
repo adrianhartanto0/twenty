@@ -1,7 +1,8 @@
-import styled from '@emotion/styled';
+import { styled } from '@linaria/react';
 
 import { contextStoreCurrentViewIdComponentState } from '@/context-store/states/contextStoreCurrentViewIdComponentState';
 import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { Dropdown } from '@/ui/layout/dropdown/components/Dropdown';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownMenuItemsContainer } from '@/ui/layout/dropdown/components/DropdownMenuItemsContainer';
@@ -17,7 +18,6 @@ import { useAreViewSortsDifferentFromRecordSorts } from '@/views/hooks/useAreVie
 import { useCanPersistViewChanges } from '@/views/hooks/useCanPersistViewChanges';
 import { useGetCurrentViewOnly } from '@/views/hooks/useGetCurrentViewOnly';
 import { useIsViewAnyFieldFilterDifferentFromCurrentAnyFieldFilter } from '@/views/hooks/useIsViewAnyFieldFilterDifferentFromCurrentAnyFieldFilter';
-import { useRefreshCoreViewsByObjectMetadataId } from '@/views/hooks/useRefreshCoreViewsByObjectMetadataId';
 import { useSaveCurrentViewFiltersAndSorts } from '@/views/hooks/useSaveCurrentViewFiltersAndSorts';
 import { VIEW_PICKER_DROPDOWN_ID } from '@/views/view-picker/constants/ViewPickerDropdownId';
 import { useViewPickerMode } from '@/views/view-picker/hooks/useViewPickerMode';
@@ -26,11 +26,13 @@ import { t } from '@lingui/core/macro';
 import { IconChevronDown, IconPlus } from 'twenty-ui/display';
 import { Button, ButtonGroup, IconButton } from 'twenty-ui/input';
 import { MenuItem } from 'twenty-ui/navigation';
+import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { PermissionFlagType } from '~/generated-metadata/graphql';
 
 const StyledContainer = styled.div`
-  border-radius: ${({ theme }) => theme.border.radius.md};
+  border-radius: ${themeCssVariables.border.radius.md};
   display: inline-flex;
-  margin-right: ${({ theme }) => theme.spacing(2)};
+  margin-right: ${themeCssVariables.spacing[2]};
   position: relative;
 `;
 
@@ -38,8 +40,12 @@ export const UpdateViewButtonGroup = () => {
   const { saveCurrentViewFilterAndSorts } = useSaveCurrentViewFiltersAndSorts();
   const { canPersistChanges } = useCanPersistViewChanges();
 
-  const { refreshCoreViewsByObjectMetadataId } =
-    useRefreshCoreViewsByObjectMetadataId();
+  // const { refreshCoreViewsByObjectMetadataId } =
+  //   useRefreshCoreViewsByObjectMetadataId();
+
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
+  );
 
   const { objectMetadataItem } = useRecordIndexContextOrThrow();
 
@@ -82,7 +88,6 @@ export const UpdateViewButtonGroup = () => {
   const handleUpdateViewClick = async () => {
     if (!canPersistChanges) return;
     await saveCurrentViewFilterAndSorts();
-    await refreshCoreViewsByObjectMetadataId(objectMetadataItem.id);
   };
 
   const { hasFiltersQueryParams } = useHasFiltersInQueryParams();
@@ -99,12 +104,15 @@ export const UpdateViewButtonGroup = () => {
   const { viewAnyFieldFilterDifferentFromCurrentAnyFieldFilter } =
     useIsViewAnyFieldFilterDifferentFromCurrentAnyFieldFilter();
 
+  // const isPersonalView =
+  //   currentView?.visibility === ViewVisibility.UNLISTED;
+
   const canShowButton =
     (viewFiltersAreDifferentFromRecordFilters ||
       viewSortsAreDifferentFromRecordSorts ||
       viewFilterGroupsAreDifferentFromRecordFilterGroups ||
       viewAnyFieldFilterDifferentFromCurrentAnyFieldFilter) &&
-    !hasFiltersQueryParams;
+    !hasFiltersQueryParams && canEditPersonalViews;
 
   if (!canShowButton) {
     return <></>;

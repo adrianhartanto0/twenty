@@ -1,23 +1,23 @@
-import { renderHook, waitFor } from '@testing-library/react';
-import { createElement, useEffect, type ReactNode } from 'react';
-import { Provider as JotaiProvider } from 'jotai';
 import { currentUserState } from '@/auth/states/currentUserState';
 import { currentUserWorkspaceState } from '@/auth/states/currentUserWorkspaceState';
 import { useDefaultHomePagePath } from '@/navigation/hooks/useDefaultHomePagePath';
-import { objectMetadataItemsState } from '@/object-metadata/states/objectMetadataItemsState';
+import { AggregateOperations } from '@/object-record/record-table/constants/AggregateOperations';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { jotaiStore } from '@/ui/utilities/state/jotai/jotaiStore';
-import { AggregateOperations } from '@/object-record/record-table/constants/AggregateOperations';
-import { coreViewsState } from '@/views/states/coreViewState';
+import { renderHook, waitFor } from '@testing-library/react';
+import { Provider as JotaiProvider } from 'jotai';
+import { createElement, useEffect, type ReactNode } from 'react';
 import { AppPath } from 'twenty-shared/types';
 import {
   ViewOpenRecordIn,
   ViewType,
   ViewVisibility,
 } from '~/generated-metadata/graphql';
-import { getMockCompanyObjectMetadataItem } from '~/testing/mock-data/companies';
 import { mockedUserData } from '~/testing/mock-data/users';
-import { generatedMockObjectMetadataItems } from '~/testing/utils/generatedMockObjectMetadataItems';
+import { getTestEnrichedObjectMetadataItemsMock } from '~/testing/utils/getTestEnrichedObjectMetadataItemsMock';
+import { getMockObjectMetadataItemOrThrow } from '~/testing/utils/getMockObjectMetadataItemOrThrow';
+import { setTestViewsInMetadataStore } from '~/testing/utils/setTestViewsInMetadataStore';
+import { setTestObjectMetadataItemsInMetadataStore } from '~/testing/utils/setTestObjectMetadataItemsInMetadataStore';
 
 const Wrapper = ({ children }: { children: ReactNode }) =>
   createElement(JotaiProvider, { store: jotaiStore }, children);
@@ -29,9 +29,9 @@ const renderHooks = ({
   withCurrentUser: boolean;
   withExistingView: boolean;
 }) => {
-  jotaiStore.set(
-    objectMetadataItemsState.atom,
-    generatedMockObjectMetadataItems,
+  setTestObjectMetadataItemsInMetadataStore(
+    jotaiStore,
+    getTestEnrichedObjectMetadataItemsMock(),
   );
 
   const { result } = renderHook(
@@ -40,15 +40,14 @@ const renderHooks = ({
       const setCurrentUserWorkspace = useSetAtomState(
         currentUserWorkspaceState,
       );
-      const setCoreViews = useSetAtomState(coreViewsState);
 
       useEffect(() => {
         if (withExistingView) {
-          setCoreViews([
+          setTestViewsInMetadataStore(jotaiStore, [
             {
               id: 'viewId',
               name: 'Test View',
-              objectMetadataId: getMockCompanyObjectMetadataItem().id,
+              objectMetadataId: getMockObjectMetadataItemOrThrow('company').id,
               type: ViewType.TABLE,
               key: null,
               isCompact: false,
@@ -69,14 +68,14 @@ const renderHooks = ({
             },
           ]);
         } else {
-          setCoreViews([]);
+          setTestViewsInMetadataStore(jotaiStore, []);
         }
 
         if (withCurrentUser) {
           setCurrentUser(mockedUserData);
           setCurrentUserWorkspace(mockedUserData.currentUserWorkspace);
         }
-      }, [setCurrentUser, setCurrentUserWorkspace, setCoreViews]);
+      }, [setCurrentUser, setCurrentUserWorkspace]);
 
       return useDefaultHomePagePath();
     },

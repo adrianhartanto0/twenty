@@ -3,8 +3,9 @@ import { updateFeatureFlag } from 'test/integration/metadata/suites/utils/update
 import { createCommandMenuItem } from 'test/integration/metadata/suites/command-menu-item/utils/create-command-menu-item.util';
 import { deleteCommandMenuItem } from 'test/integration/metadata/suites/command-menu-item/utils/delete-command-menu-item.util';
 import { findCommandMenuItems } from 'test/integration/metadata/suites/command-menu-item/utils/find-command-menu-items.util';
+import { FeatureFlagKey } from 'twenty-shared/types';
 
-import { FeatureFlagKey } from 'src/engine/core-modules/feature-flag/enums/feature-flag-key.enum';
+import { EngineComponentKey } from 'src/engine/metadata-modules/command-menu-item/enums/engine-component-key.enum';
 
 describe('CommandMenuItem deletion should succeed', () => {
   beforeAll(async () => {
@@ -30,6 +31,7 @@ describe('CommandMenuItem deletion should succeed', () => {
       expectToFail: false,
       input: {
         workflowVersionId,
+        engineComponentKey: EngineComponentKey.TRIGGER_WORKFLOW_VERSION,
         label: 'Command Menu Item To Delete',
       },
     });

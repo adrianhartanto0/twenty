@@ -1,5 +1,3 @@
-import styled from '@emotion/styled';
-
 import { getAvatarType } from '@/object-metadata/utils/getAvatarType';
 import { searchRecordStoreFamilyState } from '@/object-record/record-picker/multiple-record-picker/states/searchRecordStoreComponentFamilyState';
 import { SingleRecordPickerComponentInstanceContext } from '@/object-record/record-picker/single-record-picker/states/contexts/SingleRecordPickerComponentInstanceContext';
@@ -9,9 +7,9 @@ import { type RecordPickerPickableMorphItem } from '@/object-record/record-picke
 import { SelectableListItem } from '@/ui/layout/selectable-list/components/SelectableListItem';
 import { isSelectedItemIdComponentFamilyState } from '@/ui/layout/selectable-list/states/isSelectedItemIdComponentFamilyState';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
-import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
-import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
+import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
+import { useStore } from 'jotai';
 import { capitalize, isDefined } from 'twenty-shared/utils';
 import { Avatar } from 'twenty-ui/display';
 import { MenuItemSelectAvatar } from 'twenty-ui/navigation';
@@ -22,15 +20,17 @@ type SingleRecordPickerMenuItemProps = {
   isRecordSelected: boolean;
 };
 
-const StyledSelectableItem = styled(SelectableListItem)`
-  width: 100%;
-`;
-
 export const SingleRecordPickerMenuItem = ({
   morphItem,
   onMorphItemSelected,
   isRecordSelected,
 }: SingleRecordPickerMenuItemProps) => {
+  const store = useStore();
+
+  const searchRecordStore = store.get(
+    searchRecordStoreFamilyState.atomFamily(morphItem.recordId),
+  );
+
   const recordPickerComponentInstanceId =
     useAvailableComponentInstanceIdOrThrow(
       SingleRecordPickerComponentInstanceContext,
@@ -45,10 +45,19 @@ export const SingleRecordPickerMenuItem = ({
     selectableListComponentInstanceId,
   );
 
-  const searchRecordStore = useAtomFamilyStateValue(
-    searchRecordStoreFamilyState,
-    morphItem.recordId,
-  );
+
+  const companyName = searchRecordStore?.record?.company?.name ? `- ${searchRecordStore?.record?.company?.name}`:''
+  const menuText = `${searchRecordStore?.label} ${companyName}`
+
+  // const searchRecordStore = useAtomFamilyStateValue(
+  //   searchRecordStoreFamilyState,
+  //   morphItem.recordId,
+  // );
+
+  // const searchRecordStore = store.get(
+  //   searchRecordStoreFamilyState.atomFamily(morphItem.recordId),
+  // );
+
 
   const singleRecordPickerSearchableObjectMetadataItems =
     useAtomComponentStateValue(
@@ -64,7 +73,7 @@ export const SingleRecordPickerMenuItem = ({
     singleRecordPickerSearchableObjectMetadataItems.length > 1;
 
   return (
-    <StyledSelectableItem
+    <SelectableListItem
       itemId={morphItem.recordId}
       key={morphItem.recordId}
       onEnter={() => {
@@ -74,7 +83,7 @@ export const SingleRecordPickerMenuItem = ({
       <MenuItemSelectAvatar
         testId="menu-item"
         onClick={() => onMorphItemSelected(morphItem)}
-        text={searchRecordStore.label}
+        text={menuText}
         selected={isRecordSelected}
         focused={isSelectedItemId}
         avatar={
@@ -94,6 +103,6 @@ export const SingleRecordPickerMenuItem = ({
             : undefined
         }
       />
-    </StyledSelectableItem>
+    </SelectableListItem>
   );
 };

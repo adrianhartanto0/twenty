@@ -18,9 +18,18 @@ const program = new Command(packageJson.name)
     '-m, --minimal',
     'Create only core entities (application-config and default-role)',
   )
+  .option('-n, --name <name>', 'Application name (skips prompt)')
   .option(
-    '-i, --interactive',
-    'Interactively choose which entity examples to include',
+    '-d, --display-name <displayName>',
+    'Application display name (skips prompt)',
+  )
+  .option(
+    '--description <description>',
+    'Application description (skips prompt)',
+  )
+  .option(
+    '--skip-local-instance',
+    'Skip the local Twenty instance setup prompt',
   )
   .helpOption('-h, --help', 'Display this help message.')
   .action(
@@ -29,19 +38,18 @@ const program = new Command(packageJson.name)
       options?: {
         exhaustive?: boolean;
         minimal?: boolean;
-        interactive?: boolean;
+        name?: string;
+        displayName?: string;
+        description?: string;
+        skipLocalInstance?: boolean;
       },
     ) => {
-      const modeFlags = [
-        options?.exhaustive,
-        options?.minimal,
-        options?.interactive,
-      ].filter(Boolean);
+      const modeFlags = [options?.exhaustive, options?.minimal].filter(Boolean);
 
       if (modeFlags.length > 1) {
         console.error(
           chalk.red(
-            'Error: --exhaustive, --minimal, and --interactive are mutually exclusive.',
+            'Error: --exhaustive and --minimal are mutually exclusive.',
           ),
         );
         process.exit(1);
@@ -56,13 +64,21 @@ const program = new Command(packageJson.name)
         process.exit(1);
       }
 
-      const mode: ScaffoldingMode = options?.minimal
-        ? 'minimal'
-        : options?.interactive
-          ? 'interactive'
-          : 'exhaustive';
+      if (options?.name !== undefined && options.name.trim().length === 0) {
+        console.error(chalk.red('Error: --name cannot be empty.'));
+        process.exit(1);
+      }
 
-      await new CreateAppCommand().execute(directory, mode);
+      const mode: ScaffoldingMode = options?.minimal ? 'minimal' : 'exhaustive';
+
+      await new CreateAppCommand().execute({
+        directory,
+        mode,
+        name: options?.name,
+        displayName: options?.displayName,
+        description: options?.description,
+        skipLocalInstance: options?.skipLocalInstance,
+      });
     },
   );
 

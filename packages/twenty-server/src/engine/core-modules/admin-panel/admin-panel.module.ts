@@ -6,6 +6,7 @@ import { AdminPanelHealthService } from 'src/engine/core-modules/admin-panel/adm
 import { AdminPanelQueueService } from 'src/engine/core-modules/admin-panel/admin-panel-queue.service';
 import { AdminPanelResolver } from 'src/engine/core-modules/admin-panel/admin-panel.resolver';
 import { AdminPanelService } from 'src/engine/core-modules/admin-panel/admin-panel.service';
+import { ApplicationRegistrationModule } from 'src/engine/core-modules/application/application-registration/application-registration.module';
 import { AuditModule } from 'src/engine/core-modules/audit/audit.module';
 import { AuthModule } from 'src/engine/core-modules/auth/auth.module';
 import { WorkspaceDomainsModule } from 'src/engine/core-modules/domain/workspace-domains/workspace-domains.module';
@@ -21,6 +22,7 @@ import { MetricsModule } from 'src/engine/core-modules/metrics/metrics.module';
 import { RedisClientModule } from 'src/engine/core-modules/redis-client/redis-client.module';
 import { SecureHttpClientModule } from 'src/engine/core-modules/secure-http-client/secure-http-client.module';
 import { TelemetryModule } from 'src/engine/core-modules/telemetry/telemetry.module';
+import { UsageModule } from 'src/engine/core-modules/usage/usage.module';
 import { UserEntity } from 'src/engine/core-modules/user/user.entity';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permissions.module';
@@ -40,6 +42,8 @@ import { PermissionsModule } from 'src/engine/metadata-modules/permissions/permi
     ImpersonationModule,
     PermissionsModule,
     SecureHttpClientModule,
+    ApplicationRegistrationModule,
+    UsageModule,
   ],
   providers: [
     AdminPanelResolver,

@@ -4,16 +4,18 @@ import {
   StyledContainer,
   StyledIconChevronDown,
   StyledLabel,
+  StyledLabelWrapper,
 } from '@/ui/navigation/navigation-drawer/components/MultiWorkspaceDropdown/internal/MultiWorkspacesDropdownStyles';
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { useTheme } from '@emotion/react';
 import { isNavigationDrawerExpandedState } from '@/ui/navigation/states/isNavigationDrawerExpanded';
+import { useContext } from 'react';
 import { Avatar } from 'twenty-ui/display';
+import { ThemeContext } from 'twenty-ui/theme-constants';
 
 export const MultiWorkspaceDropdownClickableComponent = () => {
+  const { theme } = useContext(ThemeContext);
   const currentWorkspace = useAtomStateValue(currentWorkspaceState);
-  const theme = useTheme();
 
   const isNavigationDrawerExpanded = useAtomStateValue(
     isNavigationDrawerExpandedState,
@@ -27,9 +29,11 @@ export const MultiWorkspaceDropdownClickableComponent = () => {
         placeholder={currentWorkspace?.displayName || ''}
         avatarUrl={currentWorkspace?.logo ?? DEFAULT_WORKSPACE_LOGO}
       />
-      <NavigationDrawerAnimatedCollapseWrapper>
-        <StyledLabel>{currentWorkspace?.displayName ?? ''}</StyledLabel>
-      </NavigationDrawerAnimatedCollapseWrapper>
+      <StyledLabelWrapper>
+        <NavigationDrawerAnimatedCollapseWrapper>
+          <StyledLabel>{currentWorkspace?.displayName ?? ''}</StyledLabel>
+        </NavigationDrawerAnimatedCollapseWrapper>
+      </StyledLabelWrapper>
       <NavigationDrawerAnimatedCollapseWrapper>
         <StyledIconChevronDown
           size={theme.icon.size.md}

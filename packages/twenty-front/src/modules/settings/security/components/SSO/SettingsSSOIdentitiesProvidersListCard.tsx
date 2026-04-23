@@ -4,31 +4,30 @@ import { Link } from 'react-router-dom';
 
 import { SettingsPath } from 'twenty-shared/types';
 
+import { useSnackBarOnQueryError } from '@/apollo/hooks/useSnackBarOnQueryError';
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { SettingsCard } from '@/settings/components/SettingsCard';
 import { SettingsSSOIdentitiesProvidersListCardWrapper } from '@/settings/security/components/SSO/SettingsSSOIdentitiesProvidersListCardWrapper';
 import { SSOIdentitiesProvidersState } from '@/settings/security/states/SSOIdentitiesProvidersState';
-import { useSnackBar } from '@/ui/feedback/snack-bar-manager/hooks/useSnackBar';
-import { type ApolloError } from '@apollo/client';
-import isPropValid from '@emotion/is-prop-valid';
-import styled from '@emotion/styled';
-import { useLingui } from '@lingui/react/macro';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import { useQuery } from '@apollo/client/react';
+import { styled } from '@linaria/react';
+import { useLingui } from '@lingui/react/macro';
+import { useEffect } from 'react';
 import { getSettingsPath } from 'twenty-shared/utils';
 import { IconKey } from 'twenty-ui/display';
-import { useGetSsoIdentityProvidersQuery } from '~/generated-metadata/graphql';
+import { GetSsoIdentityProvidersDocument } from '~/generated-metadata/graphql';
 
-const StyledLink = styled(Link, {
-  shouldForwardProp: (prop) => isPropValid(prop) && prop !== 'isDisabled',
-})<{ isDisabled: boolean }>`
+const StyledLinkContainer = styled.div<{ isDisabled: boolean }>`
   pointer-events: ${({ isDisabled }) => (isDisabled ? 'none' : 'auto')};
-  text-decoration: none;
+
+  > a {
+    text-decoration: none;
+  }
 `;
 
 export const SettingsSSOIdentitiesProvidersListCard = () => {
-  const { enqueueErrorSnackBar } = useSnackBar();
-
   const currentWorkspace = useAtomStateValue(currentWorkspaceState);
 
   const { t } = useLingui();
@@ -37,30 +36,35 @@ export const SettingsSSOIdentitiesProvidersListCard = () => {
     SSOIdentitiesProvidersState,
   );
 
-  const { loading } = useGetSsoIdentityProvidersQuery({
+  const {
+    loading,
+    data: ssoData,
+    error: ssoError,
+  } = useQuery(GetSsoIdentityProvidersDocument, {
     fetchPolicy: 'network-only',
     skip: currentWorkspace?.hasValidEnterpriseKey === false,
-    onCompleted: (data) => {
-      setSSOIdentitiesProviders(data?.getSSOIdentityProviders ?? []);
-    },
-    onError: (error: ApolloError) => {
-      enqueueErrorSnackBar({
-        apolloError: error,
-      });
-    },
   });
 
+  useEffect(() => {
+    if (ssoData) {
+      setSSOIdentitiesProviders(ssoData?.getSSOIdentityProviders ?? []);
+    }
+  }, [ssoData, setSSOIdentitiesProviders]);
+
+  useSnackBarOnQueryError(ssoError);
+
   return loading || !SSOIdentitiesProviders.length ? (
-    <StyledLink
-      to={getSettingsPath(SettingsPath.NewSSOIdentityProvider)}
-      isDisabled={currentWorkspace?.hasValidEnterpriseKey !== true}
+    <StyledLinkContainer
+      isDisabled={false}
     >
-      <SettingsCard
-        title={t`Add SSO Identity Provider`}
-        disabled={currentWorkspace?.hasValidEnterpriseKey !== true}
-        Icon={<IconKey />}
-      />
-    </StyledLink>
+      <Link to={getSettingsPath(SettingsPath.NewSSOIdentityProvider)}>
+        <SettingsCard
+          title={t`Add SSO Identity Provider`}
+          disabled={currentWorkspace?.hasValidEnterpriseKey !== true}
+          Icon={<IconKey />}
+        />
+      </Link>
+    </StyledLinkContainer>
   ) : (
     <SettingsSSOIdentitiesProvidersListCardWrapper />
   );

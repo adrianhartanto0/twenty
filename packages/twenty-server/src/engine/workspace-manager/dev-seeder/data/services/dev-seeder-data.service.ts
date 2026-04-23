@@ -5,10 +5,9 @@ import { readFile } from 'fs/promises';
 import { join } from 'path';
 
 import { STANDARD_OBJECTS } from 'twenty-shared/metadata';
-import { FileFolder } from 'twenty-shared/types';
+import { FileFolder, FeatureFlagKey } from 'twenty-shared/types';
 import { DataSource } from 'typeorm';
 
-import { FeatureFlagKey } from 'src/engine/core-modules/feature-flag/enums/feature-flag-key.enum';
 import { FileStorageService } from 'src/engine/core-modules/file-storage/file-storage.service';
 import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
 import { FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
@@ -57,6 +56,10 @@ import {
   MESSAGE_CHANNEL_DATA_SEED_COLUMNS,
   MESSAGE_CHANNEL_DATA_SEEDS,
 } from 'src/engine/workspace-manager/dev-seeder/data/constants/message-channel-data-seeds.constant';
+import {
+  MESSAGE_FOLDER_DATA_SEED_COLUMNS,
+  MESSAGE_FOLDER_DATA_SEEDS,
+} from 'src/engine/workspace-manager/dev-seeder/data/constants/message-folder-data-seeds.constant';
 import {
   MESSAGE_CHANNEL_MESSAGE_ASSOCIATION_DATA_SEED_COLUMNS,
   MESSAGE_CHANNEL_MESSAGE_ASSOCIATION_DATA_SEEDS,
@@ -118,7 +121,10 @@ import {
   WORKSPACE_MEMBER_DATA_SEED_COLUMNS,
 } from 'src/engine/workspace-manager/dev-seeder/data/constants/workspace-member-data-seeds.constant';
 import { TimelineActivitySeederService } from 'src/engine/workspace-manager/dev-seeder/data/services/timeline-activity-seeder.service';
-import { prefillWorkflows } from 'src/engine/workspace-manager/standard-objects-prefill-data/prefill-workflows';
+import { prefillWorkflowCommandMenuItems } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-workflow-command-menu-items.util';
+import { getCreateCompanyWhenAddingNewPersonCodeStepLogicFunctionDefinitions } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-workflow-code-step-logic-functions.util';
+import { prefillWorkflows } from 'src/engine/workspace-manager/standard-objects-prefill-data/utils/prefill-workflows.util';
+import { PrefillLogicFunctionService } from 'src/engine/workspace-manager/standard-objects-prefill-data/services/prefill-logic-function.service';
 import { TWENTY_STANDARD_APPLICATION } from 'src/engine/workspace-manager/twenty-standard-application/constants/twenty-standard-applications';
 
 type RecordSeedConfig = {
@@ -195,8 +201,13 @@ const getRecordSeedsBatches = (
     },
   ];
 
-  // Batch 4: Depends on person/company or independent
+  // Batch 4: Depends on person/company/messageChannel or independent
   const batch4: RecordSeedConfig[] = [
+    {
+      tableName: 'messageFolder',
+      pgColumns: MESSAGE_FOLDER_DATA_SEED_COLUMNS,
+      recordSeeds: MESSAGE_FOLDER_DATA_SEEDS,
+    },
     {
       tableName: 'opportunity',
       pgColumns: OPPORTUNITY_DATA_SEED_COLUMNS,
@@ -295,16 +306,19 @@ export class DevSeederDataService {
     private readonly timelineActivitySeederService: TimelineActivitySeederService,
     private readonly fileStorageService: FileStorageService,
     private readonly flatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService,
+    private readonly prefillLogicFunctionService: PrefillLogicFunctionService,
   ) {}
 
   public async seed({
     schemaName,
     workspaceId,
     featureFlags,
+    light = false,
   }: {
     schemaName: string;
     workspaceId: string;
     featureFlags?: Record<FeatureFlagKey, boolean>;
+    light?: boolean;
   }) {
     const objectMetadataItems =
       await this.objectMetadataService.findManyWithinWorkspace(workspaceId);
@@ -320,6 +334,14 @@ export class DevSeederDataService {
     const { seeds: attachmentSeeds, fileSeedMetadata: attachmentFileMeta } =
       generateAttachmentSeedsForWorkspace(workspaceId);
 
+    await this.prefillLogicFunctionService.ensureSeeded({
+      workspaceId,
+      definitions:
+        getCreateCompanyWhenAddingNewPersonCodeStepLogicFunctionDefinitions(
+          workspaceId,
+        ),
+    });
+
     await this.coreDataSource.transaction(
       async (entityManager: WorkspaceEntityManager) => {
         await this.seedRecordsInBatches({
@@ -329,26 +351,32 @@ export class DevSeederDataService {
           attachmentSeeds,
           featureFlags,
           objectMetadataItems,
+          light,
         });
 
-        await this.timelineActivitySeederService.seedTimelineActivities({
-          entityManager,
-          schemaName,
-          workspaceId,
-        });
+        if (!light) {
+          await this.timelineActivitySeederService.seedTimelineActivities({
+            entityManager,
+            schemaName,
+            workspaceId,
+          });
 
-        await this.seedAttachmentFiles(
-          workspaceId,
-          entityManager,
-          attachmentFileMeta,
-        );
+          await this.seedAttachmentFiles(
+            workspaceId,
+            entityManager,
+            attachmentFileMeta,
+          );
+        }
 
         await prefillWorkflows(
           entityManager,
+          workspaceId,
           schemaName,
           flatObjectMetadataMaps,
           flatFieldMetadataMaps,
         );
+
+        await prefillWorkflowCommandMenuItems(entityManager, workspaceId);
       },
     );
   }
@@ -360,6 +388,7 @@ export class DevSeederDataService {
     attachmentSeeds,
     featureFlags,
     objectMetadataItems,
+    light = false,
   }: {
     entityManager: WorkspaceEntityManager;
     schemaName: string;
@@ -367,6 +396,7 @@ export class DevSeederDataService {
     attachmentSeeds: RecordSeedConfig['recordSeeds'];
     featureFlags?: Record<FeatureFlagKey, boolean>;
     objectMetadataItems: FlatObjectMetadata[];
+    light?: boolean;
   }) {
     const batches = getRecordSeedsBatches(
       workspaceId,
@@ -379,6 +409,10 @@ export class DevSeederDataService {
     for (const batch of batches) {
       await Promise.all(
         batch.map(async (recordSeedsConfig) => {
+          if (light && recordSeedsConfig.tableName.startsWith('_')) {
+            return;
+          }
+
           const objectMetadata = objectMetadataItems.find(
             (item) =>
               computeTableName(item.nameSingular, item.isCustom) ===

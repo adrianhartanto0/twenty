@@ -1,23 +1,26 @@
-import { type ObjectMetadataItem } from '@/object-metadata/types/ObjectMetadataItem';
+import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 
 import { useDeleteOneObjectMetadataItem } from '@/object-metadata/hooks/useDeleteOneObjectMetadataItem';
 import { useUpdateOneObjectMetadataItem } from '@/object-metadata/hooks/useUpdateOneObjectMetadataItem';
 import { isObjectMetadataReadOnly } from '@/object-record/read-only/utils/isObjectMetadataReadOnly';
+import { AdvancedSettingsWrapper } from '@/settings/components/AdvancedSettingsWrapper';
 import { SettingsUpdateDataModelObjectAboutForm } from '@/settings/data-model/object-details/components/SettingsUpdateDataModelObjectAboutForm';
+import { SettingsObjectSearchSection } from '@/settings/data-model/object-details/components/tabs/SettingsObjectSearchSection';
 import { SettingsDataModelObjectSettingsFormCard } from '@/settings/data-model/objects/forms/components/SettingsDataModelObjectSettingsFormCard';
 import { useSnackBar } from '@/ui/feedback/snack-bar-manager/hooks/useSnackBar';
 import { ConfirmationModal } from '@/ui/layout/modal/components/ConfirmationModal';
 import { useModal } from '@/ui/layout/modal/hooks/useModal';
-import styled from '@emotion/styled';
+import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { SettingsPath } from 'twenty-shared/types';
 import { H2Title, IconArchive, IconTrash } from 'twenty-ui/display';
 import { Button } from 'twenty-ui/input';
 import { Section } from 'twenty-ui/layout';
+import { themeCssVariables } from 'twenty-ui/theme-constants';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
 
 type ObjectSettingsProps = {
-  objectMetadataItem: ObjectMetadataItem;
+  objectMetadataItem: EnrichedObjectMetadataItem;
   isDeleting: boolean;
   setIsDeleting: (isDeleting: boolean) => void;
 };
@@ -25,16 +28,18 @@ type ObjectSettingsProps = {
 const StyledContentContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: ${({ theme }) => theme.spacing(8)};
+  gap: ${themeCssVariables.spacing[8]};
 `;
 
-const StyledFormSection = styled(Section)`
-  padding-left: 0 !important;
+const StyledFormSectionContainer = styled.div`
+  > * {
+    padding-left: 0 !important;
+  }
 `;
 
 const StyledDangerButtonsContainer = styled.div`
   display: flex;
-  gap: ${({ theme }) => theme.spacing(2)};
+  gap: ${themeCssVariables.spacing[2]};
 `;
 
 const DELETE_OBJECT_MODAL_ID = 'delete-object-confirmation-modal';
@@ -89,16 +94,18 @@ export const ObjectSettings = ({
 
   return (
     <StyledContentContainer>
-      <StyledFormSection>
-        <H2Title
-          title={t`About`}
-          description={t`Name in both singular (e.g., 'Invoice') and plural (e.g., 'Invoices') forms.`}
-        />
-        <SettingsUpdateDataModelObjectAboutForm
-          objectMetadataItem={objectMetadataItem}
-        />
-      </StyledFormSection>
-      <StyledFormSection>
+      <StyledFormSectionContainer>
+        <Section>
+          <H2Title
+            title={t`About`}
+            description={t`Name in both singular (e.g., 'Invoice') and plural (e.g., 'Invoices') forms.`}
+          />
+          <SettingsUpdateDataModelObjectAboutForm
+            objectMetadataItem={objectMetadataItem}
+          />
+        </Section>
+      </StyledFormSectionContainer>
+      <StyledFormSectionContainer>
         <Section>
           <H2Title
             title={t`Options`}
@@ -108,9 +115,23 @@ export const ObjectSettings = ({
             objectMetadataItem={objectMetadataItem}
           />
         </Section>
-      </StyledFormSection>
+      </StyledFormSectionContainer>
+      <AdvancedSettingsWrapper>
+        <StyledFormSectionContainer>
+          <Section>
+            <H2Title
+              title={t`Search`}
+              description={t`Configure how this object appears in search results`}
+            />
+            <SettingsObjectSearchSection
+              objectMetadataItem={objectMetadataItem}
+              isReadOnly={isReadOnly}
+            />
+          </Section>
+        </StyledFormSectionContainer>
+      </AdvancedSettingsWrapper>
       {!isReadOnly && (
-        <StyledFormSection>
+        <StyledFormSectionContainer>
           <Section>
             <H2Title
               title={t`Danger zone`}
@@ -135,10 +156,10 @@ export const ObjectSettings = ({
               )}
             </StyledDangerButtonsContainer>
           </Section>
-        </StyledFormSection>
+        </StyledFormSectionContainer>
       )}
       <ConfirmationModal
-        modalId={DELETE_OBJECT_MODAL_ID}
+        modalInstanceId={DELETE_OBJECT_MODAL_ID}
         title={t`Delete ${objectLabel} object?`}
         subtitle={t`This will permanently delete the object and all its records. Type "yes" to confirm.`}
         confirmButtonText={t`Delete`}

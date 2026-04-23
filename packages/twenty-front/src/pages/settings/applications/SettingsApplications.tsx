@@ -1,3 +1,4 @@
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
 import { SubMenuTopBarContainer } from '@/ui/layout/page/components/SubMenuTopBarContainer';
 import { TabList } from '@/ui/layout/tab-list/components/TabList';
@@ -8,19 +9,25 @@ import { useLingui } from '@lingui/react/macro';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 import { IconApps, IconCode, IconDownload } from 'twenty-ui/display';
+import { useQuery } from '@apollo/client/react';
 import {
   type FeatureFlagKey,
-  useFindManyApplicationsQuery,
+  PermissionFlagType,
+  FindManyApplicationsDocument,
 } from '~/generated-metadata/graphql';
 import { SettingsApplicationsTable } from '~/pages/settings/applications/components/SettingsApplicationsTable';
 import { SettingsApplicationsAvailableTab } from '~/pages/settings/applications/tabs/SettingsApplicationsAvailableTab';
-import { SettingsApplicationsCreateTab } from '~/pages/settings/applications/tabs/SettingsApplicationsCreateTab';
+import { SettingsApplicationsDeveloperTab } from '~/pages/settings/applications/tabs/SettingsApplicationsDeveloperTab';
 import { SettingsApplicationsInstalledTab } from '~/pages/settings/applications/tabs/SettingsApplicationsInstalledTab';
 
 const APPLICATIONS_TAB_LIST_ID = 'applications-tab-list';
 
 export const SettingsApplications = () => {
   const { t } = useLingui();
+
+  const hasDeveloperAccess = useHasPermissionFlag(
+    PermissionFlagType.API_KEYS_AND_WEBHOOKS,
+  );
 
   const isMarketplaceEnabled = useIsFeatureEnabled(
     'IS_MARKETPLACE_ENABLED' as FeatureFlagKey,
@@ -31,7 +38,7 @@ export const SettingsApplications = () => {
     APPLICATIONS_TAB_LIST_ID,
   );
 
-  const { data } = useFindManyApplicationsQuery();
+  const { data } = useQuery(FindManyApplicationsDocument);
 
   const applications = data?.findManyApplications ?? [];
 
@@ -51,26 +58,28 @@ export const SettingsApplications = () => {
           {applications.length > 0 && (
             <SettingsApplicationsTable applications={applications} />
           )}
-          <SettingsApplicationsCreateTab />
+          {hasDeveloperAccess && <SettingsApplicationsDeveloperTab />}
         </SettingsPageContainer>
       </SubMenuTopBarContainer>
     );
   }
 
   const tabs = [
-    { id: 'available', title: t`Available`, Icon: IconDownload },
+    { id: 'marketplace', title: t`Marketplace`, Icon: IconDownload },
     { id: 'installed', title: t`Installed`, Icon: IconApps },
-    { id: 'create', title: t`Create an app`, Icon: IconCode },
+    ...(hasDeveloperAccess
+      ? [{ id: 'developer', title: t`Developer`, Icon: IconCode }]
+      : []),
   ];
 
   const renderActiveTabContent = () => {
     switch (activeTabId) {
-      case 'available':
+      case 'marketplace':
         return <SettingsApplicationsAvailableTab />;
       case 'installed':
         return <SettingsApplicationsInstalledTab />;
-      case 'create':
-        return <SettingsApplicationsCreateTab />;
+      case 'developer':
+        return <SettingsApplicationsDeveloperTab />;
       default:
         return <SettingsApplicationsAvailableTab />;
     }
