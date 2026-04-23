@@ -1,5 +1,5 @@
-import { useCallback } from 'react';
 import { useStore } from 'jotai';
+import { useCallback } from 'react';
 
 import { useActivityTargetsForTargetableObjects } from '@/activities/hooks/useActivityTargetsForTargetableObjects';
 import { type ActivityTargetableObject } from '@/activities/types/ActivityTargetableEntity';
@@ -7,12 +7,12 @@ import { type Note } from '@/activities/types/Note';
 import { type NoteTarget } from '@/activities/types/NoteTarget';
 import { type Task } from '@/activities/types/Task';
 import { type TaskTarget } from '@/activities/types/TaskTarget';
+import { getRecordsFromRecordConnection } from '@/object-record/cache/utils/getRecordsFromRecordConnection';
+import { recordStoreFamilyState } from '@/object-record/record-store/states/recordStoreFamilyState';
 import {
   type CoreObjectNameSingular,
   type RecordGqlOperationOrderBy,
 } from 'twenty-shared/types';
-import { getRecordsFromRecordConnection } from '@/object-record/cache/utils/getRecordsFromRecordConnection';
-import { recordStoreFamilyState } from '@/object-record/record-store/states/recordStoreFamilyState';
 import { isDefined } from 'twenty-shared/utils';
 
 export const useActivities = <T extends Task | Note>({
@@ -33,7 +33,10 @@ export const useActivities = <T extends Task | Note>({
     (activityTargets: (TaskTarget | NoteTarget)[]) => {
       for (const activityTarget of activityTargets) {
         const activity = activityTarget[objectNameSingular];
-        store.set(recordStoreFamilyState.atomFamily(activity.id), activity);
+
+        if (activity) {
+          store.set(recordStoreFamilyState.atomFamily(activity.id), activity);
+        }
       }
     },
     [store, objectNameSingular],

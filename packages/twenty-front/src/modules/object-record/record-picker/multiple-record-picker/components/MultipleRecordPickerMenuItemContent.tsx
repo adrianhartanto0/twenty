@@ -12,6 +12,7 @@ import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/com
 import { useAtomComponentFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilySelectorValue';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
+import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { capitalize } from 'twenty-shared/utils';
 import { Avatar } from 'twenty-ui/display';
 import { MenuItemMultiSelectAvatar } from 'twenty-ui/navigation';
@@ -59,8 +60,13 @@ export const MultipleRecordPickerMenuItemContent = ({
   };
 
   const labelSingular = objectMetadataItem.labelSingular;
-  const displayText =
-    searchRecord.label?.trim() || t`Untitled ${labelSingular}`;
+
+  const companyName = searchRecord.record?.company?.name ? `- ${searchRecord.record?.company?.name}` : ''
+
+  const displayText = searchRecord.objectNameSingular === CoreObjectNameSingular.Person ?
+    `${searchRecord.label?.trim()} ${companyName}` :
+    (searchRecord.label?.trim() || t`Untitled ${labelSingular}`)
+
 
   const multipleRecordPickerSearchableObjectMetadataItems =
     useAtomComponentStateValue(
