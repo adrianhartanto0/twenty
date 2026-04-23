@@ -16,7 +16,7 @@ export const DropdownContent = forwardRef(
   (
     {
       children,
-      widthInPixels = GenericDropdownContentWidth.Medium,
+      widthInPixels = GenericDropdownContentWidth.ExtraLarge,
       selectDisabled = false,
     }: React.PropsWithChildren<{
       widthInPixels?: number;

@@ -42,7 +42,12 @@ RUN yarn workspaces focus --production twenty-emails twenty-shared twenty-sdk tw
 # Final stage: Run the server
 FROM node:24-alpine AS twenty-server
 
-RUN apk add --no-cache curl jq postgresql-client
+RUN apk add --no-cache curl jq postgresql-client musl-locales musl-locales-lang
+
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8 \
+    MUSL_LOCPATH=/usr/share/i18n/locales/musl
 
 RUN npm install -g tsx
 

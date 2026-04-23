@@ -1,9 +1,10 @@
-import { useEffect, useMemo } from 'react';
 import { useStore } from 'jotai';
+import { useEffect, useMemo, useState } from 'react';
 
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { DEFAULT_SEARCH_REQUEST_LIMIT } from '@/object-record/constants/DefaultSearchRequestLimit';
 import { useObjectRecordSearchRecords } from '@/object-record/hooks/useObjectRecordSearchRecords';
+import { usePerformCombinedFindManyRecords } from '@/object-record/multiple-objects/hooks/usePerformCombinedFindManyRecords';
 import { searchRecordStoreFamilyState } from '@/object-record/record-picker/multiple-record-picker/states/searchRecordStoreComponentFamilyState';
 import { SingleRecordPickerComponentInstanceContext } from '@/object-record/record-picker/single-record-picker/states/contexts/SingleRecordPickerComponentInstanceContext';
 import { singleRecordPickerSearchableObjectMetadataItemsComponentState } from '@/object-record/record-picker/single-record-picker/states/singleRecordPickerSearchableObjectMetadataItemsComponentState';
@@ -31,6 +32,9 @@ export const useSingleRecordPickerPerformSearch = ({
   const singleRecordPickerInstanceId = useAvailableComponentInstanceIdOrThrow(
     SingleRecordPickerComponentInstanceContext,
   );
+
+  const { performCombinedFindManyRecords } =
+    usePerformCombinedFindManyRecords();
 
   const { objectMetadataItems } = useObjectMetadataItems();
 
@@ -75,14 +79,46 @@ export const useSingleRecordPickerPerformSearch = ({
     [selectedRecords, filteredSelectedRecords, recordsToSelect],
   );
 
+  const [companyMap, setCompanyMap] = useState({});
+
+  // Fetch records when search results change
+  useEffect(() => {
+    console.log(allSearchRecords)
+
+    if (allSearchRecords.length === 0) {
+      setCompanyMap({});
+      return;
+    }
+
+    const allRecordIds = allSearchRecords.map(r => r.recordId);
+
+    performCombinedFindManyRecords({
+      operationSignatures: [{
+        objectNameSingular: objectNameSingulars[0],
+        variables: {
+          filter: { id: { in: allRecordIds } }
+        }
+      }],
+    }).then((res) => {
+      const companyName = res.result.people?.reduce((acc, item) => ({
+        ...acc,
+        [item.id]: { company: { name: item.company?.name} }
+      }), {});
+
+      setCompanyMap(companyName);
+    });
+  }, [allSearchRecords]);
+
+
   // TODO: Refactor this useEffect to avoid unnecessary re-renders (see PR #18584 review)
   useEffect(() => {
+
     allSearchRecords.forEach((searchRecord) => {
       store.set(
         searchRecordStoreFamilyState.atomFamily(searchRecord.recordId),
         {
           ...searchRecord,
-          record: undefined,
+          record: companyMap ? companyMap[searchRecord.recordId] : undefined,
         },
       );
     });
@@ -96,6 +132,7 @@ export const useSingleRecordPickerPerformSearch = ({
       ),
     );
   }, [
+    companyMap,
     allSearchRecords,
     store,
     objectMetadataItems,
