@@ -38,15 +38,41 @@ export const ObjectOptionsDropdownFieldsContent = () => {
       >
         {t`Fields`}
       </DropdownMenuHeader>
-      <DropdownMenuSearchInput
-        autoFocus
-        value={searchInput}
-        placeholder={t`Search fields`}
-        onChange={(event) => setSearchInput(event.target.value)}
-      />
-      <DropdownMenuSeparator />
-      {isNonEmptyString(searchInput) ? (
+
+      {
+        canEditPersonalViews && (
+          <>
+            <DropdownMenuSearchInput
+              autoFocus
+              value={searchInput}
+              placeholder={t`Search fields`}
+              onChange={(event) => setSearchInput(event.target.value)}
+            />
+            <DropdownMenuSeparator />
+          </>
+        )
+      }
+
+      { (canEditPersonalViews && isNonEmptyString(searchInput)) && (
         <ViewFieldsSearchDropdownSection searchInput={searchInput} />
+      )}
+
+      <ViewFieldsVisibleDropdownSection />
+
+      { (canEditPersonalViews && !isNonEmptyString(searchInput)) && (
+        <>
+          <DropdownMenuSeparator />
+          <DropdownMenuItemsContainer scrollable={false}>
+            <MenuItemNavigate
+              onClick={() => onContentChange('hiddenFields')}
+              LeftIcon={IconEyeOff}
+              text={t`Hidden Fields`}
+            />
+          </DropdownMenuItemsContainer>
+        </>
+      )}
+
+      {/* {isNonEmptyString(searchInput) ? (
       ) : (
         <>
           <ViewFieldsVisibleDropdownSection />
@@ -59,7 +85,7 @@ export const ObjectOptionsDropdownFieldsContent = () => {
             />
           </DropdownMenuItemsContainer>
         </>
-      )}
+      )} */}
     </DropdownContent>
   );
 };
