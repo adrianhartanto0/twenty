@@ -1,5 +1,5 @@
 import { styled } from '@linaria/react';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { type IconComponent, IconX } from 'twenty-ui/display';
 import { ThemeContext, themeCssVariables } from 'twenty-ui/theme-constants';
 
@@ -133,6 +133,8 @@ export const SortOrFilterChip = ({
   const { theme } = useContext(ThemeContext);
   const store = useStore();
 
+  const [hasMeFilter, setHasMeFilter] = useState(false)
+
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onRemove();
@@ -161,7 +163,9 @@ export const SortOrFilterChip = ({
     }
   }
 
-  const hasMeFilter = labelValue.search("Me") < 0
+  useEffect(() => {
+    setHasMeFilter(hasAdminRole && labelValue.search("Me") >= 0);
+  }, []); // Empty dependency array = run only on mount
 
   return (
     <StyledChip onClick={onClickFilter} variant={variant}>
