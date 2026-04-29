@@ -1,15 +1,15 @@
 import { MAX_SEARCH_RESULTS } from '@/command-menu/constants/MaxSearchResults';
+import { useApolloCoreClient } from '@/object-metadata/hooks/useApolloCoreClient';
 import { useReadableObjectMetadataItems } from '@/object-metadata/hooks/useReadableObjectMetadataItems';
 import { sidePanelSearchObjectFilterState } from '@/side-panel/states/sidePanelSearchObjectFilterState';
 import { sidePanelSearchState } from '@/side-panel/states/sidePanelSearchState';
 import { sidePanelShowHiddenObjectsState } from '@/side-panel/states/sidePanelShowHiddenObjectsState';
-import { useApolloCoreClient } from '@/object-metadata/hooks/useApolloCoreClient';
-import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import { useQuery } from '@apollo/client/react';
 import { useMemo } from 'react';
+import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { useDebounce } from 'use-debounce';
-import { useQuery } from '@apollo/client/react';
 import { SearchDocument } from '~/generated/graphql';
 
 export type SearchResultItem = {
@@ -59,6 +59,7 @@ export const useSidePanelSearchRecords = () => {
     variables: {
       searchInput: deferredSidePanelSearch ?? '',
       limit: MAX_SEARCH_RESULTS,
+      excludedObjectNameSingulars: [CoreObjectNameSingular.Company],
       includedObjectNameSingulars,
     },
   });
