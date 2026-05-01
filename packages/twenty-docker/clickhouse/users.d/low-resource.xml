@@ -3,41 +3,41 @@
   Drop-in ClickHouse users config to bound per-query CPU and memory.
   Mount into the container at /etc/clickhouse-server/users.d/low-resource.xml.
 
-  Loaded from the users-config tree (separate from config.d/) and merged
-  on top of the base users.xml. Pairs with config.d/low-resource.xml.
+  Verified against ClickHouse 26.2.4 (Core/Settings.cpp).
+  Pairs with config.d/low-resource.xml.
 -->
 <clickhouse>
     <profiles>
         <default>
             <!-- Per-query memory ceiling. -->
-            <max_memory_usage replace="replace">1073741824</max_memory_usage>
-            <max_memory_usage_for_user replace="replace">2147483648</max_memory_usage_for_user>
+            <max_memory_usage>1073741824</max_memory_usage>
+            <max_memory_usage_for_user>2147483648</max_memory_usage_for_user>
 
             <!-- Per-query thread ceiling. -->
-            <max_threads replace="replace">2</max_threads>
-            <max_final_threads replace="replace">2</max_final_threads>
-            <max_insert_threads replace="replace">2</max_insert_threads>
+            <max_threads>2</max_threads>
+            <max_final_threads>2</max_final_threads>
+            <max_insert_threads>2</max_insert_threads>
 
             <!-- Spill GROUP BY / ORDER BY to disk instead of OOMing. -->
-            <max_bytes_before_external_group_by replace="replace">536870912</max_bytes_before_external_group_by>
-            <max_bytes_before_external_sort replace="replace">536870912</max_bytes_before_external_sort>
+            <max_bytes_before_external_group_by>536870912</max_bytes_before_external_group_by>
+            <max_bytes_before_external_sort>536870912</max_bytes_before_external_sort>
 
             <!-- Cap result and intermediate sizes. -->
-            <max_result_rows replace="replace">1000000</max_result_rows>
-            <max_result_bytes replace="replace">536870912</max_result_bytes>
-            <result_overflow_mode replace="replace">break</result_overflow_mode>
+            <max_result_rows>1000000</max_result_rows>
+            <max_result_bytes>536870912</max_result_bytes>
+            <result_overflow_mode>break</result_overflow_mode>
 
             <!-- Don't use the uncompressed cache (disabled server-side). -->
-            <use_uncompressed_cache replace="replace">0</use_uncompressed_cache>
+            <use_uncompressed_cache>0</use_uncompressed_cache>
 
             <!-- Batch small inserts to reduce part churn / merge load. -->
-            <async_insert replace="replace">1</async_insert>
-            <wait_for_async_insert replace="replace">1</wait_for_async_insert>
-            <async_insert_max_data_size replace="replace">1048576</async_insert_max_data_size>
-            <async_insert_busy_timeout_ms replace="replace">1000</async_insert_busy_timeout_ms>
+            <async_insert>1</async_insert>
+            <wait_for_async_insert>1</wait_for_async_insert>
+            <async_insert_max_data_size>1048576</async_insert_max_data_size>
+            <async_insert_busy_timeout_max_ms>1000</async_insert_busy_timeout_max_ms>
 
             <!-- Disable OpenTelemetry trace export from the query path. -->
-            <opentelemetry_start_trace_probability replace="replace">0</opentelemetry_start_trace_probability>
+            <opentelemetry_start_trace_probability>0</opentelemetry_start_trace_probability>
         </default>
     </profiles>
 </clickhouse>

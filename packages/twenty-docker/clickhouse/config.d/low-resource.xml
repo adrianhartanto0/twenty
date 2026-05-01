@@ -3,67 +3,46 @@
   Drop-in ClickHouse server config to minimize CPU and memory usage.
   Mount into the container at /etc/clickhouse-server/config.d/low-resource.xml.
 
+  Verified against ClickHouse 26.2.4 (ServerSettings.cpp, MergeTreeSettings,
+  SystemLog.cpp, programs/server/config.xml).
+
   Tuned for a small single-node deployment (~2 vCPU / 2-4 GB RAM).
-  Adjust the absolute byte/thread values if your host is larger or smaller.
 -->
 <clickhouse>
     <!-- ── Memory ─────────────────────────────────────────────────── -->
-    <!-- Hard cap on total server memory as a fraction of host RAM. -->
-    <max_server_memory_usage_to_ram_ratio replace="replace">0.5</max_server_memory_usage_to_ram_ratio>
-
-    <!-- Mark cache: index marks for MergeTree. Default 5 GiB → 256 MiB. -->
-    <mark_cache_size replace="replace">268435456</mark_cache_size>
-
-    <!-- Uncompressed block cache: off (default). Keep off; it bloats RAM
-         for analytical workloads with low locality. -->
-    <uncompressed_cache_size replace="replace">0</uncompressed_cache_size>
-
-    <!-- Compiled expression cache: shrink. -->
-    <compiled_expression_cache_size replace="replace">67108864</compiled_expression_cache_size>
-    <compiled_expression_cache_elements_size replace="replace">1000</compiled_expression_cache_elements_size>
-
-    <!-- Lock the binary into RAM? No — saves ~hundreds of MB resident. -->
-    <mlock_executable replace="replace">false</mlock_executable>
+    <max_server_memory_usage_to_ram_ratio>0.5</max_server_memory_usage_to_ram_ratio>
+    <mark_cache_size>268435456</mark_cache_size>
+    <uncompressed_cache_size>0</uncompressed_cache_size>
+    <compiled_expression_cache_size>67108864</compiled_expression_cache_size>
+    <compiled_expression_cache_elements_size>1000</compiled_expression_cache_elements_size>
+    <mlock_executable>false</mlock_executable>
 
     <!-- ── Concurrency / threads ──────────────────────────────────── -->
-    <!-- Cap concurrent queries to bound peak CPU + memory. -->
-    <max_concurrent_queries replace="replace">20</max_concurrent_queries>
+    <max_concurrent_queries>20</max_concurrent_queries>
+    <max_thread_pool_size>500</max_thread_pool_size>
+    <max_thread_pool_free_size>100</max_thread_pool_free_size>
+    <thread_pool_queue_size>1000</thread_pool_queue_size>
+    <max_io_thread_pool_size>16</max_io_thread_pool_size>
+    <max_io_thread_pool_free_size>0</max_io_thread_pool_free_size>
 
-    <!-- Global thread pool ceiling. Default 10000 is wildly oversized
-         for small hosts and inflates virtual memory. -->
-    <max_thread_pool_size replace="replace">500</max_thread_pool_size>
-    <max_thread_pool_free_size replace="replace">100</max_thread_pool_free_size>
-    <thread_pool_queue_size replace="replace">1000</thread_pool_queue_size>
-
-    <!-- IO thread pools. -->
-    <max_io_thread_pool_size replace="replace">16</max_io_thread_pool_size>
-    <max_io_thread_pool_free_size replace="replace">0</max_io_thread_pool_free_size>
-
-    <!-- ── Background merges / mutations / fetches ────────────────── -->
-    <!-- These pools are the dominant idle-CPU consumers. -->
-    <background_pool_size replace="replace">4</background_pool_size>
-    <background_merges_mutations_concurrency_ratio replace="replace">1</background_merges_mutations_concurrency_ratio>
-    <background_move_pool_size replace="replace">2</background_move_pool_size>
-    <background_fetches_pool_size replace="replace">2</background_fetches_pool_size>
-    <background_common_pool_size replace="replace">2</background_common_pool_size>
-    <background_schedule_pool_size replace="replace">16</background_schedule_pool_size>
-    <background_message_broker_schedule_pool_size replace="replace">4</background_message_broker_schedule_pool_size>
-    <background_distributed_schedule_pool_size replace="replace">4</background_distributed_schedule_pool_size>
+    <!-- ── Background pools ───────────────────────────────────────── -->
+    <background_pool_size>4</background_pool_size>
+    <background_merges_mutations_concurrency_ratio>1</background_merges_mutations_concurrency_ratio>
+    <background_move_pool_size>2</background_move_pool_size>
+    <background_fetches_pool_size>2</background_fetches_pool_size>
+    <background_common_pool_size>2</background_common_pool_size>
+    <background_schedule_pool_size>16</background_schedule_pool_size>
+    <background_message_broker_schedule_pool_size>4</background_message_broker_schedule_pool_size>
+    <background_distributed_schedule_pool_size>4</background_distributed_schedule_pool_size>
 
     <!-- ── MergeTree storage tuning ───────────────────────────────── -->
     <merge_tree>
-        <!-- Smaller blocks → less RAM during merges. -->
         <merge_max_block_size>4096</merge_max_block_size>
         <max_bytes_to_merge_at_max_space_in_pool>53687091200</max_bytes_to_merge_at_max_space_in_pool>
-        <!-- Throttle large merges when the pool is busy. -->
         <number_of_free_entries_in_pool_to_lower_max_size_of_merge>2</number_of_free_entries_in_pool_to_lower_max_size_of_merge>
-        <!-- Bound part loading parallelism on startup. -->
-        <max_part_loading_threads>2</max_part_loading_threads>
-        <max_part_removal_threads>2</max_part_removal_threads>
     </merge_tree>
 
-    <!-- ── System logs (flush less, retain less) ──────────────────── -->
-    <!-- These tables silently consume a lot of disk + write IO. -->
+    <!-- ── System logs ────────────────────────────────────────────── -->
     <query_log>
         <database>system</database>
         <table>query_log</table>
@@ -78,15 +57,10 @@
     <metric_log remove="1"/>
     <asynchronous_metric_log remove="1"/>
     <opentelemetry_span_log remove="1"/>
-    <session_log remove="1"/>
     <text_log remove="1"/>
     <trace_log remove="1"/>
     <crash_log remove="1"/>
     <processors_profile_log remove="1"/>
-    <zookeeper_log remove="1"/>
-
-    <!-- Asynchronous metrics collection — slow it down. -->
-    <asynchronous_metrics_update_period_s>120</asynchronous_metrics_update_period_s>
 
     <!-- ── Logging ────────────────────────────────────────────────── -->
     <logger>
@@ -96,16 +70,10 @@
     </logger>
 
     <!-- ── Telemetry (disabled) ───────────────────────────────────── -->
-    <!-- Crash reports to Sentry. -->
     <send_crash_reports replace="replace">
         <enabled>false</enabled>
-        <anonymize>true</anonymize>
+        <send_logical_errors>false</send_logical_errors>
     </send_crash_reports>
-
-    <!-- Anonymous usage statistics phoned home to ClickHouse. -->
-    <send_metrics replace="replace">false</send_metrics>
-    <send_logs replace="replace">false</send_logs>
-    <send_events replace="replace">false</send_events>
 
     <!-- Per-query / profile limits live in users.d/low-resource.xml. -->
 </clickhouse>
