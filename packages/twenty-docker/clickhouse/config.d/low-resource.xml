@@ -14,7 +14,7 @@
     <mark_cache_size>268435456</mark_cache_size>
     <uncompressed_cache_size>0</uncompressed_cache_size>
     <compiled_expression_cache_size>67108864</compiled_expression_cache_size>
-    <compiled_expression_cache_elements_size>1000</compiled_expression_cache_elements_size>
+    <compiled_expression_cache_elements_size>10000</compiled_expression_cache_elements_size>
     <mlock_executable>false</mlock_executable>
 
     <!-- ── Concurrency / threads ──────────────────────────────────── -->
@@ -26,8 +26,7 @@
     <max_io_thread_pool_free_size>0</max_io_thread_pool_free_size>
 
     <!-- ── Background pools ───────────────────────────────────────── -->
-    <background_pool_size>4</background_pool_size>
-    <background_merges_mutations_concurrency_ratio>1</background_merges_mutations_concurrency_ratio>
+
     <background_move_pool_size>2</background_move_pool_size>
     <background_fetches_pool_size>2</background_fetches_pool_size>
     <background_common_pool_size>2</background_common_pool_size>

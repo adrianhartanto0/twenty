@@ -13,6 +13,9 @@
             <max_memory_usage>1073741824</max_memory_usage>
             <max_memory_usage_for_user>2147483648</max_memory_usage_for_user>
 
+            <background_pool_size>4</background_pool_size>
+            <background_merges_mutations_concurrency_ratio>1</background_merges_mutations_concurrency_ratio>
+            
             <!-- Per-query thread ceiling. -->
             <max_threads>2</max_threads>
             <max_final_threads>2</max_final_threads>
