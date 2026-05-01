@@ -263,6 +263,7 @@ services:
       CLICKHOUSE_PASSWORD:
     volumes:
       - ./clickhouse/config.d/low-resource.xml:/etc/clickhouse-server/config.d/low-resource.xml:ro
+      - ./clickhouse/users.d/low-resource.xml:/etc/clickhouse-server/users.d/low-resource.xml:ro
     networks:
       - db_net
     healthcheck:

@@ -9,46 +9,46 @@
 <clickhouse>
     <!-- ── Memory ─────────────────────────────────────────────────── -->
     <!-- Hard cap on total server memory as a fraction of host RAM. -->
-    <max_server_memory_usage_to_ram_ratio>0.5</max_server_memory_usage_to_ram_ratio>
+    <max_server_memory_usage_to_ram_ratio replace="replace">0.5</max_server_memory_usage_to_ram_ratio>
 
     <!-- Mark cache: index marks for MergeTree. Default 5 GiB → 256 MiB. -->
-    <mark_cache_size>268435456</mark_cache_size>
+    <mark_cache_size replace="replace">268435456</mark_cache_size>
 
     <!-- Uncompressed block cache: off (default). Keep off; it bloats RAM
          for analytical workloads with low locality. -->
-    <uncompressed_cache_size>0</uncompressed_cache_size>
+    <uncompressed_cache_size replace="replace">0</uncompressed_cache_size>
 
     <!-- Compiled expression cache: shrink. -->
-    <compiled_expression_cache_size>67108864</compiled_expression_cache_size>
-    <compiled_expression_cache_elements_size>1000</compiled_expression_cache_elements_size>
+    <compiled_expression_cache_size replace="replace">67108864</compiled_expression_cache_size>
+    <compiled_expression_cache_elements_size replace="replace">1000</compiled_expression_cache_elements_size>
 
     <!-- Lock the binary into RAM? No — saves ~hundreds of MB resident. -->
-    <mlock_executable>false</mlock_executable>
+    <mlock_executable replace="replace">false</mlock_executable>
 
     <!-- ── Concurrency / threads ──────────────────────────────────── -->
     <!-- Cap concurrent queries to bound peak CPU + memory. -->
-    <max_concurrent_queries>20</max_concurrent_queries>
+    <max_concurrent_queries replace="replace">20</max_concurrent_queries>
 
     <!-- Global thread pool ceiling. Default 10000 is wildly oversized
          for small hosts and inflates virtual memory. -->
-    <max_thread_pool_size>500</max_thread_pool_size>
-    <max_thread_pool_free_size>100</max_thread_pool_free_size>
-    <thread_pool_queue_size>1000</thread_pool_queue_size>
+    <max_thread_pool_size replace="replace">500</max_thread_pool_size>
+    <max_thread_pool_free_size replace="replace">100</max_thread_pool_free_size>
+    <thread_pool_queue_size replace="replace">1000</thread_pool_queue_size>
 
     <!-- IO thread pools. -->
-    <max_io_thread_pool_size>16</max_io_thread_pool_size>
-    <max_io_thread_pool_free_size>0</max_io_thread_pool_free_size>
+    <max_io_thread_pool_size replace="replace">16</max_io_thread_pool_size>
+    <max_io_thread_pool_free_size replace="replace">0</max_io_thread_pool_free_size>
 
     <!-- ── Background merges / mutations / fetches ────────────────── -->
     <!-- These pools are the dominant idle-CPU consumers. -->
-    <background_pool_size>4</background_pool_size>
-    <background_merges_mutations_concurrency_ratio>1</background_merges_mutations_concurrency_ratio>
-    <background_move_pool_size>2</background_move_pool_size>
-    <background_fetches_pool_size>2</background_fetches_pool_size>
-    <background_common_pool_size>2</background_common_pool_size>
-    <background_schedule_pool_size>16</background_schedule_pool_size>
-    <background_message_broker_schedule_pool_size>4</background_message_broker_schedule_pool_size>
-    <background_distributed_schedule_pool_size>4</background_distributed_schedule_pool_size>
+    <background_pool_size replace="replace">4</background_pool_size>
+    <background_merges_mutations_concurrency_ratio replace="replace">1</background_merges_mutations_concurrency_ratio>
+    <background_move_pool_size replace="replace">2</background_move_pool_size>
+    <background_fetches_pool_size replace="replace">2</background_fetches_pool_size>
+    <background_common_pool_size replace="replace">2</background_common_pool_size>
+    <background_schedule_pool_size replace="replace">16</background_schedule_pool_size>
+    <background_message_broker_schedule_pool_size replace="replace">4</background_message_broker_schedule_pool_size>
+    <background_distributed_schedule_pool_size replace="replace">4</background_distributed_schedule_pool_size>
 
     <!-- ── MergeTree storage tuning ───────────────────────────────── -->
     <merge_tree>
@@ -95,37 +95,17 @@
         <count>3</count>
     </logger>
 
-    <!-- ── Default profile: per-query limits ──────────────────────── -->
-    <!-- Profiles normally live in users.d/. Defining them here is
-         supported as an override and keeps this a single-file config. -->
-    <profiles>
-        <default>
-            <!-- Per-query memory ceiling. -->
-            <max_memory_usage>1073741824</max_memory_usage>
-            <max_memory_usage_for_user>2147483648</max_memory_usage_for_user>
+    <!-- ── Telemetry (disabled) ───────────────────────────────────── -->
+    <!-- Crash reports to Sentry. -->
+    <send_crash_reports replace="replace">
+        <enabled>false</enabled>
+        <anonymize>true</anonymize>
+    </send_crash_reports>
 
-            <!-- Per-query thread ceiling. -->
-            <max_threads>2</max_threads>
-            <max_final_threads>2</max_final_threads>
-            <max_insert_threads>2</max_insert_threads>
+    <!-- Anonymous usage statistics phoned home to ClickHouse. -->
+    <send_metrics replace="replace">false</send_metrics>
+    <send_logs replace="replace">false</send_logs>
+    <send_events replace="replace">false</send_events>
 
-            <!-- Spill GROUP BY / ORDER BY to disk instead of OOMing. -->
-            <max_bytes_before_external_group_by>536870912</max_bytes_before_external_group_by>
-            <max_bytes_before_external_sort>536870912</max_bytes_before_external_sort>
-
-            <!-- Cap result and intermediate sizes. -->
-            <max_result_rows>1000000</max_result_rows>
-            <max_result_bytes>536870912</max_result_bytes>
-            <result_overflow_mode>break</result_overflow_mode>
-
-            <!-- Don't use the uncompressed cache (we disabled it above). -->
-            <use_uncompressed_cache>0</use_uncompressed_cache>
-
-            <!-- Batch small inserts to reduce part churn / merge load. -->
-            <async_insert>1</async_insert>
-            <wait_for_async_insert>1</wait_for_async_insert>
-            <async_insert_max_data_size>1048576</async_insert_max_data_size>
-            <async_insert_busy_timeout_ms>1000</async_insert_busy_timeout_ms>
-        </default>
-    </profiles>
+    <!-- Per-query / profile limits live in users.d/low-resource.xml. -->
 </clickhouse>
