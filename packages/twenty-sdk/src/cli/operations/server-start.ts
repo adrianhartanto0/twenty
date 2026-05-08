@@ -9,6 +9,7 @@ import {
   DEFAULT_PORT,
   DEFAULT_TEST_PORT,
   getContainerPort,
+  getDockerNotRunningMessage,
   IMAGE,
   isContainerRunning,
   TEST_CONTAINER_NAME,
@@ -148,11 +149,15 @@ const innerServerStart = async (
   }
 
   if (!checkDockerRunning()) {
+    const retryCommand = isTest
+      ? 'yarn twenty server start --test'
+      : 'yarn twenty server start';
+
     return {
       success: false,
       error: {
         code: SERVER_ERROR_CODES.DOCKER_NOT_RUNNING,
-        message: 'Docker is not running. Please start Docker and try again.',
+        message: getDockerNotRunningMessage(retryCommand),
       },
     };
   }
@@ -205,7 +210,7 @@ const innerServerStart = async (
     onProgress?.('Starting existing container...');
     execSync(`docker start ${containerName}`, { stdio: 'ignore' });
   } else {
-    onProgress?.('Starting Twenty container...');
+    onProgress?.('Pulling Docker image and starting Twenty container...');
 
     const runResult = spawnSync(
       'docker',

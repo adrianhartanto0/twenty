@@ -1,5 +1,6 @@
 'use client';
 
+import { useRenderMessage } from '@/lib/i18n/use-render-message';
 import { INFORMATIVE_ICONS } from '@/icons';
 import type { TabType } from '@/sections/Tabs/types';
 import { theme } from '@/theme';
@@ -81,29 +82,41 @@ const TabIconBox = styled.span`
 `;
 
 type TabButtonProps = {
-  tab: TabType;
+  controls: string;
+  id: string;
   isActive: boolean;
   onSelect: () => void;
+  tab: TabType;
 };
 
-export function TabButton({ tab, isActive, onSelect }: TabButtonProps) {
+export function TabButton({
+  controls,
+  id,
+  isActive,
+  onSelect,
+  tab,
+}: TabButtonProps) {
+  const renderText = useRenderMessage();
+
   const iconColor = isActive
     ? theme.colors.highlight[100]
     : theme.colors.secondary.text[100];
 
-  const Icon = INFORMATIVE_ICONS[tab.icon];
+  const Icon = INFORMATIVE_ICONS[tab.icon as keyof typeof INFORMATIVE_ICONS];
 
   return (
     <StyledButton
-      type="button"
-      role="tab"
+      aria-controls={controls}
       aria-selected={isActive}
       data-active={String(isActive)}
+      id={id}
       onClick={onSelect}
+      role="tab"
+      type="button"
     >
-      <Label>{tab.body.text}</Label>
+      <Label>{renderText(tab.body)}</Label>
       <TabIconBox data-active={String(isActive)}>
-        {Icon ? <Icon size={16} color={iconColor} /> : null}
+        {Icon ? <Icon color={iconColor} size={16} /> : null}
       </TabIconBox>
     </StyledButton>
   );

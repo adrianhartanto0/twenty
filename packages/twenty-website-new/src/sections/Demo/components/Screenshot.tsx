@@ -7,17 +7,16 @@ import NextImage from 'next/image';
 const ScreenshotRoot = styled.div`
   aspect-ratio: 136 / 69;
   border-radius: ${theme.radius(4)};
+  margin-bottom: ${theme.spacing(11)};
+  margin-top: ${theme.spacing(12)};
+  max-width: 800px;
   overflow: hidden;
   position: relative;
   width: 100%;
-  max-width: 800px;
-  margin-top: ${theme.spacing(12)};
-  margin-bottom: ${theme.spacing(11)};
 
   @media (min-width: ${theme.breakpoints.md}px) {
     border-radius: ${theme.radius(6)};
     margin-top: ${theme.spacing(19)};
-    margin-bottom: ${theme.spacing(11)};
   }
 `;
 
@@ -34,7 +33,7 @@ export function Screenshot({ image }: ScreenshotProps) {
         alt={image.alt}
         className={screenshotImageClassName}
         fill
-        sizes="(min-width: 1440px) 1360px, 100vw"
+        sizes="(min-width: 921px) 800px, 100vw"
         src={image.src}
       />
     </ScreenshotRoot>
