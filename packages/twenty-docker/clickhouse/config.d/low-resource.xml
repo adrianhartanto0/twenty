@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+  Drop-in ClickHouse server config to minimize CPU and memory usage.
+  Mount into the container at /etc/clickhouse-server/config.d/low-resource.xml.
+
+  Verified against ClickHouse 26.2.4 (ServerSettings.cpp, MergeTreeSettings,
+  SystemLog.cpp, programs/server/config.xml).
+
+  Tuned for a small single-node deployment (~2 vCPU / 2-4 GB RAM).
+-->
+<clickhouse>
+    <!-- ── Memory ─────────────────────────────────────────────────── -->
+    <max_server_memory_usage_to_ram_ratio>0.5</max_server_memory_usage_to_ram_ratio>
+    <mark_cache_size>268435456</mark_cache_size>
+    <uncompressed_cache_size>0</uncompressed_cache_size>
+    <compiled_expression_cache_size>67108864</compiled_expression_cache_size>
+    <compiled_expression_cache_elements_size>10000</compiled_expression_cache_elements_size>
+    <mlock_executable>false</mlock_executable>
+
+    <!-- ── Concurrency / threads ──────────────────────────────────── -->
+    <max_concurrent_queries>20</max_concurrent_queries>
+    <max_thread_pool_size>500</max_thread_pool_size>
+    <max_thread_pool_free_size>100</max_thread_pool_free_size>
+    <thread_pool_queue_size>1000</thread_pool_queue_size>
+    <max_io_thread_pool_size>16</max_io_thread_pool_size>
+    <max_io_thread_pool_free_size>0</max_io_thread_pool_free_size>
+
+    <!-- ── Background pools ───────────────────────────────────────── -->
+
+    <background_move_pool_size>2</background_move_pool_size>
+    <background_fetches_pool_size>2</background_fetches_pool_size>
+    <background_common_pool_size>2</background_common_pool_size>
+    <background_schedule_pool_size>16</background_schedule_pool_size>
+    <background_message_broker_schedule_pool_size>4</background_message_broker_schedule_pool_size>
+    <background_distributed_schedule_pool_size>4</background_distributed_schedule_pool_size>
+
+    <!-- ── MergeTree storage tuning ───────────────────────────────── -->
+    <merge_tree>
+        <merge_max_block_size>4096</merge_max_block_size>
+        <max_bytes_to_merge_at_max_space_in_pool>53687091200</max_bytes_to_merge_at_max_space_in_pool>
+        <number_of_free_entries_in_pool_to_lower_max_size_of_merge>2</number_of_free_entries_in_pool_to_lower_max_size_of_merge>
+    </merge_tree>
+
+    <!-- ── System logs ────────────────────────────────────────────── -->
+    <query_log>
+        <database>system</database>
+        <table>query_log</table>
+        <flush_interval_milliseconds>30000</flush_interval_milliseconds>
+        <max_size_rows>524288</max_size_rows>
+        <reserved_size_rows>8192</reserved_size_rows>
+        <ttl>event_date + INTERVAL 7 DAY DELETE</ttl>
+    </query_log>
+    <query_thread_log remove="1"/>
+    <query_views_log remove="1"/>
+    <part_log remove="1"/>
+    <metric_log remove="1"/>
+    <asynchronous_metric_log remove="1"/>
+    <opentelemetry_span_log remove="1"/>
+    <text_log remove="1"/>
+    <trace_log remove="1"/>
+    <crash_log remove="1"/>
+    <processors_profile_log remove="1"/>
+
+    <!-- ── Logging ────────────────────────────────────────────────── -->
+    <logger>
+        <level>warning</level>
+        <size>100M</size>
+        <count>3</count>
+    </logger>
+
+    <!-- ── Telemetry (disabled) ───────────────────────────────────── -->
+    <send_crash_reports replace="replace">
+        <enabled>false</enabled>
+        <send_logical_errors>false</send_logical_errors>
+    </send_crash_reports>
+
+    <!-- Per-query / profile limits live in users.d/low-resource.xml. -->
+</clickhouse>
