@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAtom, useStore } from 'jotai';
 
 import { BLOCK_SCHEMA } from '@/blocknote-editor/blocks/Schema';
@@ -79,6 +79,8 @@ export const RichTextFieldEditor = ({
     useRemoveFocusItemFromFocusStackById();
 
   const focusId = `${recordId}-${fieldName}`;
+
+  const isEditorFocusedRef = useRef(false);
 
   const attachmentTargetFieldIdName = getActivityTargetObjectFieldIdName({
     nameSingular: objectNameSingular,
@@ -233,6 +235,21 @@ export const RichTextFieldEditor = ({
     }
   }, [recordId, currentRecordId, replaceBlockEditorContent]);
 
+  // Reseed the editor when SSE delivers an external update to this field
+  // (e.g. a workflow rewriting the body). The page-level
+  // RecordShowPageSSESubscribeEffect already pushes the new value into
+  // recordStoreFamilyState; we just react to it. Skipped while the editor is
+  // focused so we don't clobber the user's in-progress typing.
+  const externalBlocknote = fieldValue?.blocknote ?? null;
+
+  useEffect(() => {
+    if (currentRecordId !== recordId) return;
+    if (isEditorFocusedRef.current) return;
+    if (!isDefined(externalBlocknote)) return;
+
+    replaceBlockEditorContent(recordId);
+  }, [externalBlocknote, recordId, currentRecordId, replaceBlockEditorContent]);
+
   useHotkeysOnFocusedElement({
     keys: Key.Escape,
     callback: () => {
@@ -243,6 +260,8 @@ export const RichTextFieldEditor = ({
   });
 
   const handleBlockEditorFocus = useCallback(() => {
+    isEditorFocusedRef.current = true;
+
     if (onFocusOverride) {
       onFocusOverride();
       return;
@@ -259,6 +278,8 @@ export const RichTextFieldEditor = ({
   }, [focusId, pushFocusItemToFocusStack, onFocusOverride]);
 
   const handleBlockEditorBlur = useCallback(() => {
+    isEditorFocusedRef.current = false;
+
     if (onBlurOverride) {
       onBlurOverride();
       return;
