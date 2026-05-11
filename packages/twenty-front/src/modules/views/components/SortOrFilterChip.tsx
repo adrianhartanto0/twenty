@@ -164,7 +164,11 @@ export const SortOrFilterChip = ({
   }
 
   useEffect(() => {
-    const enableXButton = (labelKey?.search("Account Owner") < 0 && labelValue.search("Me") < 0 || hasAdminRole && labelValue.search("Me") >= 0)
+    const enableXButton = (!labelKey) || (labelKey?.search("Account Owner") < 0 && labelValue.search("Me") < 0 || hasAdminRole && labelValue.search("Me") >= 0)
+    console.log(labelValue.search("Me"))
+    // console.log(labelKey?.search("Account Owner") < 0)
+    // console.log(labelKey)
+
     setHasMeFilter(enableXButton)
   }, []); // Empty dependency array = run only on mount
 
