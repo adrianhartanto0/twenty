@@ -47,6 +47,7 @@ export class RoleService {
       where: {
         workspaceId,
       },
+      relationLoadStrategy: 'query',
       relations: {
         roleTargets: true,
         permissionFlags: true,
@@ -65,6 +66,7 @@ export class RoleService {
         id,
         workspaceId,
       },
+      relationLoadStrategy: 'query',
       relations: {
         roleTargets: true,
         permissionFlags: true,
