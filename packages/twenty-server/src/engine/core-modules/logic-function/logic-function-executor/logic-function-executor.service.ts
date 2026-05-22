@@ -84,10 +84,14 @@ export class LogicFunctionExecutorService {
     logicFunctionId,
     workspaceId,
     payload,
+    userId,
+    userWorkspaceId,
   }: {
     logicFunctionId: string;
     workspaceId: string;
     payload: object;
+    userId?: string;
+    userWorkspaceId?: string;
   }): Promise<LogicFunctionExecuteResult> {
     await this.throttleExecution(workspaceId);
 
@@ -101,6 +105,8 @@ export class LogicFunctionExecutorService {
       workspaceId,
       flatApplication,
       flatApplicationVariables,
+      userId,
+      userWorkspaceId,
     });
 
     const driver = this.logicFunctionDriverFactory.getCurrentDriver();
@@ -224,15 +230,21 @@ export class LogicFunctionExecutorService {
     workspaceId,
     flatApplication,
     flatApplicationVariables,
+    userId,
+    userWorkspaceId,
   }: {
     workspaceId: string;
     flatApplication: FlatApplication;
     flatApplicationVariables: FlatApplicationVariable[];
+    userId?: string;
+    userWorkspaceId?: string;
   }) {
     const applicationAccessToken =
       await this.applicationTokenService.generateApplicationAccessToken({
         workspaceId,
         applicationId: flatApplication.id,
+        userId,
+        userWorkspaceId,
       });
 
     const baseUrl = cleanServerUrl(this.twentyConfigService.get('SERVER_URL'));
@@ -288,8 +300,13 @@ export class LogicFunctionExecutorService {
     // .updateVariable call encrypt unconditionally), independent of
     // `isSecret`. `isSecret` is display metadata — the storage contract is
     // not conditional, so decryption isn't either.
+    //
+    // Registration variables are server-level config — any installed
+    // application across any workspace must be able to read them — so they
+    // use the instance-scoped versioned envelope (no workspaceId in the HKDF
+    // info).
     for (const variable of serverVariables) {
-      envMap[variable.key] = this.secretEncryptionService.decrypt(
+      envMap[variable.key] = this.secretEncryptionService.decryptVersioned(
         variable.encryptedValue,
       );
     }
@@ -320,7 +337,9 @@ export class LogicFunctionExecutorService {
       executionId,
     }));
 
-    this.applicationLogsService.writeLogs(logEntries);
+    void this.applicationLogsService.writeLogs(logEntries).catch((error) => {
+      this.logger.error('Failed to persist application logs', error);
+    });
 
     await this.subscriptionService.publish({
       channel: SubscriptionChannel.LOGIC_FUNCTION_LOGS_CHANNEL,
@@ -337,7 +356,7 @@ export class LogicFunctionExecutorService {
       },
     });
 
-    this.auditService
+    void this.auditService
       .createContext({
         workspaceId,
       })
@@ -362,7 +381,7 @@ export class LogicFunctionExecutorService {
 
       periodStart = currentPeriodStart;
 
-      await this.billingUsageService.decrementAvailableCredits({
+      await this.billingUsageService.decrementAvailableCreditsInCache({
         workspaceId,
         usedCredits: 100,
       });

@@ -1,6 +1,7 @@
 import { styled } from '@linaria/react';
-import { useContext, useEffect, useState } from 'react';
-import { type IconComponent, IconX } from 'twenty-ui/display';
+import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { isDefined } from 'twenty-shared/utils';
+import { IconX, type IconComponent } from 'twenty-ui/display';
 import { ThemeContext, themeCssVariables } from 'twenty-ui/theme-constants';
 
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
@@ -101,6 +102,16 @@ const StyledSortValue = styled.span`
   font-weight: ${themeCssVariables.font.weight.medium};
 `;
 
+const StyledSubFieldSeparator = styled.span`
+  font-weight: ${themeCssVariables.font.weight.regular};
+  opacity: 0.6;
+  padding: 0 ${themeCssVariables.spacing[1]};
+`;
+
+const StyledSubFieldValue = styled.span`
+  font-weight: ${themeCssVariables.font.weight.regular};
+`;
+
 const StyledKeyLabelContainer = styled.div`
   display: flex;
 `;
@@ -112,6 +123,7 @@ export type SortOrFilterChipType = 'sort' | 'filter';
 type SortOrFilterChipProps = {
   labelKey?: string;
   labelValue: string;
+  labelSubField?: ReactNode;
   variant?: SortOrFilterChipVariant;
   Icon?: IconComponent;
   onRemove: () => void;
@@ -123,6 +135,7 @@ type SortOrFilterChipProps = {
 export const SortOrFilterChip = ({
   labelKey,
   labelValue,
+  labelSubField,
   variant = 'default',
   Icon,
   onRemove,
@@ -165,10 +178,6 @@ export const SortOrFilterChip = ({
 
   useEffect(() => {
     const enableXButton = (!labelKey) || (labelKey?.search("Account Owner") < 0 && labelValue.search("Me") < 0 || hasAdminRole && labelValue.search("Me") >= 0)
-    console.log(labelValue.search("Me"))
-    // console.log(labelKey?.search("Account Owner") < 0)
-    // console.log(labelKey)
-
     setHasMeFilter(enableXButton)
   }, []); // Empty dependency array = run only on mount
 
@@ -185,6 +194,12 @@ export const SortOrFilterChip = ({
           <StyledSortValue>{labelValue}</StyledSortValue>
         ) : (
           <StyledFilterValue>{labelValue}</StyledFilterValue>
+        )}
+        {isDefined(labelSubField) && (
+          <>
+            <StyledSubFieldSeparator>·</StyledSubFieldSeparator>
+            <StyledSubFieldValue>{labelSubField}</StyledSubFieldValue>
+          </>
         )}
       </StyledKeyLabelContainer>
       {

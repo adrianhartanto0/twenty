@@ -50,7 +50,9 @@ export class RoleService {
       relationLoadStrategy: 'query',
       relations: {
         roleTargets: true,
-        permissionFlags: true,
+        rolePermissionFlags: {
+          permissionFlag: true,
+        },
         objectPermissions: true,
         fieldPermissions: true,
       },
@@ -69,7 +71,9 @@ export class RoleService {
       relationLoadStrategy: 'query',
       relations: {
         roleTargets: true,
-        permissionFlags: true,
+        rolePermissionFlags: {
+          permissionFlag: true,
+        },
         objectPermissions: true,
         fieldPermissions: true,
       },
