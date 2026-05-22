@@ -11,7 +11,7 @@ import { PublicDomainEntity } from 'src/engine/core-modules/public-domain/public
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
 import { WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
 import { WorkspaceNotFoundDefaultError } from 'src/engine/core-modules/workspace/workspace.exception';
-import { SEED_APPLE_WORKSPACE_ID } from 'src/engine/workspace-manager/dev-seeder/core/constants/seeder-workspaces.constant';
+import { SEED_YCOMBINATOR_WORKSPACE_ID } from 'src/engine/workspace-manager/dev-seeder/core/constants/seeder-workspaces.constant';
 
 @Injectable()
 export class WorkspaceDomainsService {
@@ -80,7 +80,7 @@ export class WorkspaceDomainsService {
 
     const foundWorkspace =
       workspaces.find(
-        (workspace) => workspace.id === SEED_APPLE_WORKSPACE_ID,
+        (workspace) => workspace.id === SEED_YCOMBINATOR_WORKSPACE_ID,
       ) ?? workspaces[0];
 
     assertIsDefinedOrThrow(foundWorkspace, WorkspaceNotFoundDefaultError);
