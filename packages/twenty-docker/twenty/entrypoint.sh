@@ -7,6 +7,12 @@ setup_clickhouse() {
     yarn clickhouse:migrate:prod
 }
 
+setup_logic_function() {
+   echo "setting up logic function"
+
+   yarn command:prod application:rebuild-default-deps
+}
+
 setup_and_migrate_db() {
     if [ "${DISABLE_DB_MIGRATIONS}" = "true" ]; then
         echo "Database setup and migrations are disabled, skipping..."
@@ -51,6 +57,7 @@ register_background_jobs() {
     fi
 }
 
+setup_logic_function
 setup_clickhouse
 setup_and_migrate_db
 register_background_jobs
