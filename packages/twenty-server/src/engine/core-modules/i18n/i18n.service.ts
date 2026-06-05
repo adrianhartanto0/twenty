@@ -4,6 +4,7 @@ import {
   type I18n,
   type MessageOptions,
   type Messages,
+  i18n as globalI18n,
   setupI18n,
 } from '@lingui/core';
 import { type APP_LOCALES, SOURCE_LOCALE } from 'twenty-shared/translations';
@@ -90,6 +91,13 @@ export class I18nService implements OnModuleInit {
 
       this.i18nInstancesMap[locale] = localeI18n;
     });
+
+    // Eager `t`...`` calls (e.g. in exceptions) resolve against the global
+    // @lingui/core singleton, not these per-locale instances. Load the catalog
+    // into it so those lookups hit compiled messages instead of falling back to
+    // the raw source string (which warns + breaks interpolation in production).
+    globalI18n.load(SOURCE_LOCALE, messagesByLocale[SOURCE_LOCALE]);
+    globalI18n.activate(SOURCE_LOCALE);
   }
 
   getI18nInstance(locale: keyof typeof APP_LOCALES) {
