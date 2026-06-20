@@ -1,4 +1,3 @@
-import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
 import { TABLE_Z_INDEX } from '@/object-record/record-table/constants/TableZIndex';
 import { useRecordTableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableContext';
 import { RecordTableHeaderAddColumnButton } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderAddColumnButton';
@@ -16,7 +15,6 @@ import { isRecordTableDragColumnHiddenComponentState } from '@/object-record/rec
 import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { styled } from '@linaria/react';
-import { filterOutByProperty } from 'twenty-shared/utils';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 
 const StyledHeaderContainer = styled.div`
@@ -29,7 +27,6 @@ const StyledHeaderContainer = styled.div`
 
 export const RecordTableHeader = () => {
   const { visibleRecordFields } = useRecordTableContextOrThrow();
-  const { labelIdentifierFieldMetadataItem } = useRecordIndexContextOrThrow();
 
   const isRecordTableColumnHeadersReadOnly = useAtomComponentStateValue(
     isRecordTableColumnHeadersReadOnlyComponentState,
@@ -43,14 +40,7 @@ export const RecordTableHeader = () => {
     isRecordTableCheckboxColumnHiddenComponentState,
   );
 
-  const recordFieldsWithoutLabelIdentifierAndFirstOne = visibleRecordFields
-    .filter(
-      filterOutByProperty(
-        'fieldMetadataItemId',
-        labelIdentifierFieldMetadataItem?.id,
-      ),
-    )
-    .slice(1);
+  const recordFieldsWithoutFirstTwo = visibleRecordFields.slice(2);
 
   useResizeTableHeader();
 
@@ -66,15 +56,13 @@ export const RecordTableHeader = () => {
       )}
       <RecordTableHeaderFirstCell />
       <RecordTableHeaderFirstScrollableCell />
-      {recordFieldsWithoutLabelIdentifierAndFirstOne.map(
-        (recordField, index) => (
-          <RecordTableHeaderCell
-            key={recordField.fieldMetadataItemId}
-            recordField={recordField}
-            recordFieldIndex={index + 2}
-          />
-        ),
-      )}
+      {recordFieldsWithoutFirstTwo.map((recordField, index) => (
+        <RecordTableHeaderCell
+          key={recordField.fieldMetadataItemId}
+          recordField={recordField}
+          recordFieldIndex={index + 2}
+        />
+      ))}
       {isRecordTableColumnHeadersReadOnly  && <RecordTableHeaderEmptyLastColumn />}
       {
         canEditPersonalViews && <RecordTableHeaderAddColumnButton />

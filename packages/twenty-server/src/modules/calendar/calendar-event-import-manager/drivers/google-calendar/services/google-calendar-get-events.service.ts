@@ -1,6 +1,6 @@
-//
 import { Injectable, Logger } from '@nestjs/common';
 
+import { isString } from '@sniptt/guards';
 import { type GaxiosError } from 'gaxios';
 import { google, type calendar_v3 as calendarV3 } from 'googleapis';
 
@@ -8,7 +8,7 @@ import { formatGoogleCalendarEvents } from 'src/modules/calendar/calendar-event-
 import { parseGaxiosError } from 'src/modules/calendar/calendar-event-import-manager/drivers/google-calendar/utils/parse-gaxios-error.util';
 import { parseGoogleCalendarError } from 'src/modules/calendar/calendar-event-import-manager/drivers/google-calendar/utils/parse-google-calendar-error.util';
 import { type GetCalendarEventsResponse } from 'src/modules/calendar/calendar-event-import-manager/services/calendar-get-events.service';
-import { OAuth2ClientManagerService } from 'src/modules/connected-account/oauth2-client-manager/services/oauth2-client-manager.service';
+import { GoogleOAuth2ClientProvider } from 'src/modules/connected-account/oauth2-client-manager/drivers/google/google-oauth2-client.provider';
 import { type ConnectedAccountEntity } from 'src/engine/metadata-modules/connected-account/entities/connected-account.entity';
 
 @Injectable()
@@ -16,20 +16,16 @@ export class GoogleCalendarGetEventsService {
   private readonly logger = new Logger(GoogleCalendarGetEventsService.name);
 
   constructor(
-    private readonly oAuth2ClientManagerService: OAuth2ClientManagerService,
+    private readonly googleOAuth2ClientProvider: GoogleOAuth2ClientProvider,
   ) {}
 
   public async getCalendarEvents(
-    connectedAccount: Pick<
-      ConnectedAccountEntity,
-      'provider' | 'refreshToken' | 'id' | 'workspaceId'
-    >,
+    connectedAccount: Pick<ConnectedAccountEntity, 'provider' | 'id'>,
     syncCursor?: string,
   ): Promise<GetCalendarEventsResponse> {
-    const oAuth2Client =
-      await this.oAuth2ClientManagerService.getGoogleOAuth2Client(
-        connectedAccount,
-      );
+    const oAuth2Client = await this.googleOAuth2ClientProvider.getClient(
+      connectedAccount.id,
+    );
 
     const googleCalendarClient = google.calendar({
       version: 'v3',
@@ -94,7 +90,7 @@ export class GoogleCalendarGetEventsService {
       error,
     );
     if (
-      error.code &&
+      isString(error.code) &&
       [
         'ECONNRESET',
         'ENOTFOUND',

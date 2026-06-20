@@ -5,7 +5,7 @@ import { Request } from 'express';
 import { match } from 'path-to-regexp';
 import { assertIsDefinedOrThrow, isDefined } from 'twenty-shared/utils';
 import { IsNull, Not, Repository } from 'typeorm';
-import { HTTPMethod } from 'twenty-shared/types';
+import { HTTPMethod, isLogicFunctionHttpResponse } from 'twenty-shared/types';
 
 import { AccessTokenService } from 'src/engine/core-modules/auth/token/services/access-token.service';
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
@@ -25,6 +25,26 @@ import {
   LogicFunctionExecutorService,
 } from 'src/engine/core-modules/logic-function/logic-function-executor/logic-function-executor.service';
 import { CustomException } from 'src/utils/custom-exception';
+
+export type RouteTriggerResponse = {
+  statusCode: number;
+  headers: Record<string, string>;
+  body: unknown;
+};
+
+export const buildRouteTriggerResponse = (
+  data: unknown,
+): RouteTriggerResponse => {
+  if (isLogicFunctionHttpResponse(data)) {
+    return {
+      statusCode: data.status ?? 200,
+      headers: data.headers ?? {},
+      body: data.body,
+    };
+  }
+
+  return { statusCode: 200, headers: {}, body: data };
+};
 
 @Injectable()
 export class RouteTriggerService {
@@ -143,14 +163,16 @@ export class RouteTriggerService {
       }
     }
 
-    if (
-      error instanceof LogicFunctionException &&
-      error.code === LogicFunctionExceptionCode.LOGIC_FUNCTION_NOT_FOUND
-    ) {
-      return RouteTriggerExceptionCode.LOGIC_FUNCTION_NOT_FOUND;
+    if (error instanceof LogicFunctionException) {
+      switch (error.code) {
+        case LogicFunctionExceptionCode.LOGIC_FUNCTION_NOT_FOUND:
+          return RouteTriggerExceptionCode.LOGIC_FUNCTION_NOT_FOUND;
+        case LogicFunctionExceptionCode.LOGIC_FUNCTION_DISABLED:
+          return RouteTriggerExceptionCode.FORBIDDEN_EXCEPTION;
+      }
     }
 
-    return RouteTriggerExceptionCode.LOGIC_FUNCTION_EXECUTION_ERROR;
+    return RouteTriggerExceptionCode.ROUTE_TRIGGER_PLATFORM_ERROR;
   }
 
   async handle({
@@ -223,16 +245,16 @@ export class RouteTriggerService {
     }
 
     if (!isDefined(result)) {
-      return result;
+      return buildRouteTriggerResponse(result);
     }
 
     if (result.error) {
       throw new RouteTriggerException(
         result.error.errorMessage,
-        RouteTriggerExceptionCode.LOGIC_FUNCTION_EXECUTION_ERROR,
+        RouteTriggerExceptionCode.ROUTE_TRIGGER_USER_UNCAUGHT_ERROR,
       );
     }
 
-    return result.data;
+    return buildRouteTriggerResponse(result.data);
   }
 }

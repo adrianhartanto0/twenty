@@ -9,12 +9,15 @@ import { extractManifestFromFile } from '@/cli/utilities/build/manifest/manifest
 import { addMissingFieldOptionIds } from '@/cli/utilities/build/manifest/utils/add-missing-field-option-ids';
 import { fromRoleConfigToRoleManifest } from '@/cli/utilities/build/manifest/utils/from-role-config-to-role-manifest';
 import { getDefaultFieldsInObjectFields } from '@/cli/utilities/build/manifest/utils/get-default-fields-in-object-fields';
+import { validateConditionalAvailabilityUsage } from '@/cli/utilities/build/manifest/utils/validate-conditional-availability-usage';
+import { validateViewFilterOperands } from '@/cli/utilities/build/manifest/utils/validate-view-filter-operands';
 import { type ApplicationConfig, type LogicFunctionConfig } from '@/sdk/define';
 import { type CommandMenuItemConfig } from '@/sdk/define/command-menu-items/command-menu-item-config';
 import { type FrontComponentConfig } from '@/sdk/define/front-component/front-component-config';
 import { type PostInstallLogicFunctionConfig } from '@/sdk/define/logic-functions/post-install-logic-function-config';
 import { type PreInstallLogicFunctionConfig } from '@/sdk/define/logic-functions/pre-install-logic-function-config';
 import { type ObjectConfig } from '@/sdk/define/objects/object-config';
+import { type IndexConfig } from '@/sdk/define/indexes/index-config';
 import { type PageLayoutConfig } from '@/sdk/define/page-layouts/page-layout-config';
 import { type PageLayoutTabConfig } from '@/sdk/define/page-layouts/page-layout-tab-config';
 import { type RoleConfig } from '@/sdk/define/roles/role-config';
@@ -31,16 +34,19 @@ import {
   type ConnectionProviderManifest,
   type FieldManifest,
   type FrontComponentManifest,
+  type IndexManifest,
   type LogicFunctionManifest,
   type Manifest,
   type NavigationMenuItemManifest,
   type ObjectManifest,
   type PageLayoutManifest,
   type PageLayoutTabManifest,
+  type PermissionFlagManifest,
   type PostInstallLogicFunctionApplicationManifest,
   type PreInstallLogicFunctionApplicationManifest,
   type RoleManifest,
   type SkillManifest,
+  type StandaloneViewFieldManifest,
   type ViewManifest,
 } from 'twenty-shared/application';
 import {
@@ -81,6 +87,8 @@ export const buildManifest = async (
   let applicationConfig: ApplicationConfig | undefined;
   const objects: ObjectManifest[] = [];
   const fields: FieldManifest[] = [];
+  const indexes: IndexManifest[] = [];
+  const permissionFlags: PermissionFlagManifest[] = [];
   const roles: RoleManifest[] = [];
   const skills: SkillManifest[] = [];
   const agents: AgentManifest[] = [];
@@ -89,6 +97,7 @@ export const buildManifest = async (
   const frontComponents: FrontComponentManifest[] = [];
   const publicAssets: AssetManifest[] = [];
   const views: ViewManifest[] = [];
+  const viewFields: StandaloneViewFieldManifest[] = [];
   const navigationMenuItems: NavigationMenuItemManifest[] = [];
   const pageLayouts: PageLayoutManifest[] = [];
   const pageLayoutTabs: PageLayoutTabManifest[] = [];
@@ -101,6 +110,8 @@ export const buildManifest = async (
   const applicationFilePaths: string[] = [];
   const objectsFilePaths: string[] = [];
   const fieldsFilePaths: string[] = [];
+  const indexesFilePaths: string[] = [];
+  const permissionFlagsFilePaths: string[] = [];
   const rolesFilePaths: string[] = [];
   const skillsFilePaths: string[] = [];
   const agentsFilePaths: string[] = [];
@@ -109,6 +120,7 @@ export const buildManifest = async (
   const frontComponentsFilePaths: string[] = [];
   const publicAssetsFilePaths: string[] = [];
   const viewsFilePaths: string[] = [];
+  const viewFieldsFilePaths: string[] = [];
   const navigationMenuItemsFilePaths: string[] = [];
   const pageLayoutsFilePaths: string[] = [];
   const pageLayoutTabsFilePaths: string[] = [];
@@ -117,6 +129,10 @@ export const buildManifest = async (
   for (const filePath of filePaths) {
     const fileContent = await readFile(filePath, 'utf-8');
     const relativePath = relative(appPath, filePath);
+
+    errors.push(
+      ...validateConditionalAvailabilityUsage(fileContent, relativePath),
+    );
 
     const targetFunctionName = extractDefineEntity(fileContent);
 
@@ -186,6 +202,17 @@ export const buildManifest = async (
         errors.push(...extract.errors);
         warnings.push(...(extract.warnings ?? []));
         fieldsFilePaths.push(relativePath);
+        break;
+      }
+      case ManifestEntityKey.PermissionFlags: {
+        const extract = await extractManifestFromFile<PermissionFlagManifest>({
+          appPath,
+          filePath,
+        });
+        permissionFlags.push(extract.config);
+        errors.push(...extract.errors);
+        warnings.push(...(extract.warnings ?? []));
+        permissionFlagsFilePaths.push(relativePath);
         break;
       }
       case ManifestEntityKey.Roles: {
@@ -373,6 +400,19 @@ export const buildManifest = async (
         viewsFilePaths.push(relativePath);
         break;
       }
+      case ManifestEntityKey.ViewFields: {
+        const extract =
+          await extractManifestFromFile<StandaloneViewFieldManifest>({
+            appPath,
+            filePath,
+          });
+
+        viewFields.push(extract.config);
+        errors.push(...extract.errors);
+        warnings.push(...(extract.warnings ?? []));
+        viewFieldsFilePaths.push(relativePath);
+        break;
+      }
       case ManifestEntityKey.NavigationMenuItems: {
         const extract =
           await extractManifestFromFile<NavigationMenuItemManifest>({
@@ -399,6 +439,22 @@ export const buildManifest = async (
         errors.push(...extract.errors);
         warnings.push(...(extract.warnings ?? []));
         pageLayoutsFilePaths.push(relativePath);
+        break;
+      }
+      case ManifestEntityKey.Indexes: {
+        const extract = await extractManifestFromFile<IndexConfig>({
+          appPath,
+          filePath,
+        });
+
+        const indexManifest: IndexManifest = {
+          ...extract.config,
+        };
+
+        indexes.push(indexManifest);
+        errors.push(...extract.errors);
+        warnings.push(...(extract.warnings ?? []));
+        indexesFilePaths.push(relativePath);
         break;
       }
       case ManifestEntityKey.PageLayoutTabs: {
@@ -488,6 +544,14 @@ export const buildManifest = async (
     );
   }
 
+  errors.push(
+    ...validateViewFilterOperands({
+      views,
+      objects,
+      fields,
+    }),
+  );
+
   const application: ApplicationManifest | undefined =
     applicationConfig && resolvedDefaultRoleUniversalIdentifier
       ? {
@@ -517,6 +581,8 @@ export const buildManifest = async (
         application,
         objects: objects.sort(byId),
         fields: fields.sort(byId),
+        indexes: indexes.sort(byId),
+        permissionFlags: permissionFlags.sort(byId),
         roles: roles.sort(byId),
         skills: skills.sort(byId),
         agents: agents.sort(byId),
@@ -525,6 +591,7 @@ export const buildManifest = async (
         frontComponents: frontComponents.sort(byId),
         publicAssets: publicAssets.sort(byPath),
         views: views.sort(byId),
+        viewFields: viewFields.sort(byId),
         navigationMenuItems: navigationMenuItems.sort(byId),
         pageLayouts: pageLayouts.sort(byId),
         pageLayoutTabs: pageLayoutTabs.sort(byId),
@@ -535,6 +602,8 @@ export const buildManifest = async (
     application: applicationFilePaths,
     objects: objectsFilePaths,
     fields: fieldsFilePaths,
+    indexes: indexesFilePaths,
+    permissionFlags: permissionFlagsFilePaths,
     roles: rolesFilePaths,
     skills: skillsFilePaths,
     agents: agentsFilePaths,
@@ -543,6 +612,7 @@ export const buildManifest = async (
     frontComponents: frontComponentsFilePaths,
     publicAssets: publicAssetsFilePaths,
     views: viewsFilePaths,
+    viewFields: viewFieldsFilePaths,
     navigationMenuItems: navigationMenuItemsFilePaths,
     pageLayouts: pageLayoutsFilePaths,
     pageLayoutTabs: pageLayoutTabsFilePaths,
