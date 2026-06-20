@@ -4,16 +4,22 @@ import { isString } from '@sniptt/guards';
 import { isDefined, isValidVariable } from 'twenty-shared/utils';
 import {
   BaseOutputSchemaV2,
+  buildManualTriggerMetadataNode,
   BulkRecordsAvailability,
   extractRawVariableNamePart,
   GlobalAvailability,
   navigateOutputSchemaProperty,
   SingleRecordAvailability,
   TRIGGER_STEP_ID,
+  WORKFLOW_TRIGGER_METADATA_KEY,
+  WORKFLOW_TRIGGER_PAYLOAD_KEY,
+  WORKFLOW_TRIGGER_PAYLOAD_LABEL,
+  WorkflowActionType,
 } from 'twenty-shared/workflow';
 
 import { type DatabaseEventAction } from 'src/engine/api/graphql/graphql-query-runner/enums/database-event-action';
 import { checkStringIsDatabaseEventAction } from 'src/engine/api/graphql/graphql-query-runner/utils/check-string-is-database-event-action';
+import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
 import { generateFakeValue } from 'src/engine/utils/generate-fake-value';
 import { WorkflowCommonWorkspaceService } from 'src/modules/workflow/common/workspace-services/workflow-common.workspace-service';
 import { DEFAULT_ITERATOR_CURRENT_ITEM } from 'src/modules/workflow/workflow-builder/workflow-schema/constants/default-iterator-current-item.const';
@@ -29,10 +35,7 @@ import { generateFakeObjectRecord } from 'src/modules/workflow/workflow-builder/
 import { generateFakeObjectRecordEvent } from 'src/modules/workflow/workflow-builder/workflow-schema/utils/generate-fake-object-record-event';
 import { inferArrayItemSchema } from 'src/modules/workflow/workflow-builder/workflow-schema/utils/infer-array-item-schema';
 import { type FormFieldMetadata } from 'src/modules/workflow/workflow-executor/workflow-actions/form/types/workflow-form-action-settings.type';
-import {
-  type WorkflowAction,
-  WorkflowActionType,
-} from 'src/modules/workflow/workflow-executor/workflow-actions/types/workflow-action.type';
+import { type WorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/types/workflow-action.type';
 import {
   WorkflowTrigger,
   WorkflowTriggerType,
@@ -42,6 +45,7 @@ import {
 export class WorkflowSchemaWorkspaceService {
   constructor(
     private readonly workflowCommonWorkspaceService: WorkflowCommonWorkspaceService,
+    private readonly flatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService,
   ) {}
 
   async computeStepOutputSchema({
@@ -291,14 +295,28 @@ export class WorkflowSchemaWorkspaceService {
     workspaceId: string;
   }): Promise<OutputSchema> {
     if (availability.type === 'GLOBAL') {
-      return {};
+      return {
+        [WORKFLOW_TRIGGER_METADATA_KEY]: buildManualTriggerMetadataNode(),
+      };
     }
 
     if (availability.type === 'SINGLE_RECORD') {
-      return this.computeRecordOutputSchema({
+      const recordOutputSchema = await this.computeRecordOutputSchema({
         objectType: availability.objectNameSingular,
         workspaceId,
       });
+
+      const payload: Node = {
+        isLeaf: false,
+        type: 'object',
+        label: WORKFLOW_TRIGGER_PAYLOAD_LABEL,
+        value: recordOutputSchema,
+      };
+
+      return {
+        [WORKFLOW_TRIGGER_PAYLOAD_KEY]: payload,
+        [WORKFLOW_TRIGGER_METADATA_KEY]: buildManualTriggerMetadataNode(),
+      };
     }
 
     if (availability.type === 'BULK_RECORDS') {
@@ -308,14 +326,24 @@ export class WorkflowSchemaWorkspaceService {
           workspaceId,
         );
 
-      return {
-        [objectMetadataInfo.flatObjectMetadata.namePlural]: {
-          label: objectMetadataInfo.flatObjectMetadata.labelPlural,
-          isLeaf: true,
-          type: 'array',
-          value:
-            'Array of ' + objectMetadataInfo.flatObjectMetadata.labelPlural,
+      const payload: Node = {
+        isLeaf: false,
+        type: 'object',
+        label: WORKFLOW_TRIGGER_PAYLOAD_LABEL,
+        value: {
+          [objectMetadataInfo.flatObjectMetadata.namePlural]: {
+            label: objectMetadataInfo.flatObjectMetadata.labelPlural,
+            isLeaf: true,
+            type: 'array',
+            value:
+              'Array of ' + objectMetadataInfo.flatObjectMetadata.labelPlural,
+          },
         },
+      };
+
+      return {
+        [WORKFLOW_TRIGGER_PAYLOAD_KEY]: payload,
+        [WORKFLOW_TRIGGER_METADATA_KEY]: buildManualTriggerMetadataNode(),
       };
     }
 

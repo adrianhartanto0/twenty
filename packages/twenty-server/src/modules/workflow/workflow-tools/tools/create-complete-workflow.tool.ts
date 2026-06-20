@@ -7,6 +7,10 @@ import { z } from 'zod';
 
 import { type RolePermissionConfig } from 'src/engine/twenty-orm/types/role-permission-config';
 import { buildSystemAuthContext } from 'src/engine/twenty-orm/utils/build-system-auth-context.util';
+import {
+  WorkflowVersionStepException,
+  WorkflowVersionStepExceptionCode,
+} from 'src/modules/workflow/common/exceptions/workflow-version-step.exception';
 import { WorkflowVersionStatus } from 'src/modules/workflow/common/standard-objects/workflow-version.workspace-entity';
 import { WorkflowStatus } from 'src/modules/workflow/common/standard-objects/workflow.workspace-entity';
 import { type WorkflowAction } from 'src/modules/workflow/workflow-executor/workflow-actions/types/workflow-action.type';
@@ -14,6 +18,7 @@ import {
   type WorkflowToolContext,
   type WorkflowToolDependencies,
 } from 'src/modules/workflow/workflow-tools/types/workflow-tool-dependencies.type';
+import { summarizeValidation } from 'src/modules/workflow/workflow-tools/utils/summarize-validation.util';
 import { type WorkflowTrigger } from 'src/modules/workflow/workflow-trigger/types/workflow-trigger.type';
 
 const createCompleteWorkflowSchema = z.object({
@@ -66,6 +71,7 @@ type CreateCompleteWorkflowToolDeps = Pick<
   | 'workflowTriggerService'
   | 'globalWorkspaceOrmManager'
   | 'recordPositionService'
+  | 'workflowValidationService'
 >;
 
 type CreateCompleteWorkflowToolContext = WorkflowToolContext & {
@@ -101,7 +107,9 @@ IMPORTANT: The tool schema provides comprehensive field descriptions, examples, 
 - Variable reference syntax: {{trigger.fieldName}} for trigger data, {{<step-id>.result.fieldName}} for step outputs (step-id is the step's UUID, not its name)
 - Error handling options
 
-This is the most efficient way for AI to create workflows as it handles all the complexity in one call.`,
+This is the most efficient way for AI to create workflows as it handles all the complexity in one call.
+
+The response includes a compact validation summary. For the full validation report with available variable paths, call validate_workflow once after your edits — not after every change.`,
   inputSchema: createCompleteWorkflowSchema,
   execute: async (parameters: {
     name: string;
@@ -116,6 +124,16 @@ This is the most efficient way for AI to create workflows as it handles all the 
     activate?: boolean;
   }) => {
     try {
+      const codeSteps = parameters.steps.filter(
+        (step) => step.type === ('CODE' as string),
+      );
+
+      if (codeSteps.length > 0) {
+        throw new WorkflowVersionStepException(
+          'CODE steps cannot be created via create_complete_workflow because it does not create the underlying logic function. Use create_workflow_version_step instead.',
+          WorkflowVersionStepExceptionCode.INVALID_REQUEST,
+        );
+      }
       const workflowId = await createWorkflow({
         deps,
         context,
@@ -168,6 +186,13 @@ This is the most efficient way for AI to create workflows as it handles all the 
         });
       }
 
+      const validation =
+        await deps.workflowValidationService.validateWorkflowDefinition({
+          workspaceId: context.workspaceId,
+          trigger: parameters.trigger,
+          steps: parameters.steps,
+        });
+
       return {
         success: true,
         message: `Workflow "${parameters.name}" created successfully with ${parameters.steps.length} steps`,
@@ -175,8 +200,8 @@ This is the most efficient way for AI to create workflows as it handles all the 
           workflowId,
           workflowVersionId,
           name: parameters.name,
-          trigger: parameters.trigger,
-          steps: parameters.steps,
+          stepIds: parameters.steps.map((step) => step.id),
+          validation: summarizeValidation(validation),
         },
         recordReferences: [
           {

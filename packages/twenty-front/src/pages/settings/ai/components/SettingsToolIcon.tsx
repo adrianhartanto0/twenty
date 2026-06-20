@@ -22,7 +22,6 @@ type ApplicationInfo = {
 };
 
 type MarketplaceAppInfo = {
-  icon: string;
   logo?: string | null;
 };
 
@@ -109,11 +108,6 @@ export const SettingsToolIcon = ({
     );
   }
 
-  if (isDefined(marketplaceApp)) {
-    const MarketplaceIcon = getIcon(marketplaceApp.icon);
-    return <MarketplaceIcon size={16} />;
-  }
-
   if (isDefined(application)) {
     return (
       <Avatar
@@ -154,7 +148,7 @@ export const SettingsToolIcon = ({
           <OperationIcon
             size="12px"
             stroke={theme.icon.stroke.md}
-            color={themeCssVariables.grayScale.gray10}
+            color={theme.font.color.tertiary}
           />
         </StyledOperationOverlay>
       </StyledCompositeContainer>
@@ -178,5 +172,11 @@ export const SettingsToolIcon = ({
     );
   }
 
-  return <MainIcon size={16} />;
+  return (
+    <MainIcon
+      size={16}
+      stroke={theme.icon.stroke.md}
+      color={theme.font.color.tertiary}
+    />
+  );
 };

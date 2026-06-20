@@ -1,8 +1,14 @@
 import { type FieldMetadataDTO } from 'src/engine/metadata-modules/field-metadata/dtos/field-metadata.dto';
 import { type FieldMetadataEntity } from 'src/engine/metadata-modules/field-metadata/field-metadata.entity';
 
+// isUnique is derived from IndexMetadata rather than stored on the field
+// entity; callers that need an accurate value (e.g. the REST controller)
+// pass the precomputed Set<fieldMetadataId>. Callers in pure-entity
+// contexts that don't care about uniqueness can omit it.
 export const fromFieldMetadataEntityToFieldMetadataDto = (
   entity: FieldMetadataEntity,
+  standardApplicationId: string,
+  uniqueFieldMetadataIds?: ReadonlySet<string>,
 ): FieldMetadataDTO => ({
   id: entity.id,
   universalIdentifier: entity.universalIdentifier,
@@ -13,12 +19,13 @@ export const fromFieldMetadataEntityToFieldMetadataDto = (
   description: entity.description ?? undefined,
   icon: entity.icon ?? undefined,
   standardOverrides: entity.standardOverrides ?? undefined,
-  isCustom: entity.isCustom,
+  isCustom: entity.applicationId !== standardApplicationId,
   isActive: entity.isActive,
   isSystem: entity.isSystem,
-  isUIReadOnly: entity.isUIReadOnly,
+  isUIEditable: entity.isUIEditable,
+  isUIReadOnly: !entity.isUIEditable,
   isNullable: entity.isNullable ?? false,
-  isUnique: entity.isUnique ?? false,
+  isUnique: uniqueFieldMetadataIds?.has(entity.id) ?? false,
   defaultValue: entity.defaultValue ?? undefined,
   options: entity.options ?? undefined,
   settings: entity.settings ?? undefined,

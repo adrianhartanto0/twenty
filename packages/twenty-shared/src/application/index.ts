@@ -36,6 +36,8 @@ export type {
   CommandMenuItemManifest,
   FrontComponentManifest,
 } from './frontComponentManifestType';
+export type { IndexFieldManifest } from './indexFieldManifestType';
+export type { IndexManifest } from './indexManifestType';
 export type {
   LogicFunctionManifest,
   CronTriggerSettings,
@@ -53,14 +55,18 @@ export type {
   PageLayoutTabManifest,
   PageLayoutManifest,
 } from './pageLayoutManifestType';
+export type {
+  PermissionFlagPermissionType,
+  PermissionFlagManifest,
+} from './permissionFlagManifestType';
 export type { PostInstallLogicFunctionApplicationManifest } from './postInstallLogicFunctionApplicationType';
 export type { PreInstallLogicFunctionApplicationManifest } from './preInstallLogicFunctionApplicationType';
 export type {
   ObjectPermissionManifest,
   FieldPermissionManifest,
-  PermissionFlagManifest,
   RoleManifest,
 } from './roleManifestType';
+export type { RunAgentInput, RunAgentResult } from './runAgentType';
 export type { ServerVariables } from './server-variables.type';
 export type { SkillManifest } from './skillManifestType';
 export type { StoredOAuthConnectionProviderConfig } from './storedOAuthConnectionProviderConfigType';
@@ -69,6 +75,7 @@ export type { ToolTriggerSettings } from './toolTriggerSettingsType';
 export type {
   ViewManifestFilterValue,
   ViewFieldManifest,
+  StandaloneViewFieldManifest,
   ViewFilterManifest,
   ViewFilterGroupManifest,
   ViewGroupManifest,

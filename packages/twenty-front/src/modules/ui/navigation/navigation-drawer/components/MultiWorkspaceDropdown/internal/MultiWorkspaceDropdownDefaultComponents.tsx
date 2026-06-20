@@ -217,13 +217,20 @@ export const MultiWorkspaceDropdownDefaultComponents = () => {
           onClick={() => setMultiWorkspaceDropdown('themes')}
         />
         <UndecoratedLink
-          to={getSettingsPath(SettingsPath.WorkspaceMembersPage)}
+          to={`${getSettingsPath(SettingsPath.WorkspaceMembersPage)}#invite`}
           onClick={() => {
             closeDropdown(MULTI_WORKSPACE_DROPDOWN_ID);
           }}
         >
           <MenuItem LeftIcon={IconUserPlus} text={t`Invite user`} />
         </UndecoratedLink>
+        {isSupportChatConfigured && (
+          <MenuItem
+            LeftIcon={IconMessage}
+            text={t`Support`}
+            onClick={handleSupport}
+          />
+        )}
         <UndecoratedLink
           to={getSettingsPath(SettingsPath.ProfilePage)}
           onClick={() => {
@@ -233,13 +240,6 @@ export const MultiWorkspaceDropdownDefaultComponents = () => {
         >
           <MenuItem LeftIcon={IconSettings} text={t`Settings`} />
         </UndecoratedLink>
-        {isSupportChatConfigured && (
-          <MenuItem
-            LeftIcon={IconMessage}
-            text={t`Support`}
-            onClick={handleSupport}
-          />
-        )}
       </DropdownMenuItemsContainer>
     </DropdownContent>
   );

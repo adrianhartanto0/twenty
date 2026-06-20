@@ -29,7 +29,8 @@ import { type BillingPortalCheckoutSessionParameters } from 'src/engine/core-mod
 import { WorkspaceDomainsService } from 'src/engine/core-modules/domain/workspace-domains/services/workspace-domains.service';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
 import { type WorkspaceEntity } from 'src/engine/core-modules/workspace/workspace.entity';
-
+import { InjectWorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/inject-workspace-scoped-repository.decorator';
+import { WorkspaceScopedRepository } from 'src/engine/twenty-orm/workspace-scoped-repository/workspace-scoped-repository';
 @Injectable()
 export class BillingPortalWorkspaceService {
   protected readonly logger = new Logger(BillingPortalWorkspaceService.name);
@@ -38,10 +39,10 @@ export class BillingPortalWorkspaceService {
     private readonly stripeBillingPortalService: StripeBillingPortalService,
     private readonly workspaceDomainsService: WorkspaceDomainsService,
     private readonly billingSubscriptionService: BillingSubscriptionService,
-    @InjectRepository(BillingSubscriptionEntity)
-    private readonly billingSubscriptionRepository: Repository<BillingSubscriptionEntity>,
-    @InjectRepository(BillingCustomerEntity)
-    private readonly billingCustomerRepository: Repository<BillingCustomerEntity>,
+    @InjectWorkspaceScopedRepository(BillingSubscriptionEntity)
+    private readonly billingSubscriptionRepository: WorkspaceScopedRepository<BillingSubscriptionEntity>,
+    @InjectWorkspaceScopedRepository(BillingCustomerEntity)
+    private readonly billingCustomerRepository: WorkspaceScopedRepository<BillingCustomerEntity>,
     @InjectRepository(UserWorkspaceEntity)
     private readonly userWorkspaceRepository: Repository<UserWorkspaceEntity>,
   ) {}
@@ -156,10 +157,13 @@ export class BillingPortalWorkspaceService {
       workspaceId: workspace.id,
     });
 
-    const customer = await this.billingCustomerRepository.findOne({
-      where: { workspaceId: workspace.id },
-      relations: ['billingSubscriptions'],
-    });
+    const customer = await this.billingCustomerRepository.findOne(
+      workspace.id,
+      {
+        where: {},
+        relations: ['billingSubscriptions'],
+      },
+    );
 
     const stripeSubscriptionLineItems = this.getStripeSubscriptionLineItems({
       quantity,
@@ -179,14 +183,15 @@ export class BillingPortalWorkspaceService {
   async computeBillingPortalSessionURLOrThrow(
     workspace: WorkspaceEntity,
     returnUrlPath?: string,
+    forPaymentMethodUpdate?: boolean,
   ) {
-    const lastSubscription = await this.billingSubscriptionRepository.findOne({
-      where: {
-        workspaceId: workspace.id,
-        status: Not(SubscriptionStatus.Canceled),
+    const lastSubscription = await this.billingSubscriptionRepository.findOne(
+      workspace.id,
+      {
+        where: { status: Not(SubscriptionStatus.Canceled) },
+        order: { createdAt: 'DESC' },
       },
-      order: { createdAt: 'DESC' },
-    });
+    );
 
     if (!lastSubscription) {
       throw new Error('Error: missing subscription');
@@ -198,20 +203,17 @@ export class BillingPortalWorkspaceService {
       throw new Error('Error: missing stripeCustomerId');
     }
 
-    const frontBaseUrl = this.workspaceDomainsService.buildWorkspaceURL({
-      workspace,
-    });
+    const returnUrl = this.buildReturnUrl(workspace, returnUrlPath);
 
-    if (returnUrlPath) {
-      frontBaseUrl.pathname = returnUrlPath;
-    }
-    const returnUrl = frontBaseUrl.toString();
-
-    const session =
-      await this.stripeBillingPortalService.createBillingPortalSession(
-        stripeCustomerId,
-        returnUrl,
-      );
+    const session = forPaymentMethodUpdate
+      ? await this.stripeBillingPortalService.createBillingPortalSessionForPaymentMethodUpdate(
+          stripeCustomerId,
+          returnUrl,
+        )
+      : await this.stripeBillingPortalService.createBillingPortalSession(
+          stripeCustomerId,
+          returnUrl,
+        );
 
     assertIsDefinedOrThrow(
       session.url,
@@ -229,14 +231,7 @@ export class BillingPortalWorkspaceService {
     stripeCustomerId: string,
     returnUrlPath?: string,
   ) {
-    const frontBaseUrl = this.workspaceDomainsService.buildWorkspaceURL({
-      workspace,
-    });
-
-    if (returnUrlPath) {
-      frontBaseUrl.pathname = returnUrlPath;
-    }
-    const returnUrl = frontBaseUrl.toString();
+    const returnUrl = this.buildReturnUrl(workspace, returnUrlPath);
 
     const session =
       await this.stripeBillingPortalService.createBillingPortalSessionForPaymentMethodUpdate(
@@ -253,6 +248,24 @@ export class BillingPortalWorkspaceService {
     );
 
     return session.url;
+  }
+
+  private buildReturnUrl(workspace: WorkspaceEntity, returnUrlPath?: string) {
+    const frontBaseUrl = this.workspaceDomainsService.buildWorkspaceURL({
+      workspace,
+    });
+
+    if (!isDefined(returnUrlPath)) {
+      return frontBaseUrl.toString();
+    }
+
+    const resolvedUrl = new URL(returnUrlPath, frontBaseUrl);
+
+    if (resolvedUrl.origin !== frontBaseUrl.origin) {
+      return frontBaseUrl.toString();
+    }
+
+    return resolvedUrl.toString();
   }
 
   private getDefaultResourceCreditPrice(

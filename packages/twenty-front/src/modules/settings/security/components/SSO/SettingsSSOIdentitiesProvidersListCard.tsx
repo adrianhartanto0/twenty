@@ -42,7 +42,7 @@ export const SettingsSSOIdentitiesProvidersListCard = () => {
     error: ssoError,
   } = useQuery(GetSsoIdentityProvidersDocument, {
     fetchPolicy: 'network-only',
-    skip: currentWorkspace?.hasValidEnterpriseKey === false,
+    skip: currentWorkspace?.hasValidSignedEnterpriseKey === false,
   });
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export const SettingsSSOIdentitiesProvidersListCard = () => {
       <Link to={getSettingsPath(SettingsPath.NewSSOIdentityProvider)}>
         <SettingsCard
           title={t`Add SSO Identity Provider`}
-          disabled={currentWorkspace?.hasValidEnterpriseKey !== true}
+          disabled={currentWorkspace?.hasValidSignedEnterpriseKey !== true}
           Icon={<IconKey />}
         />
       </Link>
