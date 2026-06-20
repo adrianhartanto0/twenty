@@ -43,6 +43,7 @@ services:
 
       # --- Other required flags ---
       - "--providers.docker=true"
+      - "--providers.docker.constraints=!Label(`acs.ingress`,`cariproduk`)"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
@@ -76,10 +77,13 @@ services:
       - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
       - "traefik.http.services.frontend.loadbalancer.server.port=5000"
 
-      - "traefik.http.routers.frontend.middlewares=rate-limit"
+      - "traefik.http.routers.frontend.middlewares=rate-limit,gzip"
       - "traefik.http.middlewares.rate-limit.ratelimit.average=75"
       - "traefik.http.middlewares.rate-limit.ratelimit.burst=50"
       - "traefik.http.middlewares.rate-limit.ratelimit.period=5s"
+
+      # gzip/brotli compression middleware
+      - "traefik.http.middlewares.gzip.compress=true"
 
     depends_on:
       backend:
@@ -220,6 +224,7 @@ services:
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.routers.backend.tls.certresolver=letsencrypt"
       - "traefik.http.services.backend.loadbalancer.server.port=3000"
+      - "traefik.http.routers.backend.middlewares=gzip"
       - "traefik.docker.network=public_net"
 
   # ─── PostgreSQL ─────────────────────────────────────────────
