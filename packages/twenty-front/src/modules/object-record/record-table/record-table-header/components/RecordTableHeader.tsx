@@ -1,22 +1,14 @@
-import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
 import { TABLE_Z_INDEX } from '@/object-record/record-table/constants/TableZIndex';
-import { useRecordTableContextOrThrow } from '@/object-record/record-table/contexts/RecordTableContext';
-import { RecordTableHeaderAddColumnButton } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderAddColumnButton';
-import { RecordTableHeaderCell } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderCell';
 import { RecordTableHeaderCheckboxColumn } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderCheckboxColumn';
+import { RecordTableHeaderDnd } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderDnd';
 import { RecordTableHeaderDragDropColumn } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderDragDropColumn';
-import { RecordTableHeaderEmptyLastColumn } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderEmptyLastColumn';
 import { RecordTableHeaderFirstCell } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderFirstCell';
-import { RecordTableHeaderFirstScrollableCell } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderFirstScrollableCell';
-import { RecordTableHeaderLastEmptyColumn } from '@/object-record/record-table/record-table-header/components/RecordTableHeaderLastEmptyColumn';
 import { useResizeTableHeader } from '@/object-record/record-table/record-table-header/hooks/useResizeTableHeader';
 import { isRecordTableCheckboxColumnHiddenComponentState } from '@/object-record/record-table/states/isRecordTableCheckboxColumnHiddenComponentState';
-import { isRecordTableColumnHeadersReadOnlyComponentState } from '@/object-record/record-table/states/isRecordTableColumnHeadersReadOnlyComponentState';
 import { isRecordTableDragColumnHiddenComponentState } from '@/object-record/record-table/states/isRecordTableDragColumnHiddenComponentState';
 import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { styled } from '@linaria/react';
-import { filterOutByProperty } from 'twenty-shared/utils';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 
 const StyledHeaderContainer = styled.div`
@@ -28,13 +20,6 @@ const StyledHeaderContainer = styled.div`
 `;
 
 export const RecordTableHeader = () => {
-  const { visibleRecordFields } = useRecordTableContextOrThrow();
-  const { labelIdentifierFieldMetadataItem } = useRecordIndexContextOrThrow();
-
-  const isRecordTableColumnHeadersReadOnly = useAtomComponentStateValue(
-    isRecordTableColumnHeadersReadOnlyComponentState,
-  );
-
   const isRecordTableDragColumnHidden = useAtomComponentStateValue(
     isRecordTableDragColumnHiddenComponentState,
   );
@@ -42,15 +27,6 @@ export const RecordTableHeader = () => {
   const isRecordTableCheckboxColumnHidden = useAtomComponentStateValue(
     isRecordTableCheckboxColumnHiddenComponentState,
   );
-
-  const recordFieldsWithoutLabelIdentifierAndFirstOne = visibleRecordFields
-    .filter(
-      filterOutByProperty(
-        'fieldMetadataItemId',
-        labelIdentifierFieldMetadataItem?.id,
-      ),
-    )
-    .slice(1);
 
   useResizeTableHeader();
 
@@ -65,8 +41,8 @@ export const RecordTableHeader = () => {
         <RecordTableHeaderCheckboxColumn />
       )}
       <RecordTableHeaderFirstCell />
-      <RecordTableHeaderFirstScrollableCell />
-      {recordFieldsWithoutLabelIdentifierAndFirstOne.map(
+      {/* <RecordTableHeaderFirstScrollableCell /> */}
+      {/* {recordFieldsWithoutLabelIdentifierAndFirstOne.map(
         (recordField, index) => (
           <RecordTableHeaderCell
             key={recordField.fieldMetadataItemId}
@@ -79,7 +55,8 @@ export const RecordTableHeader = () => {
       {
         canEditPersonalViews && <RecordTableHeaderAddColumnButton />
       }
-      <RecordTableHeaderLastEmptyColumn />
+      <RecordTableHeaderLastEmptyColumn /> */}
+      <RecordTableHeaderDnd />
     </StyledHeaderContainer>
   );
 };

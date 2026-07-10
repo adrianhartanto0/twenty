@@ -17,6 +17,7 @@ import { FieldWidgetMorphRelationCard } from '@/page-layout/widgets/field/compon
 import { FieldWidgetMorphRelationField } from '@/page-layout/widgets/field/components/FieldWidgetMorphRelationField';
 import { FieldWidgetRelationCard } from '@/page-layout/widgets/field/components/FieldWidgetRelationCard';
 import { FieldWidgetRelationField } from '@/page-layout/widgets/field/components/FieldWidgetRelationField';
+import { FieldWidgetRelationTable } from '@/page-layout/widgets/field/components/FieldWidgetRelationTable';
 import { assertFieldWidgetOrThrow } from '@/page-layout/widgets/field/utils/assertFieldWidgetOrThrow';
 import { FieldWidgetTextEditor } from '@/page-layout/widgets/field/components/FieldWidgetTextEditor';
 import { useLayoutRenderingContext } from '@/ui/layout/contexts/LayoutRenderingContext';
@@ -32,8 +33,7 @@ import {
   AnimatedPlaceholderEmptySubTitle,
   AnimatedPlaceholderEmptyTextContainer,
   AnimatedPlaceholderEmptyTitle,
-  EMPTY_PLACEHOLDER_TRANSITION_PROPS,
-} from 'twenty-ui/layout';
+} from 'twenty-ui/feedback';
 import { FieldDisplayMode } from '~/generated-metadata/graphql';
 
 const StyledContainer = styled.div`
@@ -73,10 +73,7 @@ export const FieldWidget = ({ widget }: FieldWidgetProps) => {
     return (
       <SidePanelProvider value={{ isInSidePanel }}>
         <StyledContainer>
-          <AnimatedPlaceholderEmptyContainer
-            // oxlint-disable-next-line react/jsx-props-no-spreading
-            {...EMPTY_PLACEHOLDER_TRANSITION_PROPS}
-          >
+          <AnimatedPlaceholderEmptyContainer>
             <AnimatedPlaceholder type="noRecord" />
             <AnimatedPlaceholderEmptyTextContainer>
               <AnimatedPlaceholderEmptyTitle>
@@ -155,6 +152,15 @@ export const FieldWidget = ({ widget }: FieldWidgetProps) => {
           fieldDefinition={fieldDefinition}
           relationValue={record}
           isInSidePanel={isInSidePanel}
+        />
+      );
+    }
+
+    if (fieldDisplayMode === FieldDisplayMode.TABLE) {
+      return (
+        <FieldWidgetRelationTable
+          fieldDefinition={fieldDefinition}
+          recordId={targetRecord.id}
         />
       );
     }

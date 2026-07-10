@@ -9,12 +9,12 @@ import { FeatureFlagKey, FileFolder } from 'twenty-shared/types';
 import { DataSource } from 'typeorm';
 
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
-import { FileStorageService } from 'src/engine/core-modules/file-storage/file-storage.service';
+import { FileStorageService } from 'src/engine/core-modules/file-storage/services/file-storage.service';
 import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadata-modules/flat-entity/services/workspace-many-or-all-flat-entity-maps-cache.service';
 import { FlatObjectMetadata } from 'src/engine/metadata-modules/flat-object-metadata/types/flat-object-metadata.type';
 import { ObjectMetadataService } from 'src/engine/metadata-modules/object-metadata/object-metadata.service';
 import { type WorkspaceEntityManager } from 'src/engine/twenty-orm/entity-manager/workspace-entity-manager';
-import { computeTableName } from 'src/engine/utils/compute-table-name.util';
+import { computeObjectTargetTable } from 'src/engine/utils/compute-object-target-table.util';
 import {
   ATTACHMENT_DATA_SEED_COLUMNS,
   ATTACHMENT_SAMPLE_FILES,
@@ -45,10 +45,6 @@ import {
   EMPLOYMENT_HISTORY_DATA_SEED_COLUMNS,
   EMPLOYMENT_HISTORY_DATA_SEEDS,
 } from 'src/engine/workspace-manager/dev-seeder/data/constants/employment-history-data-seeds.constant';
-import {
-  MESSAGE_CHANNEL_DATA_SEED_COLUMNS,
-  MESSAGE_CHANNEL_DATA_SEEDS,
-} from 'src/engine/workspace-manager/dev-seeder/data/constants/message-channel-data-seeds.constant';
 import {
   MESSAGE_CHANNEL_MESSAGE_ASSOCIATION_DATA_SEED_COLUMNS,
   MESSAGE_CHANNEL_MESSAGE_ASSOCIATION_DATA_SEEDS,
@@ -172,11 +168,6 @@ const getRecordSeedsBatches = (
       tableName: '_pet',
       pgColumns: PET_DATA_SEED_COLUMNS,
       recordSeeds: PET_DATA_SEEDS,
-    },
-    {
-      tableName: 'messageChannel',
-      pgColumns: MESSAGE_CHANNEL_DATA_SEED_COLUMNS,
-      recordSeeds: MESSAGE_CHANNEL_DATA_SEEDS,
     },
   ];
 
@@ -396,8 +387,7 @@ export class DevSeederDataService {
 
           const objectMetadata = objectMetadataItems.find(
             (item) =>
-              computeTableName(item.nameSingular, item.isCustom) ===
-              recordSeedsConfig.tableName,
+              computeObjectTargetTable(item) === recordSeedsConfig.tableName,
           );
 
           if (!objectMetadata) {
@@ -474,7 +464,6 @@ export class DevSeederDataService {
 
       await this.fileStorageService.writeFile({
         sourceFile,
-        mimeType: metadata.mimeType,
         fileFolder: FileFolder.FilesField,
         applicationUniversalIdentifier,
         workspaceId,

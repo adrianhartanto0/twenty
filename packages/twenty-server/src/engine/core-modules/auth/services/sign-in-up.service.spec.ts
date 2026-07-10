@@ -86,7 +86,7 @@ const createSignInUpServiceForTests = () => {
       markEmailAsVerified: jest.fn(),
     } as any,
     {
-      incrementCounter: jest.fn(),
+      incrementCounterForEvent: jest.fn(),
     } as any,
     {
       invalidateAndRecompute: jest.fn(),
@@ -104,6 +104,12 @@ const createSignInUpServiceForTests = () => {
       createContext: jest.fn().mockReturnValue({
         insertWorkspaceEvent: jest.fn(),
       }),
+    } as any,
+    {
+      creditWorkspaceBalance: jest.fn(),
+    } as any,
+    {
+      isBillingEnabled: jest.fn(),
     } as any,
     {
       createQueryRunner: jest.fn(() => queryRunnerMock),

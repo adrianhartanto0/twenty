@@ -11,6 +11,8 @@ import { useObjectPermissions } from '@/object-record/hooks/useObjectPermissions
 import { useRefetchAggregateQueriesForObjectMetadataItem } from '@/object-record/hooks/useRefetchAggregateQueriesForObjectMetadataItem';
 import { useUpsertRecordsInStore } from '@/object-record/record-store/hooks/useUpsertRecordsInStore';
 import { computeOptimisticRecordFromInput } from '@/object-record/utils/computeOptimisticRecordFromInput';
+import { getUnknownRecordInputFields } from '@/object-record/utils/getUnknownRecordInputFields';
+import { captureMessage } from '@sentry/react';
 import { useCallback } from 'react';
 import { isDefined, isNonEmptyArray } from 'twenty-shared/utils';
 import {
@@ -39,13 +41,33 @@ export const useTriggerOptimisticEffectFromSseUpdateEvents = () => {
       });
 
       for (const updateEvent of updateEvents) {
-        const updatedRecord = updateEvent.properties.after;
+        const recordFromEvent = updateEvent.properties.after;
 
-        if (!isDefined(updatedRecord)) {
+        if (!isDefined(recordFromEvent)) {
           continue;
         }
 
-        upsertRecordsInStore({ partialRecords: [updatedRecord] });
+        const unknownRecordInputFields = getUnknownRecordInputFields({
+          objectMetadataItem,
+          recordInput: recordFromEvent,
+        });
+
+        if (unknownRecordInputFields.length > 0) {
+          captureMessage(
+            `SSE update event for ${objectMetadataItem.nameSingular} carried fields unknown to this tab's metadata: ${unknownRecordInputFields.join(', ')}`,
+            'warning',
+          );
+        }
+
+        const updatedRecord =
+          unknownRecordInputFields.length > 0
+            ? Object.fromEntries(
+                Object.entries(recordFromEvent).filter(
+                  ([recordKey]) =>
+                    !unknownRecordInputFields.includes(recordKey),
+                ),
+              )
+            : recordFromEvent;
 
         const computedOptimisticRecord = {
           ...computeOptimisticRecordFromInput({
@@ -76,6 +98,15 @@ export const useTriggerOptimisticEffectFromSseUpdateEvents = () => {
           objectPermissionsByObjectMetadataId,
         });
 
+        if (
+          isDefined(cachedRecord?.updatedAt) &&
+          isDefined(updatedRecord.updatedAt) &&
+          new Date(updatedRecord.updatedAt as string).getTime() <
+            new Date(cachedRecord!.updatedAt as string).getTime()
+        ) {
+          continue;
+        }
+
         const cachedRecordWithConnection = getRecordNodeFromRecord({
           record: cachedRecord,
           objectMetadataItem,
@@ -90,6 +121,8 @@ export const useTriggerOptimisticEffectFromSseUpdateEvents = () => {
         ) {
           continue;
         }
+
+        upsertRecordsInStore({ partialRecords: [updatedRecord] });
 
         updateRecordFromCache({
           objectMetadataItems,

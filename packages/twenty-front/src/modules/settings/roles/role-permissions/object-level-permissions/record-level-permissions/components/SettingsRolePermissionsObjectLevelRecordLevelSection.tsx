@@ -2,8 +2,8 @@
 
 import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
-import { H2Title } from 'twenty-ui/display';
 import { Section } from 'twenty-ui/layout';
+import { H2Title } from 'twenty-ui/typography';
 
 import { billingState } from '@/client-config/states/billingState';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';

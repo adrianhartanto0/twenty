@@ -10,6 +10,8 @@ import { useIsWorkspaceActivationStatusEqualsTo } from '@/workspace/hooks/useIsW
 import { useSubscriptionStatus } from '@/workspace/hooks/useSubscriptionStatus';
 import { hasReachedCurrentBillingPeriodCapSelector } from '@/workspace/states/hasReachedCurrentBillingPeriodCapSelector';
 
+import { InformationBannerNonProductionInstance } from '@/information-banner/components/enterprise/InformationBannerNonProductionInstance';
+import { InformationBannerMaintenance } from '@/information-banner/components/maintenance/InformationBannerMaintenance';
 import {
   PermissionFlagType,
   SubscriptionStatus,
@@ -57,8 +59,8 @@ export const InformationBannerWrapper = () => {
 
   return (
     <StyledInformationBannerWrapper>
-      {/* <InformationBannerMaintenance />
-      <InformationBannerInvalidEnterpriseKey /> */}
+      <InformationBannerNonProductionInstance />
+      <InformationBannerMaintenance />
       {isAccountSyncEnabled && (
         <InformationBannerReconnectAccountInsufficientPermissions />
       )}

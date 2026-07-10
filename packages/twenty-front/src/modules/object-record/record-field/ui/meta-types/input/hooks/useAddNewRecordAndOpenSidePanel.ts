@@ -4,12 +4,14 @@ import { SEARCH_QUERY } from '@/command-menu/graphql/queries/search';
 import { useApolloCoreClient } from '@/object-metadata/hooks/useApolloCoreClient';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
+import { useBuildRecordInputFromRLSPredicates } from '@/object-record/hooks/useBuildRecordInputFromRLSPredicates';
 import { useCreateOneRecord } from '@/object-record/hooks/useCreateOneRecord';
+import { useObjectPermissionsForObject } from '@/object-record/hooks/useObjectPermissionsForObject';
+import { canCreateRecordsForObjectMetadataItem } from '@/object-record/utils/canCreateRecordsForObjectMetadataItem';
 import { useOpenRecordInSidePanel } from '@/side-panel/hooks/useOpenRecordInSidePanel';
 
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { isImpersonatingState } from '@/auth/states/isImpersonatingState';
-import { useObjectPermissionsForObject } from '@/object-record/hooks/useObjectPermissionsForObject';
 import { useUpdateOneRecord } from '@/object-record/hooks/useUpdateOneRecord';
 import { viewableRecordIdState } from '@/object-record/record-side-panel/states/viewableRecordIdState';
 import { viewableRecordNameSingularState } from '@/object-record/record-side-panel/states/viewableRecordNameSingularState';
@@ -47,12 +49,24 @@ export const useAddNewRecordAndOpenSidePanel = ({
 
   const { updateOneRecord } = useUpdateOneRecord();
 
+  const { buildRecordInputFromRLSPredicates } =
+    useBuildRecordInputFromRLSPredicates({
+      objectMetadataItem: relationObjectMetadataItem,
+    });
+
   const { openRecordInSidePanel } = useOpenRecordInSidePanel();
 
   const apolloCoreClient = useApolloCoreClient();
 
+  const relationObjectPermissions = useObjectPermissionsForObject(
+    relationObjectMetadataItem.id,
+  );
+
   if (
-    relationObjectMetadataNameSingular === 'workspaceMember' ||
+    !canCreateRecordsForObjectMetadataItem({
+      objectPermissions: relationObjectPermissions,
+      objectMetadataItem: relationObjectMetadataItem,
+    }) ||
     !isDefined(objectMetadataItem.nameSingular)
   ) {
     return {
@@ -73,13 +87,14 @@ export const useAddNewRecordAndOpenSidePanel = ({
     createNewRecordAndOpenSidePanel: async (searchInput?: string) => {
       const newRecordId = v4();
 
-      console.log(relationObjectMetadataItem)
-
-      const createRecordPayload = buildRecordLabelPayload({
-        id: newRecordId,
-        searchInput,
-        objectMetadataItem: relationObjectMetadataItem,
-      });
+      const createRecordPayload = {
+        ...buildRecordInputFromRLSPredicates(),
+        ...buildRecordLabelPayload({
+          id: newRecordId,
+          searchInput,
+          objectMetadataItem: relationObjectMetadataItem,
+        }),
+      };
 
       if (relationFieldMetadataItemRelationType === RelationType.MANY_TO_ONE) {
         const gqlField =
@@ -110,8 +125,7 @@ export const useAddNewRecordAndOpenSidePanel = ({
 
       if (relationFieldMetadataItemRelationType === RelationType.ONE_TO_MANY) {
         await updateOneRecord({
-          objectNameSingular:
-            objectMetadataItem.nameSingular ?? 'workspaceMember',
+          objectNameSingular: objectMetadataItem.nameSingular,
           idToUpdate: recordId,
           updateOneRecordInput: {
             [`${fieldMetadataItem.name}Id`]: newRecordId,

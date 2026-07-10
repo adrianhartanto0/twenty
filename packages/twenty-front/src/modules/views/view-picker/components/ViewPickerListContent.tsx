@@ -23,7 +23,7 @@ import { VIEW_PICKER_DROPDOWN_ID } from '@/views/view-picker/constants/ViewPicke
 import { useViewPickerMode } from '@/views/view-picker/hooks/useViewPickerMode';
 import { viewPickerReferenceViewIdComponentState } from '@/views/view-picker/states/viewPickerReferenceViewIdComponentState';
 import { useLingui } from '@lingui/react/macro';
-import { IconPlus } from 'twenty-ui/display';
+import { IconPlus } from 'twenty-ui/icon';
 import { MenuItem } from 'twenty-ui/navigation';
 import { themeCssVariables } from 'twenty-ui/theme-constants';
 import { PermissionFlagType, ViewVisibility } from '~/generated-metadata/graphql';
@@ -151,6 +151,7 @@ export const ViewPickerListContent = () => {
               onDragEnd={handleWorkspaceDragEnd}
               draggableItems={workspaceViews.map((view, index) => {
                 const isIndexView = view.key === 'INDEX';
+                const isCurrentView = currentView?.id === view.id;
                 return (
                   <DraggableItem
                     key={view.id}
@@ -164,6 +165,7 @@ export const ViewPickerListContent = () => {
                         isIndexView={isIndexView}
                         isLastView={isLastView}
                         onEdit={handleEditViewButtonClick}
+                        isCurrentView={isCurrentView}
                       />
                     }
                   />
@@ -184,6 +186,7 @@ export const ViewPickerListContent = () => {
               onDragEnd={handleUnlistedDragEnd}
               draggableItems={unlistedViews.map((view, index) => {
                 const isIndexView = view.key === 'INDEX';
+                const isCurrentView = currentView?.id === view.id;
                 return (
                   <DraggableItem
                     key={view.id}
@@ -203,6 +206,7 @@ export const ViewPickerListContent = () => {
                             ? handleEditViewButtonClick
                             : undefined
                         }
+                        isCurrentView={isCurrentView}
                       />
                     }
                   />

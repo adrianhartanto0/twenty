@@ -1,6 +1,5 @@
 import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 
-import { IDField } from '@ptc-org/nestjs-query-graphql';
 import { type Application } from 'cloudflare/resources/zero-trust/access/applications/applications';
 import { WorkspaceActivationStatus } from 'twenty-shared/workspace';
 import {
@@ -32,6 +31,7 @@ import { KeyValuePairEntity } from 'src/engine/core-modules/key-value-pair/key-v
 import { PublicDomainEntity } from 'src/engine/core-modules/public-domain/public-domain.entity';
 import { WorkspaceSSOIdentityProviderEntity } from 'src/engine/core-modules/sso/workspace-sso-identity-provider.entity';
 import { UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
+import { WorkspaceDiscoverability } from 'src/engine/core-modules/workspace/types/workspace-discoverability.type';
 import { AgentEntity } from 'src/engine/metadata-modules/ai/ai-agent/entities/agent.entity';
 import { type ModelId } from 'src/engine/metadata-modules/ai/ai-models/types/model-id.type';
 import { RoleDTO } from 'src/engine/metadata-modules/role/dtos/role.dto';
@@ -57,6 +57,10 @@ registerEnumType(WorkspaceActivationStatus, {
   name: 'WorkspaceActivationStatus',
 });
 
+registerEnumType(WorkspaceDiscoverability, {
+  name: 'WorkspaceDiscoverability',
+});
+
 @Check(
   'onboarded_workspace_requires_default_role',
   `"activationStatus" IN ('PENDING_CREATION', 'ONGOING_CREATION') OR "defaultRoleId" IS NOT NULL`,
@@ -65,7 +69,7 @@ registerEnumType(WorkspaceActivationStatus, {
 @ObjectType('Workspace')
 export class WorkspaceEntity {
   // Fields
-  @IDField(() => UUIDScalarType)
+  @Field(() => UUIDScalarType)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -112,6 +116,15 @@ export class WorkspaceEntity {
   @Field()
   @Column({ default: true })
   isPublicInviteLinkEnabled: boolean;
+
+  @Field(() => WorkspaceDiscoverability)
+  @Column({
+    type: 'enum',
+    enumName: 'workspace_discoverability_enum',
+    enum: WorkspaceDiscoverability,
+    default: WorkspaceDiscoverability.PUBLIC,
+  })
+  workspaceDiscoverability: WorkspaceDiscoverability;
 
   @Field()
   @Column({ type: 'integer', default: 14 })
