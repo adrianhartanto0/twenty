@@ -15,6 +15,18 @@ export class AddTypeToNavigationMenuItem1773681736596 implements MigrationInterf
     await queryRunner.query(
       `ALTER TABLE "core"."navigationMenuItem" DROP CONSTRAINT "CHK_navigation_menu_item_target_fields"`,
     );
+
+    await queryRunner.query(
+      `UPDATE core."navigationMenuItem" SET "type" = 'OBJECT' WHERE "navigationMenuItem"."targetObjectMetadataId" IS NOT NULL`,
+    );
+
+    await queryRunner.query(
+      `UPDATE core."navigationMenuItem" SET "type" = 'VIEW' WHERE "navigationMenuItem"."viewId" IS NOT NULL`,
+    );
+
+    await queryRunner.query(
+      `UPDATE core."navigationMenuItem" set "type" = 'FOLDER' WHERE core."navigationMenuItem"."name" IS NOT NULL`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

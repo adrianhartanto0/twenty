@@ -1,6 +1,8 @@
 import { styled } from '@linaria/react';
 
 import { contextStoreCurrentViewIdComponentState } from '@/context-store/states/contextStoreCurrentViewIdComponentState';
+import { useRecordIndexContextOrThrow } from '@/object-record/record-index/contexts/RecordIndexContext';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { Dropdown } from '@/ui/layout/dropdown/components/Dropdown';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownMenuItemsContainer } from '@/ui/layout/dropdown/components/DropdownMenuItemsContainer';
@@ -25,6 +27,7 @@ import { IconChevronDown, IconPlus } from 'twenty-ui/icon';
 import { Button, ButtonGroup, IconButton } from 'twenty-ui/input';
 import { MenuItem } from 'twenty-ui/navigation';
 import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { PermissionFlagType } from '~/generated-metadata/graphql';
 
 const StyledContainer = styled.div`
   border-radius: ${themeCssVariables.border.radius.md};
@@ -36,6 +39,15 @@ const StyledContainer = styled.div`
 export const UpdateViewButtonGroup = () => {
   const { saveCurrentViewFilterAndSorts } = useSaveCurrentViewFiltersAndSorts();
   const { canPersistChanges } = useCanPersistViewChanges();
+
+  // const { refreshCoreViewsByObjectMetadataId } =
+  //   useRefreshCoreViewsByObjectMetadataId();
+
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
+  );
+
+  const { objectMetadataItem } = useRecordIndexContextOrThrow();
 
   const { setViewPickerMode } = useViewPickerMode();
 
@@ -92,12 +104,15 @@ export const UpdateViewButtonGroup = () => {
   const { viewAnyFieldFilterDifferentFromCurrentAnyFieldFilter } =
     useIsViewAnyFieldFilterDifferentFromCurrentAnyFieldFilter();
 
+  // const isPersonalView =
+  //   currentView?.visibility === ViewVisibility.UNLISTED;
+
   const canShowButton =
     (viewFiltersAreDifferentFromRecordFilters ||
       viewSortsAreDifferentFromRecordSorts ||
       viewFilterGroupsAreDifferentFromRecordFilterGroups ||
       viewAnyFieldFilterDifferentFromCurrentAnyFieldFilter) &&
-    !hasFiltersQueryParams;
+    !hasFiltersQueryParams && canEditPersonalViews;
 
   if (!canShowButton) {
     return <></>;

@@ -1,27 +1,26 @@
 import { v4 } from 'uuid';
 
 import { SEARCH_QUERY } from '@/command-menu/graphql/queries/search';
-import { useOpenRecordInSidePanel } from '@/side-panel/hooks/useOpenRecordInSidePanel';
 import { useApolloCoreClient } from '@/object-metadata/hooks/useApolloCoreClient';
-import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
+import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { useBuildRecordInputFromRLSPredicates } from '@/object-record/hooks/useBuildRecordInputFromRLSPredicates';
 import { useCreateOneRecord } from '@/object-record/hooks/useCreateOneRecord';
 import { useObjectPermissionsForObject } from '@/object-record/hooks/useObjectPermissionsForObject';
 import { canCreateRecordsForObjectMetadataItem } from '@/object-record/utils/canCreateRecordsForObjectMetadataItem';
+import { useOpenRecordInSidePanel } from '@/side-panel/hooks/useOpenRecordInSidePanel';
 
+import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
+import { isImpersonatingState } from '@/auth/states/isImpersonatingState';
 import { useUpdateOneRecord } from '@/object-record/hooks/useUpdateOneRecord';
 import { viewableRecordIdState } from '@/object-record/record-side-panel/states/viewableRecordIdState';
 import { viewableRecordNameSingularState } from '@/object-record/record-side-panel/states/viewableRecordNameSingularState';
-import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { buildRecordLabelPayload } from '@/object-record/utils/buildRecordLabelPayload';
-import { getOperationName } from '~/utils/getOperationName';
-import {
-  computeMorphRelationGqlFieldName,
-  isDefined,
-} from 'twenty-shared/utils';
+import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
+import { computeMorphRelationGqlFieldName, isDefined } from 'twenty-shared/utils';
 import { FieldMetadataType, RelationType } from '~/generated-metadata/graphql';
-
+import { getOperationName } from '~/utils/getOperationName';
 type useAddNewRecordAndOpenSidePanelProps = {
   fieldMetadataItem: FieldMetadataItem;
   objectMetadataItem: EnrichedObjectMetadataItem;
@@ -77,6 +76,13 @@ export const useAddNewRecordAndOpenSidePanel = ({
   const relationFieldMetadataItemRelationType =
     relationFieldMetadataItem.settings?.relationType;
 
+  const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
+  const isImpersonating = useAtomStateValue(isImpersonatingState);
+
+  const objectPermissions = useObjectPermissionsForObject(
+    relationObjectMetadataItem.id,
+  );
+
   return {
     createNewRecordAndOpenSidePanel: async (searchInput?: string) => {
       const newRecordId = v4();
@@ -105,6 +111,16 @@ export const useAddNewRecordAndOpenSidePanel = ({
         createRecordPayload[`${gqlField}Id`] = recordId;
       }
 
+      if (isImpersonating) {
+        objectPermissions.rowLevelPermissionPredicates.forEach((item) => {
+          const fieldMetadataItem = relationObjectMetadataItem.fields.find(
+            (field) => field.id === item.fieldMetadataId,
+          );
+
+          createRecordPayload[`${fieldMetadataItem?.name}Id`] = currentWorkspaceMember?.id;
+        });
+      }
+
       await createOneRecord(createRecordPayload);
 
       if (relationFieldMetadataItemRelationType === RelationType.ONE_TO_MANY) {
@@ -120,6 +136,8 @@ export const useAddNewRecordAndOpenSidePanel = ({
       setViewableRecordId(newRecordId);
       setViewableRecordNameSingular(relationObjectMetadataNameSingular);
 
+      console.log(relationObjectMetadataNameSingular)
+
       apolloCoreClient.refetchQueries({
         include: [getOperationName(SEARCH_QUERY) ?? ''],
       });
@@ -128,6 +146,7 @@ export const useAddNewRecordAndOpenSidePanel = ({
         recordId: newRecordId,
         objectNameSingular: relationObjectMetadataNameSingular,
       });
+
 
       return newRecordId;
     },

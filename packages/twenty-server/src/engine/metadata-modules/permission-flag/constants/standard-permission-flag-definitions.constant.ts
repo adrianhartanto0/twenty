@@ -154,6 +154,11 @@ const STANDARD_PERMISSION_FLAG_METADATA: Record<
     description: 'Edit own profile information',
     icon: 'IconUser',
   },
+  [PermissionFlagType.PERSONAL_VIEWS]: {
+    label: 'Edit Personal View',
+    description: 'Create, edit, and delete workspace views',
+    icon: 'IconTable',
+  },
 };
 
 export const STANDARD_PERMISSION_FLAG_DEFINITIONS: StandardPermissionFlagDefinition[] =

@@ -5,6 +5,9 @@ import { viewableRecordNameSingularState } from '@/object-record/record-side-pan
 import { type WorkspaceMember } from '@/workspace-member/types/WorkspaceMember';
 
 import { isUpsertingActivityInDBState } from '@/activities/states/isCreatingActivityInDBState';
+import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
+import { isImpersonatingState } from '@/auth/states/isImpersonatingState';
+import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { type ActivityTargetableObject } from '@/activities/types/ActivityTargetableEntity';
 import { type Note } from '@/activities/types/Note';
@@ -14,7 +17,9 @@ import { type TaskTarget } from '@/activities/types/TaskTarget';
 import { useOpenRecordInSidePanel } from '@/side-panel/hooks/useOpenRecordInSidePanel';
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { useCreateOneRecord } from '@/object-record/hooks/useCreateOneRecord';
+import { useObjectPermissionsForObject } from '@/object-record/hooks/useObjectPermissionsForObject';
 import { findTargetFieldInfo } from '@/object-record/record-field/ui/utils/junction/findTargetFieldInfo';
+import { isDefined } from 'twenty-shared/utils';
 
 export const useOpenCreateActivityDrawer = ({
   activityObjectNameSingular,
@@ -55,6 +60,17 @@ export const useOpenCreateActivityDrawer = ({
 
   const { objectMetadataItems } = useObjectMetadataItems();
 
+  const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
+  const isImpersonating = useAtomStateValue(isImpersonatingState);
+
+  const activityObjectMetadata = objectMetadataItems.find(
+    (item) => item.nameSingular === activityObjectNameSingular,
+  );
+
+  const objectPermissions = useObjectPermissionsForObject(
+    activityObjectMetadata?.id ?? '',
+  );
+
   const openCreateActivityDrawer = async ({
     targetableObjects,
     customAssignee,
@@ -65,7 +81,24 @@ export const useOpenCreateActivityDrawer = ({
     setViewableRecordId(null);
     setViewableRecordNameSingular(activityObjectNameSingular);
 
+    // When impersonating, the server's auth context is the impersonator, so
+    // server-side defaulting can't fill in RLS-predicate fields like `owner`
+    // with the impersonated workspace member id. Send them explicitly from the
+    // frontend, mirroring the workaround in useAddNewRecordAndOpenSidePanel.
+    const impersonationDefaults: Record<string, string> = {};
+    if (isImpersonating && isDefined(currentWorkspaceMember)) {
+      objectPermissions.rowLevelPermissionPredicates.forEach((predicate) => {
+        const field = activityObjectMetadata?.fields.find(
+          (f) => f.id === predicate.fieldMetadataId,
+        );
+        if (isDefined(field)) {
+          impersonationDefaults[`${field.name}Id`] = currentWorkspaceMember.id;
+        }
+      });
+    }
+
     const activity = await createOneActivity({
+      ...impersonationDefaults,
       ...(activityObjectNameSingular === CoreObjectNameSingular.Task
         ? {
             assigneeId: customAssignee?.id,

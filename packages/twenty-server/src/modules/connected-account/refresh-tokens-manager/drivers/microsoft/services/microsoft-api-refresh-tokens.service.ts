@@ -18,11 +18,13 @@ export class MicrosoftAPIRefreshAccessTokenService {
   async refreshTokens(
     refreshToken: PlaintextString,
   ): Promise<ConnectedAccountPlaintextTokens> {
+    const tenantId = this.config.get("AUTH_MICROSOFT_TENANT_ID") || "common"
+
     const msalClient = new ConfidentialClientApplication({
       auth: {
         clientId: this.config.get('AUTH_MICROSOFT_CLIENT_ID'),
         clientSecret: this.config.get('AUTH_MICROSOFT_CLIENT_SECRET'),
-        authority: 'https://login.microsoftonline.com/common',
+        authority: `https://login.microsoftonline.com/${tenantId}`,
       },
     });
 

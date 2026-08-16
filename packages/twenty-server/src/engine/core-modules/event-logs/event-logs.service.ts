@@ -135,25 +135,25 @@ export class EventLogsService {
       );
     }
 
-    const requiredEntitlement = EVENT_LOG_TYPES[table].requiresEntitlement;
+    // const requiredEntitlement = EVENT_LOG_TYPES[table].requiresEntitlement;
 
-    if (requiredEntitlement === null) {
-      return;
-    }
+    // if (requiredEntitlement === null) {
+    //   return;
+    // }
 
-    const hasAccess =
-      this.enterprisePlanService.isValid() &&
-      (await this.billingService.hasEntitlement(
-        workspaceId,
-        requiredEntitlement,
-      ));
+    // const hasAccess =
+    //   this.enterprisePlanService.isValid() &&
+    //   (await this.billingService.hasEntitlement(
+    //     workspaceId,
+    //     requiredEntitlement,
+    //   ));
 
-    if (!hasAccess) {
-      throw new EventLogsException(
-        'Audit logs require an Enterprise subscription.',
-        EventLogsExceptionCode.NO_ENTITLEMENT,
-      );
-    }
+    // if (!hasAccess) {
+    //   throw new EventLogsException(
+    //     'Audit logs require an Enterprise subscription.',
+    //     EventLogsExceptionCode.NO_ENTITLEMENT,
+    //   );
+    // }
   }
 
   private async applyFilters(

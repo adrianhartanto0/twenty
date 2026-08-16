@@ -1,8 +1,13 @@
 import { styled } from '@linaria/react';
-import { useContext, type ReactNode } from 'react';
-import { type IconComponent, IconX } from 'twenty-ui/icon';
-import { ThemeContext, themeCssVariables } from 'twenty-ui/theme-constants';
+import { useContext, useEffect, useState, type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
+import { IconX, type IconComponent } from 'twenty-ui/icon';
+import { ThemeContext, themeCssVariables } from 'twenty-ui/theme-constants';
+
+import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
+import { useWorkspaceMemberRoles } from '@/settings/members/hooks/useWorkspaceMemberRoles';
+import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import { useStore } from 'jotai';
 
 const StyledChip = styled.div<{ variant: SortOrFilterChipVariant }>`
   align-items: center;
@@ -140,14 +145,45 @@ export const SortOrFilterChip = ({
   type,
 }: SortOrFilterChipProps) => {
   const { theme } = useContext(ThemeContext);
+  const store = useStore();
+
+  const [hasMeFilter, setHasMeFilter] = useState(false)
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onRemove();
   };
 
+  const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
+
+  let hasAdminRole = false
+
+  if (currentWorkspaceMember && currentWorkspaceMember.id) {
+    const {
+      roles,
+      allRoles,
+      loading: rolesLoading,
+    } = useWorkspaceMemberRoles(currentWorkspaceMember?.id);
+
+    if (!rolesLoading && roles) {
+      const adminRoles = roles.filter(role => role.label === "Admin")
+      hasAdminRole = adminRoles.length > 0
+    }
+  }
+
+  const onClickFilter = () => {
+    if (hasAdminRole && onClick) {
+      onClick()
+    }
+  }
+
+  useEffect(() => {
+    const enableXButton = (!labelKey) || (labelKey?.search("Account Owner") < 0 && labelValue.search("Me") < 0 || hasAdminRole && labelValue.search("Me") >= 0)
+    setHasMeFilter(enableXButton)
+  }, []); // Empty dependency array = run only on mount
+
   return (
-    <StyledChip onClick={onClick} variant={variant}>
+    <StyledChip onClick={onClickFilter} variant={variant}>
       {Icon && (
         <StyledIcon>
           <Icon size={theme.icon.size.sm} />
@@ -167,13 +203,17 @@ export const SortOrFilterChip = ({
           </>
         )}
       </StyledKeyLabelContainer>
-      <StyledDelete
-        variant={variant}
-        onClick={handleDeleteClick}
-        data-testid={'remove-icon-' + testId}
-      >
-        <IconX size={theme.icon.size.sm} stroke={theme.icon.stroke.sm} />
-      </StyledDelete>
+      {
+        hasMeFilter && (
+          <StyledDelete
+            variant={variant}
+            onClick={handleDeleteClick}
+            data-testid={'remove-icon-' + testId}
+          >
+            <IconX size={theme.icon.size.sm} stroke={theme.icon.stroke.sm} />
+          </StyledDelete>
+        )
+      }
     </StyledChip>
   );
 };

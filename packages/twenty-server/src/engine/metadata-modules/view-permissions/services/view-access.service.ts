@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 import { PermissionFlagType } from 'twenty-shared/constants';
-import { isDefined } from 'twenty-shared/utils';
 import { ViewVisibility } from 'twenty-shared/types';
+import { isDefined } from 'twenty-shared/utils';
 
 import { PermissionsService } from 'src/engine/metadata-modules/permissions/permissions.service';
 import { type ViewEntity } from 'src/engine/metadata-modules/view/entities/view.entity';
@@ -85,6 +85,15 @@ export class ViewAccessService {
         this.throwCreatePermissionDenied();
       }
 
+      const canEditPersonalViews = await this.hasPersonalViewsPermission(
+        userWorkspaceId,
+        workspaceId,
+      );
+
+      if (!canEditPersonalViews) {
+        this.throwCreatePermissionDenied();
+      }
+
       return true;
     }
 
@@ -124,10 +133,39 @@ export class ViewAccessService {
       view.createdByUserWorkspaceId === userWorkspaceId;
 
     if (isOwnUnlistedView) {
-      return true;
+      const canEditPersonalViews = await this.hasPersonalViewsPermission(
+        userWorkspaceId,
+        workspaceId,
+        apiKeyId,
+      );
+
+      if (canEditPersonalViews) {
+        return true;
+      }
     }
 
     this.throwModifyPermissionDenied();
+  }
+
+  private async hasPersonalViewsPermission(
+    userWorkspaceId: string | undefined,
+    workspaceId: string,
+    apiKeyId?: string,
+  ): Promise<boolean> {
+    // API keys cannot own personal views
+    if (!isDefined(userWorkspaceId)) {
+      return false;
+    }
+
+    const permissions =
+      await this.permissionsService.getUserWorkspacePermissions({
+        userWorkspaceId,
+        workspaceId,
+      });
+
+    // Default to true for backward compatibility — existing roles without
+    // this flag set should continue to allow personal view editing
+    return permissions.permissionFlags[PermissionFlagType.PERSONAL_VIEWS] ?? false;
   }
 
   private async hasViewsPermission(

@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 
 import { useObjectNamePluralFromSingular } from '@/object-metadata/hooks/useObjectNamePluralFromSingular';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 
 import { useObjectOptionsDropdown } from '@/object-record/object-options-dropdown/hooks/useObjectOptionsDropdown';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
@@ -16,6 +17,7 @@ import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 import { IconChevronLeft, IconSettings } from 'twenty-ui/icon';
 import { MenuItem, UndecoratedLink } from 'twenty-ui/navigation';
+import { PermissionFlagType } from '~/generated-metadata/graphql';
 
 export const ObjectOptionsDropdownHiddenFieldsContent = () => {
   const { t } = useLingui();
@@ -35,18 +37,27 @@ export const ObjectOptionsDropdownHiddenFieldsContent = () => {
     navigationMemorizedUrlState,
   );
 
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
+  );
+
   return (
     <DropdownContent>
-      <DropdownMenuHeader
-        StartComponent={
-          <DropdownMenuHeaderLeftComponent
-            onClick={() => onContentChange('fields')}
-            Icon={IconChevronLeft}
-          />
-        }
-      >
-        {t`Hidden Fields`}
-      </DropdownMenuHeader>
+      {
+        canEditPersonalViews && (
+          <DropdownMenuHeader
+            StartComponent={
+              <DropdownMenuHeaderLeftComponent
+                onClick={() => onContentChange('fields')}
+                Icon={IconChevronLeft}
+              />
+            }
+          >
+            {t`Hidden Fields`}
+          </DropdownMenuHeader>
+        )
+      }
+
       <ViewFieldsHiddenDropdownSection />
       <DropdownMenuSeparator />
       <UndecoratedLink

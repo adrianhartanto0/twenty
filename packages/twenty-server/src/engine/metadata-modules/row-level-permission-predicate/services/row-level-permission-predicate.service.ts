@@ -563,7 +563,7 @@ export class RowLevelPermissionPredicateService {
         BillingEntitlementKey.RLS,
       );
 
-    return hasValidEnterprisePlan && isRowLevelPermissionEnabled;
+    return true;
   }
 
   private async hasRowLevelPermissionFeatureOrThrow(workspaceId: string) {

@@ -12,7 +12,8 @@ import { isSelectedItemIdComponentFamilyState } from '@/ui/layout/selectable-lis
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+// import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+import { useStore } from 'jotai';
 import { capitalize, isDefined } from 'twenty-shared/utils';
 import { Avatar } from 'twenty-ui/data-display';
 import { MenuItemSelectAvatar } from 'twenty-ui/navigation';
@@ -29,6 +30,12 @@ export const SingleRecordPickerMenuItem = ({
   onMorphItemSelected,
   isRecordSelected,
 }: SingleRecordPickerMenuItemProps) => {
+  const store = useStore();
+
+  const searchRecordStore = store.get(
+    searchRecordStoreFamilyState.atomFamily(morphItem.recordId),
+  );
+
   const recordPickerComponentInstanceId =
     useAvailableComponentInstanceIdOrThrow(
       SingleRecordPickerComponentInstanceContext,
@@ -43,10 +50,19 @@ export const SingleRecordPickerMenuItem = ({
     selectableListComponentInstanceId,
   );
 
-  const searchRecordStore = useAtomFamilyStateValue(
-    searchRecordStoreFamilyState,
-    morphItem.recordId,
-  );
+
+  const companyName = searchRecordStore?.record?.company?.name ? `- ${searchRecordStore?.record?.company?.name}`:''
+  const menuText = `${searchRecordStore?.label} ${companyName}`
+
+  // const searchRecordStore = useAtomFamilyStateValue(
+  //   searchRecordStoreFamilyState,
+  //   morphItem.recordId,
+  // );
+
+  // const searchRecordStore = store.get(
+  //   searchRecordStoreFamilyState.atomFamily(morphItem.recordId),
+  // );
+
 
   const singleRecordPickerSearchableObjectMetadataItems =
     useAtomComponentStateValue(
@@ -84,7 +100,7 @@ export const SingleRecordPickerMenuItem = ({
       <MenuItemSelectAvatar
         testId="menu-item"
         onClick={() => onMorphItemSelected(morphItem)}
-        text={searchRecordStore.label}
+        text={menuText}
         selected={isRecordSelected}
         focused={isSelectedItemId}
         avatar={

@@ -133,6 +133,7 @@ export class RoleService {
       where: {
         id,
       },
+      relationLoadStrategy: 'query',
       relations: {
         roleTargets: true,
         rolePermissionFlags: {

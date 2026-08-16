@@ -1,4 +1,5 @@
 import { useObjectOptionsDropdown } from '@/object-record/object-options-dropdown/hooks/useObjectOptionsDropdown';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownMenuHeader } from '@/ui/layout/dropdown/components/DropdownMenuHeader/DropdownMenuHeader';
 import { DropdownMenuHeaderLeftComponent } from '@/ui/layout/dropdown/components/DropdownMenuHeader/internal/DropdownMenuHeaderLeftComponent';
@@ -12,12 +13,18 @@ import { isNonEmptyString } from '@sniptt/guards';
 import { useState } from 'react';
 import { IconChevronLeft, IconEyeOff } from 'twenty-ui/icon';
 import { MenuItemNavigate } from 'twenty-ui/navigation';
+import { PermissionFlagType } from '~/generated-metadata/graphql';
+
 
 export const ObjectOptionsDropdownFieldsContent = () => {
   const { t } = useLingui();
   const [searchInput, setSearchInput] = useState('');
 
   const { onContentChange, resetContent } = useObjectOptionsDropdown();
+
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
+  );
 
   return (
     <DropdownContent>
@@ -31,15 +38,41 @@ export const ObjectOptionsDropdownFieldsContent = () => {
       >
         {t`Fields`}
       </DropdownMenuHeader>
-      <DropdownMenuSearchInput
-        autoFocus
-        value={searchInput}
-        placeholder={t`Search fields`}
-        onChange={(event) => setSearchInput(event.target.value)}
-      />
-      <DropdownMenuSeparator />
-      {isNonEmptyString(searchInput) ? (
+
+      {
+        canEditPersonalViews && (
+          <>
+            <DropdownMenuSearchInput
+              autoFocus
+              value={searchInput}
+              placeholder={t`Search fields`}
+              onChange={(event) => setSearchInput(event.target.value)}
+            />
+            <DropdownMenuSeparator />
+          </>
+        )
+      }
+
+      { (canEditPersonalViews && isNonEmptyString(searchInput)) && (
         <ViewFieldsSearchDropdownSection searchInput={searchInput} />
+      )}
+
+      <ViewFieldsVisibleDropdownSection />
+
+      { (canEditPersonalViews && !isNonEmptyString(searchInput)) && (
+        <>
+          <DropdownMenuSeparator />
+          <DropdownMenuItemsContainer scrollable={false}>
+            <MenuItemNavigate
+              onClick={() => onContentChange('hiddenFields')}
+              LeftIcon={IconEyeOff}
+              text={t`Hidden Fields`}
+            />
+          </DropdownMenuItemsContainer>
+        </>
+      )}
+
+      {/* {isNonEmptyString(searchInput) ? (
       ) : (
         <>
           <ViewFieldsVisibleDropdownSection />
@@ -52,7 +85,7 @@ export const ObjectOptionsDropdownFieldsContent = () => {
             />
           </DropdownMenuItemsContainer>
         </>
-      )}
+      )} */}
     </DropdownContent>
   );
 };

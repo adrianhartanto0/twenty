@@ -1,6 +1,7 @@
 export const TOOL_PERMISSION_FLAGS = [
   'AI',
   'VIEWS',
+  'PERSONAL_VIEWS',
   'UPLOAD_FILE',
   'DOWNLOAD_FILE',
   'SEND_EMAIL_TOOL',

@@ -6,9 +6,11 @@ import { RecordTableHeaderFirstCell } from '@/object-record/record-table/record-
 import { useResizeTableHeader } from '@/object-record/record-table/record-table-header/hooks/useResizeTableHeader';
 import { isRecordTableCheckboxColumnHiddenComponentState } from '@/object-record/record-table/states/isRecordTableCheckboxColumnHiddenComponentState';
 import { isRecordTableDragColumnHiddenComponentState } from '@/object-record/record-table/states/isRecordTableDragColumnHiddenComponentState';
+import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { styled } from '@linaria/react';
 import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { PermissionFlagType } from '~/generated-metadata/graphql';
 
 const StyledHeaderContainer = styled.div`
   background-color: ${themeCssVariables.background.primary};
@@ -31,6 +33,10 @@ export const RecordTableHeader = () => {
 
   useResizeTableHeader();
 
+  const canEditPersonalViews = useHasPermissionFlag(
+    PermissionFlagType.PERSONAL_VIEWS,
+  );
+
   return (
     <StyledHeaderContainer>
       {!isRecordTableDragColumnHidden && <RecordTableHeaderDragDropColumn />}
@@ -38,6 +44,21 @@ export const RecordTableHeader = () => {
         <RecordTableHeaderCheckboxColumn />
       )}
       <RecordTableHeaderFirstCell />
+      {/* <RecordTableHeaderFirstScrollableCell /> */}
+      {/* {recordFieldsWithoutLabelIdentifierAndFirstOne.map(
+        (recordField, index) => (
+          <RecordTableHeaderCell
+            key={recordField.fieldMetadataItemId}
+            recordField={recordField}
+            recordFieldIndex={index + 2}
+          />
+        ),
+      )}
+      {isRecordTableColumnHeadersReadOnly  && <RecordTableHeaderEmptyLastColumn />}
+      {
+        canEditPersonalViews && <RecordTableHeaderAddColumnButton />
+      }
+      <RecordTableHeaderLastEmptyColumn /> */}
       <RecordTableHeaderDnd />
     </StyledHeaderContainer>
   );

@@ -32,7 +32,6 @@ export const buildDefaultFieldsWidgetGroups = ({
   );
 
   const isFieldVisible = (fieldType: FieldMetadataType) =>
-    fieldType !== FieldMetadataType.RELATION &&
     fieldType !== FieldMetadataType.MORPH_RELATION;
 
   const groups: FieldsWidgetGroup[] = [];

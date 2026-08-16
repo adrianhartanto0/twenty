@@ -1,6 +1,4 @@
 import { allowRequestsToTwentyIconsState } from '@/client-config/states/allowRequestsToTwentyIcons';
-import { viewableRecordIdComponentState } from '@/side-panel/pages/record-page/states/viewableRecordIdComponentState';
-import { viewableRecordNameSingularComponentState } from '@/side-panel/pages/record-page/states/viewableRecordNameSingularComponentState';
 import { useLabelIdentifierFieldMetadataItem } from '@/object-metadata/hooks/useLabelIdentifierFieldMetadataItem';
 import { useObjectMetadataItem } from '@/object-metadata/hooks/useObjectMetadataItem';
 import { useIsRecordFieldReadOnly } from '@/object-record/read-only/hooks/useIsRecordFieldReadOnly';
@@ -11,14 +9,15 @@ import { recordStoreFamilySelector } from '@/object-record/record-store/states/s
 import { recordStoreIdentifierFamilySelector } from '@/object-record/record-store/states/selectors/recordStoreIdentifierFamilySelector';
 import { RecordTitleCell } from '@/object-record/record-title-cell/components/RecordTitleCell';
 import { RecordTitleCellContainerType } from '@/object-record/record-title-cell/types/RecordTitleCellContainerType';
+import { viewableRecordIdComponentState } from '@/side-panel/pages/record-page/states/viewableRecordIdComponentState';
+import { viewableRecordNameSingularComponentState } from '@/side-panel/pages/record-page/states/viewableRecordNameSingularComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { Trans } from '@lingui/react/macro';
-import { isNonEmptyString } from '@sniptt/guards';
-import { styled } from '@linaria/react';
 import { useAtomFamilySelectorValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilySelectorValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
+import { styled } from '@linaria/react';
+import { isNonEmptyString } from '@sniptt/guards';
 import { AppPath } from 'twenty-shared/types';
-import { getAppPath } from 'twenty-shared/utils';
+import { capitalize, getAppPath } from 'twenty-shared/utils';
 import { Avatar } from 'twenty-ui/data-display';
 import { UndecoratedLink } from 'twenty-ui/navigation';
 import { FieldMetadataType } from '~/generated-metadata/graphql';
@@ -117,6 +116,8 @@ export const SidePanelRecordInfo = ({
     defaultValue: labelIdentifierFieldMetadataItem?.defaultValue,
   };
 
+  const objectName = fieldDefinition.metadata.objectMetadataNameSingular || ''
+
   const titleContent = (
     <FieldContext.Provider
       value={{
@@ -160,11 +161,7 @@ export const SidePanelRecordInfo = ({
           titleContent
         )
       }
-      label={
-        beautifiedCreatedAt ? (
-          <Trans>Created {beautifiedCreatedAt}</Trans>
-        ) : undefined
-      }
+      label={capitalize(objectName)}
     />
   );
 };
