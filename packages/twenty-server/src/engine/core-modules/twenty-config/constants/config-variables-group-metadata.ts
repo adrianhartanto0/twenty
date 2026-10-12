@@ -31,6 +31,13 @@ export const CONFIG_VARIABLES_GROUP_METADATA: Record<
     isHiddenOnLoad: false,
     isHiddenInAdminPanel: false,
   },
+  [ConfigVariablesGroup.WEB_PUSH_CONFIG]: {
+    position: 1250,
+    description:
+      'VAPID keys used to send browser push notifications. Generate a pair with `npx web-push generate-vapid-keys` and never rotate it in production, since every existing subscription is bound to the public key.',
+    isHiddenOnLoad: true,
+    isHiddenInAdminPanel: false,
+  },
   [ConfigVariablesGroup.GOOGLE_AUTH]: {
     position: 400,
     description: 'Configure Google integration (login, calendar, email)',

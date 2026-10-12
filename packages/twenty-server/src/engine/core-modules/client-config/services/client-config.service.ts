@@ -34,6 +34,18 @@ export class ClientConfigService {
     private maintenanceModeService: MaintenanceModeService,
   ) {}
 
+
+  private getWebPushVapidPublicKey(): string | undefined {
+    const publicKey = this.twentyConfigService.get('WEB_PUSH_VAPID_PUBLIC_KEY');
+    const privateKey = this.twentyConfigService.get(
+      'WEB_PUSH_VAPID_PRIVATE_KEY',
+    );
+
+    return isNonEmptyString(publicKey) && isNonEmptyString(privateKey)
+      ? publicKey
+      : undefined;
+  }
+
   private isCloudflareIntegrationEnabled(): boolean {
     return (
       !!this.twentyConfigService.get('CLOUDFLARE_API_KEY') &&
@@ -179,6 +191,9 @@ export class ClientConfigService {
             isCreditCardRequired: false,
           },
         ],
+      },
+      webPush: {
+        vapidPublicKey: this.getWebPushVapidPublicKey(),
       },
       aiModels,
       authProviders: {

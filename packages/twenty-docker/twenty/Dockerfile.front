@@ -36,11 +36,16 @@ RUN npx nx run twenty-front:lingui:extract && \
 RUN npx nx build twenty-front
 
 # Final stage: Serve the frontend
-FROM node:24-alpine AS twenty-front
+FROM caddy:2-alpine AS twenty-front
 
-WORKDIR /app
-COPY --from=twenty-front-build /app /app
+COPY --from=twenty-front-build /app/packages/twenty-front/build /srv
+COPY ./Caddyfile /etc/caddy/Caddyfile
 
-EXPOSE 5000
+EXPOSE 80
 
-CMD ["npx", "nx", "serve", "twenty-front"]
+# WORKDIR /app
+# COPY --from=twenty-front-build /app /app
+
+# EXPOSE 5000
+
+# CMD ["npx", "nx", "serve", "twenty-front"]

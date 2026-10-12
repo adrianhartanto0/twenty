@@ -1,13 +1,14 @@
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
-import { FormatPreferencesSettings } from '@/settings/experience/components/FormatPreferencesSettings';
 import { SettingsPageLayout } from '@/settings/components/layout/SettingsPageLayout';
+import { FormatPreferencesSettings } from '@/settings/experience/components/FormatPreferencesSettings';
+import { PushNotificationSettings } from '@/settings/experience/components/PushNotificationSettings';
 import { useColorScheme } from '@/ui/theme/hooks/useColorScheme';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
-import { H2Title } from 'twenty-ui/typography';
 import { ColorSchemePicker } from 'twenty-ui/input';
 import { Section } from 'twenty-ui/layout';
+import { H2Title } from 'twenty-ui/typography';
 import { LocalePicker } from '~/pages/settings/profile/appearance/components/LocalePicker';
 
 export const SettingsExperience = () => {
@@ -52,6 +53,14 @@ export const SettingsExperience = () => {
           />
           <FormatPreferencesSettings />
         </Section>
+        <Section>
+          <H2Title
+            title={t`Notifications`}
+            description={t`Get notified on this device through your browser`}
+          />
+          <PushNotificationSettings />
+        </Section>
+
         {/* Unified into FormatPreferencesSettings */}
       </SettingsPageContainer>
     </SettingsPageLayout>

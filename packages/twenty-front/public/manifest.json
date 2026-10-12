@@ -454,5 +454,9 @@
       "src": "images/icons/ios/1024.png",
       "sizes": "1024x1024"
     }
+    {
+      "src": "images/icons/acs-logo.png",
+      "sizes": "500x500"
+    }
   ]
 }

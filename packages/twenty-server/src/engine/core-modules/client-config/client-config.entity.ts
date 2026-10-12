@@ -39,6 +39,12 @@ export class NativeModelCapabilities {
 }
 
 @ObjectType()
+export class WebPush {
+  @Field(() => String, { nullable: true })
+  vapidPublicKey: string | undefined;
+}
+
+@ObjectType()
 export class ClientAiModelConfig {
   @Field(() => String)
   // Composite model id (`provider/modelName`) for this workspace; matches registry and admin APIs.
@@ -297,6 +303,9 @@ export class ClientConfig {
 
   @Field(() => Captcha)
   captcha: Captcha;
+
+  @Field(() => WebPush)
+  webPush: WebPush;
 
   @Field(() => ApiConfig)
   api: ApiConfig;

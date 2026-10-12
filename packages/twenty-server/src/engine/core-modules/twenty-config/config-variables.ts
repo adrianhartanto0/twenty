@@ -12,8 +12,8 @@ import {
   IsString,
   IsUrl,
   ValidateIf,
-  type ValidationError,
   validateSync,
+  type ValidationError,
 } from 'class-validator';
 import {
   ENTERPRISE_INSTANCE_TYPE,
@@ -1828,6 +1828,34 @@ export class ConfigVariables {
   })
   @CastToPositiveNumber()
   WORKSPACE_INACTIVE_DAYS_BEFORE_DELETION = 21;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.WEB_PUSH_CONFIG,
+    description:
+      'VAPID public key sent to browsers when they subscribe to push notifications (base64url)',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  WEB_PUSH_VAPID_PUBLIC_KEY?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.WEB_PUSH_CONFIG,
+    isSensitive: true,
+    description:
+      'VAPID private key used to sign push requests sent to browser push services (base64url)',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  WEB_PUSH_VAPID_PRIVATE_KEY?: string;
+
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.WEB_PUSH_CONFIG,
+    description:
+      'Contact for push services in case of delivery problems, as a mailto: or https: URL',
+    type: ConfigVariableType.STRING,
+  })
+  @IsOptional()
+  WEB_PUSH_VAPID_SUBJECT = 'mailto:contact@twenty.com';
 
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,

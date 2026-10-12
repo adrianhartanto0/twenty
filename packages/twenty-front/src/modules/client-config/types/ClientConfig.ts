@@ -1,3 +1,6 @@
+import { type OnboardingConfig } from '@/client-config/types/OnboardingConfig';
+import { type WebPushConfig } from '@/client-config/types/WebPushConfig';
+import { type EnterpriseInstanceType } from 'twenty-shared/constants';
 import {
   type ApiConfig,
   type AuthProviders,
@@ -9,8 +12,6 @@ import {
   type Sentry,
   type Support,
 } from '~/generated-metadata/graphql';
-import { type EnterpriseInstanceType } from 'twenty-shared/constants';
-import { type OnboardingConfig } from '@/client-config/types/OnboardingConfig';
 
 export type ClientConfig = {
   appVersion?: string;
@@ -48,4 +49,5 @@ export type ClientConfig = {
   allowRequestsToTwentyIcons: boolean;
   maintenance?: ClientConfigMaintenanceMode;
   enterpriseInstanceType?: EnterpriseInstanceType;
+  webPush: WebPushConfig;
 };

@@ -1,41 +1,42 @@
 import { aiModelsState } from '@/client-config/states/aiModelsState';
+import { allowRequestsToTwentyIconsState } from '@/client-config/states/allowRequestsToTwentyIcons';
 import { apiConfigState } from '@/client-config/states/apiConfigState';
-import { onboardingConfigState } from '@/client-config/states/onboardingConfigState';
 import { appVersionState } from '@/client-config/states/appVersionState';
 import { authProvidersState } from '@/client-config/states/authProvidersState';
 import { billingState } from '@/client-config/states/billingState';
 import { calendarBookingPageIdState } from '@/client-config/states/calendarBookingPageIdState';
 import { canManageFeatureFlagsState } from '@/client-config/states/canManageFeatureFlagsState';
 import { captchaState } from '@/client-config/states/captchaState';
+import { clientConfigApiStatusState } from '@/client-config/states/clientConfigApiStatusState';
+import { enterpriseInstanceTypeState } from '@/client-config/states/enterpriseInstanceTypeState';
 import { isAnalyticsEnabledState } from '@/client-config/states/isAnalyticsEnabledState';
 import { isAttachmentPreviewEnabledState } from '@/client-config/states/isAttachmentPreviewEnabledState';
-import { isConfigVariablesInDbEnabledState } from '@/client-config/states/isConfigVariablesInDbEnabledState';
-import { isDeveloperDefaultSignInPrefilledState } from '@/client-config/states/isDeveloperDefaultSignInPrefilledState';
 import { isClickHouseConfiguredState } from '@/client-config/states/isClickHouseConfiguredState';
 import { isCloudflareIntegrationEnabledState } from '@/client-config/states/isCloudflareIntegrationEnabledState';
+import { isConfigVariablesInDbEnabledState } from '@/client-config/states/isConfigVariablesInDbEnabledState';
 import { isDDLLockedState } from '@/client-config/states/isDDLLockedState';
-import { enterpriseInstanceTypeState } from '@/client-config/states/enterpriseInstanceTypeState';
-import { isEmailingDomainInDemoModeState } from '@/client-config/states/isEmailingDomainInDemoModeState';
+import { isDeveloperDefaultSignInPrefilledState } from '@/client-config/states/isDeveloperDefaultSignInPrefilledState';
 import { isEmailVerificationRequiredState } from '@/client-config/states/isEmailVerificationRequiredState';
+import { isEmailingDomainInDemoModeState } from '@/client-config/states/isEmailingDomainInDemoModeState';
 import { isGoogleCalendarEnabledState } from '@/client-config/states/isGoogleCalendarEnabledState';
 import { isGoogleMessagingEnabledState } from '@/client-config/states/isGoogleMessagingEnabledState';
 import { isImapSmtpCaldavEnabledState } from '@/client-config/states/isImapSmtpCaldavEnabledState';
-import { maintenanceModeState } from '@/client-config/states/maintenanceModeState';
 import { isMicrosoftCalendarEnabledState } from '@/client-config/states/isMicrosoftCalendarEnabledState';
 import { isMicrosoftMessagingEnabledState } from '@/client-config/states/isMicrosoftMessagingEnabledState';
 import { isMultiWorkspaceEnabledState } from '@/client-config/states/isMultiWorkspaceEnabledState';
 import { isOnboardingAiChatEnabledState } from '@/client-config/states/isOnboardingAiChatEnabledState';
 import { labPublicFeatureFlagsState } from '@/client-config/states/labPublicFeatureFlagsState';
+import { maintenanceModeState } from '@/client-config/states/maintenanceModeState';
+import { onboardingConfigState } from '@/client-config/states/onboardingConfigState';
 import { sentryConfigState } from '@/client-config/states/sentryConfigState';
 import { supportChatState } from '@/client-config/states/supportChatState';
+import { webPushState } from '@/client-config/states/webPushState';
 import { type ClientConfig } from '@/client-config/types/ClientConfig';
-import { domainConfigurationState } from '@/domain-manager/states/domainConfigurationState';
-import { useCallback } from 'react';
-import { clientConfigApiStatusState } from '@/client-config/states/clientConfigApiStatusState';
 import { getClientConfig } from '@/client-config/utils/getClientConfig';
-import { allowRequestsToTwentyIconsState } from '@/client-config/states/allowRequestsToTwentyIcons';
-import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
+import { domainConfigurationState } from '@/domain-manager/states/domainConfigurationState';
 import { useAtomState } from '@/ui/utilities/state/jotai/hooks/useAtomState';
+import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
+import { useCallback } from 'react';
 import { ENTERPRISE_INSTANCE_TYPE } from 'twenty-shared/constants';
 
 type UseClientConfigResult = {
@@ -71,6 +72,7 @@ export const useClientConfig = (): UseClientConfigResult => {
   );
 
   const setCaptcha = useSetAtomState(captchaState);
+  const setWebPush = useSetAtomState(webPushState);
 
   const setApiConfig = useSetAtomState(apiConfigState);
   const setOnboardingConfig = useSetAtomState(onboardingConfigState);
@@ -186,6 +188,8 @@ export const useClientConfig = (): UseClientConfigResult => {
         provider: clientConfig?.captcha?.provider,
         siteKey: clientConfig?.captcha?.siteKey,
       });
+
+      setWebPush(clientConfig?.webPush ?? null);
 
       setApiConfig(clientConfig?.api);
       setOnboardingConfig(clientConfig?.onboarding);

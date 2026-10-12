@@ -32,6 +32,7 @@ import { clearSessionLocalStorageKeys } from '@/auth/utils/clearSessionLocalStor
 import { broadcastSignOutToOtherTabs } from '@/auth/utils/crossTabSignOut';
 import { isValidReturnToPath } from '@/auth/utils/isValidReturnToPath';
 import { isNonEmptyString } from '@sniptt/guards';
+import { unregisterCurrentPushSubscription } from '@/push-notification/utils/unregisterCurrentPushSubscription';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 
@@ -444,10 +445,11 @@ export const useAuth = () => {
     [handleGetLoginTokenFromCredentials, handleGetAuthTokensFromLoginToken],
   );
 
-  const handleSignOut = useCallback(() => {
+  const handleSignOut = useCallback(async () => {
+    await unregisterCurrentPushSubscription(apolloClient);
     broadcastSignOutToOtherTabs();
     clearSession();
-  }, [clearSession]);
+  }, [apolloClient, clearSession]);
 
   const handleCredentialsSignUpInWorkspace = useCallback(
     async ({

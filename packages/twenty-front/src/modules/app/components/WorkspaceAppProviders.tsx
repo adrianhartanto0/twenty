@@ -22,6 +22,7 @@ import { UserMetadataProviderInitialEffect } from '@/metadata-store/effect-compo
 import { ApolloCoreProvider } from '@/object-metadata/components/ApolloCoreProvider';
 import { WelcomeOverlay } from '@/onboarding/components/WelcomeOverlay/WelcomeOverlay';
 import { CompanyEnrichmentOnboardingEffect } from '@/onboarding/effect-components/CompanyEnrichmentOnboardingEffect';
+import { PushNotificationSubscriptionEffect } from '@/push-notification/effect-components/PushNotificationSubscriptionEffect';
 import { ApolloAdminProvider } from '@/settings/admin-panel/apollo/components/ApolloAdminProvider';
 import { EndTrialAfterPaymentMethodGater } from '@/settings/billing/components/EndTrialAfterPaymentMethodGater';
 import { SSEProvider } from '@/sse-db-event/components/SSEProvider';
@@ -56,6 +57,7 @@ export const WorkspaceAppProviders = () => {
                   <UserThemeProviderEffect />
                   <SnackBarProvider>
                     <ErrorMessageEffect />
+                    <PushNotificationSubscriptionEffect />
                     <AgentChatProvider>
                       <DialogComponentInstanceContext.Provider
                         value={{ instanceId: 'dialog-manager' }}
