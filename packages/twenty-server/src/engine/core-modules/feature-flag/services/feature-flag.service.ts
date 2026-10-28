@@ -74,6 +74,9 @@ export class FeatureFlagService {
 
       await this.workspaceCacheService.invalidateAndRecompute(workspaceId, [
         'featureFlagsMap',
+        ...(keys.includes(FeatureFlagKey.IS_MORPH_RELATION_HEAD_ENABLED)
+          ? (['rolesPermissions'] as const)
+          : []),
       ]);
     }
   }
@@ -112,17 +115,21 @@ export class FeatureFlagService {
       { where: { key: featureFlag } },
     );
 
-    const featureFlagToSave = existingFeatureFlag
-      ? { ...existingFeatureFlag, value }
-      : { key: featureFlag, value };
+    if (existingFeatureFlag?.value === value) {
+      return existingFeatureFlag;
+    }
 
-    const result = await this.featureFlagRepository.save(
+    const result = await this.featureFlagRepository.upsertAndReturnOne(
       workspaceId,
-      featureFlagToSave,
+      { key: featureFlag, value },
+      ['workspaceId', 'key'],
     );
 
     await this.workspaceCacheService.invalidateAndRecompute(workspaceId, [
       'featureFlagsMap',
+      ...(featureFlag === FeatureFlagKey.IS_MORPH_RELATION_HEAD_ENABLED
+        ? (['rolesPermissions'] as const)
+        : []),
     ]);
 
     return result;

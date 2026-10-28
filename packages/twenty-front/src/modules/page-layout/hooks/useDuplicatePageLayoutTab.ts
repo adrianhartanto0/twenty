@@ -79,6 +79,7 @@ export const useDuplicatePageLayoutTab = ({
       );
 
       if (!isDefined(sourceTab)) {
+        // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
         throw new Error(`Tab with id ${tabId} not found`);
       }
 
@@ -135,17 +136,14 @@ export const useDuplicatePageLayoutTab = ({
         ...generateDuplicatedTimestamps(),
       };
 
-      const sourceLayouts = allTabLayouts[tabId] ?? {
-        desktop: [],
-        mobile: [],
-      };
+      const sourceLayouts = allTabLayouts[tabId];
 
       const newLayouts = {
-        desktop: sourceLayouts.desktop.map((layout) => ({
+        desktop: (sourceLayouts?.desktop ?? []).map((layout) => ({
           ...layout,
           i: widgetOldIdNewIdMap.get(layout.i) || layout.i,
         })),
-        mobile: sourceLayouts.mobile.map((layout) => ({
+        mobile: (sourceLayouts?.mobile ?? []).map((layout) => ({
           ...layout,
           i: widgetOldIdNewIdMap.get(layout.i) || layout.i,
         })),

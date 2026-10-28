@@ -9,13 +9,11 @@ import { getWorkflowRunStepContext } from '@/workflow/workflow-steps/utils/getWo
 import { getWorkflowVariablesUsedInStep } from '@/workflow/workflow-steps/utils/getWorkflowVariablesUsedInStep';
 import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
-import { IconBrackets } from 'twenty-ui/icon';
 import {
   type GetJsonNodeHighlighting,
-  JsonNestedNode,
-  JsonTreeContextProvider,
+  JsonTree,
   type ShouldExpandNodeInitiallyProps,
-} from 'twenty-ui/json-visualizer';
+} from 'twenty-ui/components/data-display';
 import { type JsonValue } from 'type-fest';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 
@@ -51,6 +49,7 @@ export const WorkflowRunStepInputDetail = ({ stepId }: { stepId: string }) => {
   });
 
   if (stepDefinition?.type !== 'action') {
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
     throw new Error('The input tab must be rendered with an action step.');
   }
 
@@ -72,6 +71,7 @@ export const WorkflowRunStepInputDetail = ({ stepId }: { stepId: string }) => {
   });
 
   if (stepContext.length === 0) {
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
     throw new Error('The input tab must be rendered with a non-empty context.');
   }
 
@@ -101,30 +101,21 @@ export const WorkflowRunStepInputDetail = ({ stepId }: { stepId: string }) => {
   return (
     <>
       <WorkflowRunStepJsonContainer>
-        <JsonTreeContextProvider
-          value={{
-            emptyArrayLabel: t`Empty Array`,
-            emptyObjectLabel: t`Empty Object`,
-            emptyStringLabel: t`[empty string]`,
-            arrowButtonCollapsedLabel: t`Expand`,
-            arrowButtonExpandedLabel: t`Collapse`,
-            getNodeHighlighting,
-            shouldExpandNodeInitially: isFirstNodeDepthOfPreviousStep,
-            onNodeValueClick: copyToClipboard,
-          }}
-        >
-          <JsonNestedNode
-            elements={stepContext.map(({ id, name, context }) => ({
-              id,
-              label: name,
-              value: context as JsonValue,
-            }))}
-            Icon={IconBrackets}
-            depth={0}
-            keyPath=""
-            emptyElementsText=""
-          />
-        </JsonTreeContextProvider>
+        <JsonTree
+          emptyArrayLabel={t`Empty Array`}
+          emptyObjectLabel={t`Empty Object`}
+          emptyStringLabel={t`[empty string]`}
+          arrowButtonCollapsedLabel={t`Expand`}
+          arrowButtonExpandedLabel={t`Collapse`}
+          getNodeHighlighting={getNodeHighlighting}
+          shouldExpandNodeInitially={isFirstNodeDepthOfPreviousStep}
+          onNodeValueClick={copyToClipboard}
+          entries={stepContext.map(({ id, name, context }) => ({
+            id,
+            label: name,
+            value: context as JsonValue,
+          }))}
+        />
       </WorkflowRunStepJsonContainer>
     </>
   );

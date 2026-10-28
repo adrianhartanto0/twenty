@@ -8,9 +8,9 @@ import { findFlatEntityByIdInFlatEntityMaps } from 'src/engine/metadata-modules/
 import { findFlatEntityByUniversalIdentifierOrThrow } from 'src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-universal-identifier-or-throw.util';
 import { findManyFlatEntityByIdInFlatEntityMapsOrThrow } from 'src/engine/metadata-modules/flat-entity/utils/find-many-flat-entity-by-id-in-flat-entity-maps-or-throw.util';
 import { fromCreateViewFieldInputToFlatViewFieldToCreate } from 'src/engine/metadata-modules/flat-view-field/utils/from-create-view-field-input-to-flat-view-field-to-create.util';
-import { fromDeleteViewFieldInputToFlatViewFieldOrThrow } from 'src/engine/metadata-modules/flat-view-field/utils/from-delete-view-field-input-to-flat-view-field-or-throw.util';
 import { fromDestroyViewFieldInputToFlatViewFieldOrThrow } from 'src/engine/metadata-modules/flat-view-field/utils/from-destroy-view-field-input-to-flat-view-field-or-throw.util';
 import { fromUpdateViewFieldInputToFlatViewFieldToUpdateOrThrow } from 'src/engine/metadata-modules/flat-view-field/utils/from-update-view-field-input-to-flat-view-field-to-update-or-throw.util';
+import { MorphRelationReferenceVisibilityService } from 'src/engine/metadata-modules/morph-relation-head/services/morph-relation-reference-visibility.service';
 import { CreateViewFieldInput } from 'src/engine/metadata-modules/view-field/dtos/inputs/create-view-field.input';
 import { DeleteViewFieldInput } from 'src/engine/metadata-modules/view-field/dtos/inputs/delete-view-field.input';
 import { DestroyViewFieldInput } from 'src/engine/metadata-modules/view-field/dtos/inputs/destroy-view-field.input';
@@ -30,6 +30,7 @@ export class ViewFieldService {
     private readonly workspaceMigrationValidateBuildAndRunService: WorkspaceMigrationValidateBuildAndRunService,
     private readonly workspaceManyOrAllFlatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService,
     private readonly applicationService: ApplicationService,
+    private readonly morphRelationReferenceVisibilityService: MorphRelationReferenceVisibilityService,
   ) {}
 
   async createOne({
@@ -216,66 +217,10 @@ export class ViewFieldService {
     deleteViewFieldInput: DeleteViewFieldInput;
     workspaceId: string;
   }): Promise<ViewFieldDTO> {
-    const { workspaceCustomFlatApplication } =
-      await this.applicationService.findWorkspaceTwentyStandardAndCustomApplicationOrThrow(
-        {
-          workspaceId,
-        },
-      );
-
-    const { flatViewFieldMaps: existingFlatViewFieldMaps } =
-      await this.workspaceManyOrAllFlatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
-        {
-          workspaceId,
-          flatMapsKeys: ['flatViewFieldMaps'],
-        },
-      );
-
-    const optimisticallyUpdatedFlatViewWithDeletedAt =
-      fromDeleteViewFieldInputToFlatViewFieldOrThrow({
-        flatViewFieldMaps: existingFlatViewFieldMaps,
-        deleteViewFieldInput,
-      });
-
-    const validateAndBuildResult =
-      await this.workspaceMigrationValidateBuildAndRunService.validateBuildAndRunWorkspaceMigration(
-        {
-          allFlatEntityOperationByMetadataName: {
-            viewField: {
-              flatEntityToCreate: [],
-              flatEntityToDelete: [],
-              flatEntityToUpdate: [optimisticallyUpdatedFlatViewWithDeletedAt],
-            },
-          },
-          workspaceId,
-          isSystemBuild: false,
-          applicationUniversalIdentifier:
-            workspaceCustomFlatApplication.universalIdentifier,
-        },
-      );
-
-    if (validateAndBuildResult.status === 'fail') {
-      throw new WorkspaceMigrationBuilderException(
-        validateAndBuildResult,
-        'Multiple validation errors occurred while deleting view field',
-      );
-    }
-
-    const { flatViewFieldMaps: recomputedExistingFlatViewFieldMaps } =
-      await this.workspaceManyOrAllFlatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
-        {
-          workspaceId,
-          flatMapsKeys: ['flatViewFieldMaps'],
-        },
-      );
-
-    return fromFlatViewFieldToViewFieldDto(
-      findFlatEntityByUniversalIdentifierOrThrow({
-        universalIdentifier:
-          optimisticallyUpdatedFlatViewWithDeletedAt.universalIdentifier,
-        flatEntityMaps: recomputedExistingFlatViewFieldMaps,
-      }),
-    );
+    return this.destroyOne({
+      destroyViewFieldInput: deleteViewFieldInput,
+      workspaceId,
+    });
   }
 
   async destroyOne({
@@ -350,11 +295,20 @@ export class ViewFieldService {
         },
       );
 
+    const isMorphRelationReferenceVisible =
+      await this.morphRelationReferenceVisibilityService.getIsMorphRelationReferenceVisible(
+        workspaceId,
+      );
+
     return Object.values(flatViewFieldMaps.byUniversalIdentifier)
       .filter(isDefined)
-      .filter((field) => !isDefined(field.deletedAt))
+      .filter(
+        (field) =>
+          !isDefined(field.deletedAt) &&
+          isMorphRelationReferenceVisible(field.fieldMetadataId),
+      )
       .map(fromFlatViewFieldToViewFieldDto)
-      .sort((a, b) => a.position - b.position);
+      .sort((a, b) => a.position - b.position || a.id.localeCompare(b.id));
   }
 
   async findByViewId(
@@ -369,11 +323,21 @@ export class ViewFieldService {
         },
       );
 
+    const isMorphRelationReferenceVisible =
+      await this.morphRelationReferenceVisibilityService.getIsMorphRelationReferenceVisible(
+        workspaceId,
+      );
+
     return Object.values(flatViewFieldMaps.byUniversalIdentifier)
       .filter(isDefined)
-      .filter((field) => field.viewId === viewId && !isDefined(field.deletedAt))
+      .filter(
+        (field) =>
+          field.viewId === viewId &&
+          !isDefined(field.deletedAt) &&
+          isMorphRelationReferenceVisible(field.fieldMetadataId),
+      )
       .map(fromFlatViewFieldToViewFieldDto)
-      .sort((a, b) => a.position - b.position);
+      .sort((a, b) => a.position - b.position || a.id.localeCompare(b.id));
   }
 
   async findById(

@@ -13,11 +13,8 @@ import { useOpenRecordInSidePanel } from '@/side-panel/hooks/useOpenRecordInSide
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { isImpersonatingState } from '@/auth/states/isImpersonatingState';
 import { useUpdateOneRecord } from '@/object-record/hooks/useUpdateOneRecord';
-import { viewableRecordIdState } from '@/object-record/record-side-panel/states/viewableRecordIdState';
-import { viewableRecordNameSingularState } from '@/object-record/record-side-panel/states/viewableRecordNameSingularState';
 import { buildRecordLabelPayload } from '@/object-record/utils/buildRecordLabelPayload';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomState';
 import { computeMorphRelationGqlFieldName, isDefined } from 'twenty-shared/utils';
 import { FieldMetadataType, RelationType } from '~/generated-metadata/graphql';
 import { getOperationName } from '~/utils/getOperationName';
@@ -38,11 +35,6 @@ export const useAddNewRecordAndOpenSidePanel = ({
   relationFieldMetadataItem,
   recordId,
 }: useAddNewRecordAndOpenSidePanelProps) => {
-  const setViewableRecordId = useSetAtomState(viewableRecordIdState);
-  const setViewableRecordNameSingular = useSetAtomState(
-    viewableRecordNameSingularState,
-  );
-
   const { createOneRecord } = useCreateOneRecord({
     objectNameSingular: relationObjectMetadataNameSingular,
   });
@@ -128,15 +120,17 @@ export const useAddNewRecordAndOpenSidePanel = ({
           objectNameSingular: objectMetadataItem.nameSingular,
           idToUpdate: recordId,
           updateOneRecordInput: {
+            // Metadata and protocol identifiers must stay stable across locales.
+            // oxlint-disable-next-line lingui/no-unlocalized-strings
             [`${fieldMetadataItem.name}Id`]: newRecordId,
           },
         });
       }
 
-      setViewableRecordId(newRecordId);
-      setViewableRecordNameSingular(relationObjectMetadataNameSingular);
+      // setViewableRecordId(newRecordId);
+      // setViewableRecordNameSingular(relationObjectMetadataNameSingular);
 
-      console.log(relationObjectMetadataNameSingular)
+      // console.log(relationObjectMetadataNameSingular)
 
       apolloCoreClient.refetchQueries({
         include: [getOperationName(SEARCH_QUERY) ?? ''],

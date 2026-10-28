@@ -35,8 +35,13 @@ export const WorkflowRunVisualizerEffect = ({
     workflowVisualizerWorkflowRunIdComponentState,
   );
 
-  const workflowVersionId = workflowRun?.workflowVersionId;
-  const workflowVersion = useWorkflowVersion(workflowVersionId);
+  const workflowVersionId =
+    workflowRun?.coreWorkflowVersionId ??
+    workflowRun?.workflowVersionId ??
+    undefined;
+  const workflowVersion = useWorkflowVersion(
+    workflowRun?.coreWorkflowVersionId ?? undefined,
+  );
   const setWorkflowVisualizerWorkflowVersionId = useSetAtomComponentState(
     workflowVisualizerWorkflowVersionIdComponentState,
   );
@@ -83,7 +88,9 @@ export const WorkflowRunVisualizerEffect = ({
       return;
     }
 
-    setWorkflowVisualizerWorkflowId(workflowRun.workflowId);
+    setWorkflowVisualizerWorkflowId(
+      workflowRun.coreWorkflowId ?? workflowRun.workflowId ?? undefined,
+    );
   }, [setWorkflowVisualizerWorkflowId, workflowRun]);
 
   useEffect(() => {
@@ -180,6 +187,7 @@ export const WorkflowRunVisualizerEffect = ({
       );
       if (!isDefined(currentWorkflowVisualizerWorkflowId)) {
         throw new Error(
+          // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
           'The workflow id must be set; ensure the workflow id is always set before rendering the workflow diagram.',
         );
       }
@@ -235,23 +243,27 @@ export const WorkflowRunVisualizerEffect = ({
   useEffect(() => {
     handleWorkflowRunDiagramGeneration({
       workflowRunState: workflowRun?.state ?? undefined,
-      workflowVersionId: workflowRun?.workflowVersionId,
+      workflowVersionId,
       isInSidePanel,
     });
   }, [
     handleWorkflowRunDiagramGeneration,
     isInSidePanel,
     workflowRun?.state,
-    workflowRun?.workflowVersionId,
+    workflowVersionId,
   ]);
 
   useEffect(() => {
-    if (!isDefined(workflowVersion)) {
+    if (!isDefined(workflowVersion) || !isDefined(workflowRun?.state)) {
       return;
     }
 
-    populateStepsOutputSchema(workflowVersion);
-  }, [populateStepsOutputSchema, workflowVersion]);
+    populateStepsOutputSchema({
+      ...workflowVersion,
+      trigger: workflowRun.state.flow.trigger,
+      steps: workflowRun.state.flow.steps,
+    });
+  }, [populateStepsOutputSchema, workflowRun?.state, workflowVersion]);
 
   return null;
 };

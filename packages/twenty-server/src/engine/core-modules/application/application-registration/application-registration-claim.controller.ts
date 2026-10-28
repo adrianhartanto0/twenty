@@ -1,7 +1,7 @@
 import { Controller, Get, Query, Res, UseGuards } from '@nestjs/common';
 
 import { Response } from 'express';
-import { SettingsPath } from 'twenty-shared/types';
+import { ApiPath, SettingsPath } from 'twenty-shared/types';
 import { getSettingsPath } from 'twenty-shared/utils';
 
 import { ApplicationRegistrationClaimService } from 'src/engine/core-modules/application/application-registration/application-registration-claim.service';
@@ -20,7 +20,7 @@ import { PublicEndpointGuard } from 'src/engine/guards/public-endpoint.guard';
 // GitHub OAuth callback of the trusted-publishers claim flow. Auth context
 // travels in the signed state token, not in a session, hence the public
 // endpoint.
-@Controller('application-registration-claim')
+@Controller(ApiPath.ApplicationRegistrationClaim)
 export class ApplicationRegistrationClaimController {
   constructor(
     private readonly applicationRegistrationClaimService: ApplicationRegistrationClaimService,
@@ -68,10 +68,10 @@ export class ApplicationRegistrationClaimController {
 
       const url = this.workspaceDomainsService.buildWorkspaceURL({
         workspace,
-        pathname: getSettingsPath(SettingsPath.Applications),
+        pathname: getSettingsPath(SettingsPath.Developers),
       });
 
-      url.hash = 'developer';
+      url.hash = 'apps';
 
       return res.redirect(url.toString());
     } catch (error) {
@@ -81,11 +81,11 @@ export class ApplicationRegistrationClaimController {
       if (workspace !== null) {
         const url = this.workspaceDomainsService.buildWorkspaceURL({
           workspace,
-          pathname: getSettingsPath(SettingsPath.Applications),
+          pathname: getSettingsPath(SettingsPath.Developers),
         });
 
         url.searchParams.set('claimErrorCode', claimErrorCode);
-        url.hash = 'developer';
+        url.hash = 'apps';
 
         return res.redirect(url.toString());
       }
@@ -97,7 +97,7 @@ export class ApplicationRegistrationClaimController {
             subdomain: this.twentyConfigService.get('DEFAULT_SUBDOMAIN'),
             customDomain: null,
           },
-          pathname: getSettingsPath(SettingsPath.Applications),
+          pathname: getSettingsPath(SettingsPath.Developers),
         }),
       );
     }

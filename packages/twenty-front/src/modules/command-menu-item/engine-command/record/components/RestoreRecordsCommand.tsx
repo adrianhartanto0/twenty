@@ -5,7 +5,7 @@ import { useLazyFetchAllRecords } from '@/object-record/hooks/useLazyFetchAllRec
 import { useRestoreManyRecords } from '@/object-record/hooks/useRestoreManyRecords';
 import { useRemoveSelectedRecordsFromRecordBoard } from '@/object-record/record-board/hooks/useRemoveSelectedRecordsFromRecordBoard';
 import { PLACEHOLDER_RECORD_INDEX_ID } from '@/object-record/record-index/constants/PlaceholderRecordIndexId';
-import { useResetTableRowSelection } from '@/object-record/record-table/hooks/internal/useResetTableRowSelection';
+import { useResetRecordSelection } from '@/object-record/record-selection/hooks/useResetRecordSelection';
 import { useSidePanelMenu } from '@/side-panel/hooks/useSidePanelMenu';
 import { t } from '@lingui/core/macro';
 import { type RecordGqlOperationFilter } from 'twenty-shared/types';
@@ -16,12 +16,13 @@ export const RestoreRecordsCommand = () => {
     useHeadlessCommandContextApi();
 
   if (!isDefined(objectMetadataItem)) {
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This is an internal command precondition diagnostic.
     throw new Error('Object metadata is required to restore records');
   }
 
   const isSingleRecord = selectedRecords.length === 1;
 
-  const { resetTableRowSelection } = useResetTableRowSelection(
+  const { resetRecordSelection } = useResetRecordSelection(
     recordIndexId ?? PLACEHOLDER_RECORD_INDEX_ID,
   );
   const { removeSelectedRecordsFromRecordBoard } =
@@ -59,14 +60,14 @@ export const RestoreRecordsCommand = () => {
     closeSidePanelMenu();
 
     if (!isDefined(graphqlFilter)) {
-      throw new Error('Cannot restore records without a valid filter');
+      throw new Error(t`Cannot restore records without a valid filter`);
     }
 
     const recordsToRestore = await fetchAllRecordIds();
     const recordIdsToRestore = recordsToRestore.map((record) => record.id);
 
     if (isDefined(recordIndexId)) {
-      resetTableRowSelection();
+      resetRecordSelection();
     }
 
     await restoreManyRecords({
@@ -88,7 +89,7 @@ export const RestoreRecordsCommand = () => {
       title={title}
       subtitle={subtitle}
       confirmButtonText={title}
-      confirmButtonAccent="default"
+      confirmButtonColor="neutral"
       execute={handleExecute}
     />
   );

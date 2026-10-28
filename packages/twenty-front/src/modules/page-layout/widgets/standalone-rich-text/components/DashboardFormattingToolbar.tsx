@@ -7,33 +7,45 @@ import {
   NestBlockButton,
   TextAlignButton,
   UnnestBlockButton,
+  useBlockNoteEditor,
 } from '@blocknote/react';
 import { flip, offset, shift } from '@floating-ui/react';
 
+import { getBlockTypeSelectItems } from '@/blocknote-editor/utils/getBlockTypeSelectItems';
 import { DashboardFormattingToolbarColorButton } from '@/page-layout/widgets/standalone-rich-text/components/DashboardFormattingToolbarColorButton';
 import { FORMATTING_TOOLBAR_FLOATING_CONFIG } from '@/page-layout/widgets/standalone-rich-text/constants/FormattingToolbarFloatingConfig';
 import { styled } from '@linaria/react';
 
 const StyledToolbarContainer = styled.div`
+  max-width: calc(
+    100vw - ${FORMATTING_TOOLBAR_FLOATING_CONFIG.boundaryPadding * 2}px
+  );
+
+  & .bn-formatting-toolbar.bn-toolbar {
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    max-width: 100%;
+    overflow: visible;
+  }
+
   & .bn-formatting-toolbar .mantine-Button-root {
     height: 24px;
     min-height: 24px;
   }
 `;
 
-type DashboardFormattingToolbarProps = {
-  boundaryElement?: HTMLElement | null;
-};
+export const DashboardFormattingToolbar = () => {
+  const editor = useBlockNoteEditor();
 
-export const DashboardFormattingToolbar = ({
-  boundaryElement,
-}: DashboardFormattingToolbarProps) => {
   return (
-    <StyledToolbarContainer>
-      <FormattingToolbarController
-        formattingToolbar={() => (
+    <FormattingToolbarController
+      formattingToolbar={() => (
+        <StyledToolbarContainer>
           <FormattingToolbar>
-            <BlockTypeSelect key="blockTypeSelect" />
+            <BlockTypeSelect
+              key="blockTypeSelect"
+              items={getBlockTypeSelectItems(editor.dictionary)}
+            />
             <BasicTextStyleButton basicTextStyle="bold" key="boldStyleButton" />
             <BasicTextStyleButton
               basicTextStyle="italic"
@@ -58,22 +70,19 @@ export const DashboardFormattingToolbar = ({
             <UnnestBlockButton key="unnestBlockButton" />
             <CreateLinkButton key="createLinkButton" />
           </FormattingToolbar>
-        )}
-        floatingUIOptions={{
-          useFloatingOptions: {
-            middleware: [
-              offset(FORMATTING_TOOLBAR_FLOATING_CONFIG.offsetFromSelection),
-              shift({
-                boundary: boundaryElement ?? undefined,
-                padding: FORMATTING_TOOLBAR_FLOATING_CONFIG.boundaryPadding,
-              }),
-              flip({
-                boundary: boundaryElement ?? undefined,
-              }),
-            ],
-          },
-        }}
-      />
-    </StyledToolbarContainer>
+        </StyledToolbarContainer>
+      )}
+      floatingUIOptions={{
+        useFloatingOptions: {
+          middleware: [
+            offset(FORMATTING_TOOLBAR_FLOATING_CONFIG.offsetFromSelection),
+            shift({
+              padding: FORMATTING_TOOLBAR_FLOATING_CONFIG.boundaryPadding,
+            }),
+            flip(),
+          ],
+        },
+      }}
+    />
   );
 };

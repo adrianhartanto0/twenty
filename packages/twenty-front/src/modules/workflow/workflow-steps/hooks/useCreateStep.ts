@@ -3,7 +3,7 @@ import { useGetUpdatableWorkflowVersionOrThrow } from '@/workflow/hooks/useGetUp
 import { workflowLastCreatedStepIdComponentState } from '@/workflow/states/workflowLastCreatedStepIdComponentState';
 import { type WorkflowActionType } from '@/workflow/types/Workflow';
 import { workflowSelectedNodeComponentState } from '@/workflow/workflow-diagram/states/workflowSelectedNodeComponentState';
-import { type WorkflowStepConnectionOptions } from '@/workflow/workflow-diagram/workflow-iterator/types/WorkflowStepConnectionOptions';
+import { type WorkflowStepConnectionOptions } from '@/workflow/workflow-diagram/types/WorkflowStepConnectionOptions';
 import { useCreateWorkflowVersionStep } from '@/workflow/workflow-steps/hooks/useCreateWorkflowVersionStep';
 import {
   type Difference,
@@ -82,6 +82,7 @@ export const useCreateStep = () => {
       ) as Nullable<DifferenceChange>;
 
       if (!isDefined(createdFirstStepDiff) && !isDefined(addedStepDiff)) {
+        // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
         throw new Error("Couldn't create step");
       }
 

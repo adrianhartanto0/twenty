@@ -1,5 +1,5 @@
 
-import { type ObjectMetadataItem } from '@/object-metadata/types/ObjectMetadataItem';
+import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
 import {
   type ObjectPermissions,
   type QueryCursorDirection,
@@ -10,8 +10,8 @@ export const generateRowLevelFilter = ({
   objectMetadataItem,
   objectPermissionsByObjectMetadataId,
 }: {
-  objectMetadataItem: ObjectMetadataItem;
-  objectMetadataItems: ObjectMetadataItem[];
+  objectMetadataItem: EnrichedObjectMetadataItem;
+  objectMetadataItems: EnrichedObjectMetadataItem[];
   recordGqlFields?: RecordGqlOperationGqlRecordFields;
   computeReferences?: boolean;
   cursorDirection?: QueryCursorDirection;

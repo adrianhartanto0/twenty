@@ -1,20 +1,19 @@
 import { useObjectOptionsDropdown } from '@/object-record/object-options-dropdown/hooks/useObjectOptionsDropdown';
 import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
-import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
 import { DropdownMenuHeader } from '@/ui/layout/dropdown/components/DropdownMenuHeader/DropdownMenuHeader';
 import { DropdownMenuHeaderLeftComponent } from '@/ui/layout/dropdown/components/DropdownMenuHeader/internal/DropdownMenuHeaderLeftComponent';
 import { DropdownMenuItemsContainer } from '@/ui/layout/dropdown/components/DropdownMenuItemsContainer';
 import { DropdownMenuSearchInput } from '@/ui/layout/dropdown/components/DropdownMenuSearchInput';
 import { DropdownMenuSeparator } from '@/ui/layout/dropdown/components/DropdownMenuSeparator';
+import { LegacyDropdownContent } from '@/ui/layout/dropdown/components/LegacyDropdownContent';
 import { ViewFieldsSearchDropdownSection } from '@/views/components/ViewFieldsSearchDropdownSection';
 import { ViewFieldsVisibleDropdownSection } from '@/views/components/ViewFieldsVisibleDropdownSection';
 import { useLingui } from '@lingui/react/macro';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useState } from 'react';
+import { ListItemButton } from 'twenty-ui/components/navigation';
 import { IconChevronLeft, IconEyeOff } from 'twenty-ui/icon';
-import { MenuItemNavigate } from 'twenty-ui/navigation';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
-
 
 export const ObjectOptionsDropdownFieldsContent = () => {
   const { t } = useLingui();
@@ -27,7 +26,7 @@ export const ObjectOptionsDropdownFieldsContent = () => {
   );
 
   return (
-    <DropdownContent>
+    <LegacyDropdownContent>
       <DropdownMenuHeader
         StartComponent={
           <DropdownMenuHeaderLeftComponent
@@ -57,35 +56,20 @@ export const ObjectOptionsDropdownFieldsContent = () => {
         <ViewFieldsSearchDropdownSection searchInput={searchInput} />
       )}
 
-      <ViewFieldsVisibleDropdownSection />
-
       { (canEditPersonalViews && !isNonEmptyString(searchInput)) && (
-        <>
-          <DropdownMenuSeparator />
-          <DropdownMenuItemsContainer scrollable={false}>
-            <MenuItemNavigate
-              onClick={() => onContentChange('hiddenFields')}
-              LeftIcon={IconEyeOff}
-              text={t`Hidden Fields`}
-            />
-          </DropdownMenuItemsContainer>
-        </>
-      )}
-
-      {/* {isNonEmptyString(searchInput) ? (
-      ) : (
         <>
           <ViewFieldsVisibleDropdownSection />
           <DropdownMenuSeparator />
           <DropdownMenuItemsContainer scrollable={false}>
-            <MenuItemNavigate
-              onClick={() => onContentChange('hiddenFields')}
-              LeftIcon={IconEyeOff}
-              text={t`Hidden Fields`}
-            />
+            <ListItemButton
+                onClick={() => onContentChange('hiddenFields')}
+                startIcon={<IconEyeOff />}
+                hasSubmenu
+              >{t`Hidden Fields`}
+            </ListItemButton>
           </DropdownMenuItemsContainer>
         </>
-      )} */}
-    </DropdownContent>
+      )}
+    </LegacyDropdownContent>
   );
 };

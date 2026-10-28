@@ -1,6 +1,6 @@
 import { type FieldMetadata } from '@/object-record/record-field/ui/types/FieldMetadata';
 import { type ColumnDefinition } from '@/object-record/record-table/types/ColumnDefinition';
-import { CSV_INJECTION_PREVENTION_ZWJ } from '@/spreadsheet-import/constants/CsvInjectionPreventionZwj';
+import { CSV_INJECTION_PREVENTION_ZWJ } from 'twenty-shared/constants';
 
 import {
   csvDownloader,
@@ -170,6 +170,24 @@ describe('generateCsv', () => {
 
     expect(csv).toContain('Id,Name,Tags,Skills');
     expect(csv).toContain('1,John Doe,[],[]');
+  });
+
+  it('preserves the relation ID header for CSV consumers', () => {
+    const csv = generateCsv({
+      columns: [
+        {
+          label: 'Company',
+          type: FieldMetadataType.RELATION,
+          metadata: {
+            fieldName: 'company',
+            relationType: RelationType.MANY_TO_ONE,
+          },
+        },
+      ],
+      rows: [{ id: '1', companyId: '2' }],
+    });
+
+    expect(csv).toBe('\uFEFFId,Company Id\n1,2');
   });
 
   describe('CSV Injection Prevention with ZWJ', () => {

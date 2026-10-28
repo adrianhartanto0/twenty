@@ -1,4 +1,4 @@
-import { LEGEND_HIGHLIGHT_DIMMED_OPACITY } from '@/page-layout/widgets/graph/constants/LegendHighlightDimmedOpacity.constant';
+import { LEGEND_HIGHLIGHT_DIMMED_OPACITY } from '@/page-layout/widgets/graph/constants/LegendHighlightDimmedOpacity';
 import { type PieChartDataItemWithColor } from '@/page-layout/widgets/graph/graph-widget-pie-chart/types/PieChartDataItem';
 import { graphWidgetHighlightedLegendIdComponentState } from '@/page-layout/widgets/graph/states/graphWidgetHighlightedLegendIdComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
@@ -74,6 +74,7 @@ export const CustomArcsLayer = ({
               fill={datum.color}
               opacity={isDimmed ? LEGEND_HIGHLIGHT_DIMMED_OPACITY : 1}
               style={{
+                // oxlint-disable-next-line lingui/no-unlocalized-strings -- This value is a CSS transition.
                 transition: 'opacity 0.15s ease-in-out',
               }}
             />

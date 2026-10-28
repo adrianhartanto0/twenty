@@ -2,8 +2,7 @@ import { isDefined } from 'twenty-shared/utils';
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { SettingsDnsRecordsTable } from '@/settings/components/SettingsDnsRecordsTable';
 import { t } from '@lingui/core/macro';
-import { H2Title } from 'twenty-ui/typography';
-import { Section } from 'twenty-ui/layout';
+import { Section } from 'twenty-ui/components/layout';
 import { type ThemeColor } from 'twenty-ui/theme';
 import {
   type DomainRecord,
@@ -18,10 +17,13 @@ export const SettingsDomainRecords = ({
 }) => {
   const currentWorkspace = useAtomStateValue(currentWorkspaceState);
 
+  // These names are only used in developer errors and keep their fingerprints stable.
+  // oxlint-disable lingui/no-unlocalized-strings
   const rowsDefinitions = [
     { name: 'Domain Setup', validationType: 'redirection' as const },
     { name: 'Secure Connection', validationType: 'ssl' as const },
   ];
+  // oxlint-enable lingui/no-unlocalized-strings
 
   const defaultValues: { status: string; statusColor: ThemeColor } =
     currentWorkspace?.customDomain
@@ -42,6 +44,7 @@ export const SettingsDomainRecords = ({
     );
 
     if (!record) {
+      // oxlint-disable-next-line lingui/no-unlocalized-strings -- Keep this developer invariant stable for error grouping.
       throw new Error(`Record ${row.name} not found`);
     }
 
@@ -57,12 +60,12 @@ export const SettingsDomainRecords = ({
   });
 
   return (
-    <Section>
-      <H2Title
+    <Section.Root>
+      <Section.Header
         title={t`Domain Setup`}
         description={t`Configure these DNS records with your domain provider`}
       />
       <SettingsDnsRecordsTable records={transformedRecords} />
-    </Section>
+    </Section.Root>
   );
 };

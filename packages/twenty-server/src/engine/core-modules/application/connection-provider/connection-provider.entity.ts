@@ -34,6 +34,13 @@ export class ConnectionProviderEntity
   @Column({ nullable: false, type: 'varchar' })
   displayName: string;
 
+  @Column({ nullable: true, type: 'varchar' })
+  @WasIntroducedInUpgrade({
+    upgradeCommandName:
+      '2.39.0_AddLogoToConnectionProviderFastInstanceCommand_1788542613404',
+  })
+  logo: string | null;
+
   @Column({ nullable: false, type: 'varchar' })
   type: ConnectionProviderType;
 
@@ -43,9 +50,23 @@ export class ConnectionProviderEntity
   @Column({ nullable: true, type: 'uuid' })
   @WasIntroducedInUpgrade({
     upgradeCommandName:
+      '2.48.0_AddIdentifyAccountLogicFunctionAndExternalAccountIdFastInstanceCommand_1791975194413',
+  })
+  identifyAccountLogicFunctionUniversalIdentifier: string | null;
+
+  @Column({ nullable: true, type: 'uuid' })
+  @WasIntroducedInUpgrade({
+    upgradeCommandName:
       '2.24.0_AddOnConnectLogicFunctionToConnectionProviderFastInstanceCommand_1784712843602',
   })
   onConnectLogicFunctionUniversalIdentifier: string | null;
+
+  @Column({ nullable: true, type: 'uuid' })
+  @WasIntroducedInUpgrade({
+    upgradeCommandName:
+      '2.27.0_AddOnDisconnectLogicFunctionToConnectionProviderFastInstanceCommand_1785810340935',
+  })
+  onDisconnectLogicFunctionUniversalIdentifier: string | null;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;

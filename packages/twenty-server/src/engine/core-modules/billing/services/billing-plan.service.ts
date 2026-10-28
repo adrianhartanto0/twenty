@@ -3,13 +3,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { findOrThrow } from 'twenty-shared/utils';
-import { JsonContains, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import {
   BillingException,
   BillingExceptionCode,
 } from 'src/engine/core-modules/billing/billing.exception';
+import { BILLING_PLAN_SWITCHES } from 'src/engine/core-modules/billing/constants/billing-plan-switches.constant';
+import { BILLING_SELLABLE_PLAN_KEYS } from 'src/engine/core-modules/billing/constants/billing-sellable-plan-keys.constant';
 import { BillingProductEntity } from 'src/engine/core-modules/billing/entities/billing-product.entity';
 import { BillingPlanKey } from 'src/engine/core-modules/billing/enums/billing-plan-key.enum';
 import { BillingProductKey } from 'src/engine/core-modules/billing/enums/billing-product-key.enum';
@@ -25,40 +26,6 @@ export class BillingPlanService {
     @InjectRepository(BillingProductEntity)
     private readonly billingProductRepository: Repository<BillingProductEntity>,
   ) {}
-
-  async getProductsByProductMetadata({
-    planKey,
-    priceUsageBased,
-    productKey,
-  }: {
-    planKey: BillingPlanKey;
-    priceUsageBased: BillingUsageType;
-    productKey: BillingProductKey;
-  }): Promise<BillingProductEntity[]> {
-    return await this.billingProductRepository.find({
-      where: {
-        metadata: JsonContains({
-          priceUsageBased,
-          planKey,
-          productKey,
-        }),
-        active: true,
-      },
-      relations: ['billingPrices'],
-    });
-  }
-
-  async getPlanBaseProduct(
-    planKey: BillingPlanKey,
-  ): Promise<BillingProductEntity> {
-    const [baseProduct] = await this.getProductsByProductMetadata({
-      planKey,
-      priceUsageBased: BillingUsageType.LICENSED,
-      productKey: BillingProductKey.BASE_PRODUCT,
-    });
-
-    return baseProduct;
-  }
 
   async listPlans(): Promise<BillingGetPlanResult[]> {
     const planKeys = Object.values(BillingPlanKey);
@@ -93,34 +60,13 @@ export class BillingPlanService {
 
       return {
         planKey,
+        isSellable: BILLING_SELLABLE_PLAN_KEYS.includes(planKey),
+        upgradePlanKeys: BILLING_PLAN_SWITCHES[planKey].upgradePlanKeys,
+        downgradePlanKeys: BILLING_PLAN_SWITCHES[planKey].downgradePlanKeys,
         meteredProducts,
         baseProducts,
         resourceCreditProducts,
       };
-    });
-  }
-
-  async getPlanByPriceId(stripePriceId: string) {
-    const plans = await this.listPlans();
-
-    return findOrThrow(plans, (plan) => {
-      return (
-        plan.meteredProducts.some((product) =>
-          product.billingPrices.some(
-            (price) => price.stripePriceId === stripePriceId,
-          ),
-        ) ||
-        plan.baseProducts.some((product) =>
-          product.billingPrices.some(
-            (price) => price.stripePriceId === stripePriceId,
-          ),
-        ) ||
-        plan.resourceCreditProducts.some((product) =>
-          product.billingPrices.some(
-            (price) => price.stripePriceId === stripePriceId,
-          ),
-        )
-      );
     });
   }
 

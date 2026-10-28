@@ -30,8 +30,8 @@ import { useContext } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { StepStatus } from 'twenty-shared/workflow';
 import { IconCheck, IconX, useIcons } from 'twenty-ui/icon';
-import { Loader } from 'twenty-ui/feedback';
-import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { Loader } from 'twenty-ui/primitives/feedback';
+import { themeCssVariables } from 'twenty-ui/theme';
 
 const StyledNodeLabelWithCounterPart = styled.div`
   align-items: center;
@@ -121,6 +121,7 @@ export const WorkflowRunDiagramStepNode = ({
 
   const handleClick = () => {
     if (!isDefined(workflowVisualizerWorkflowId)) {
+      // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
       throw new Error('Workflow ID must be defined');
     }
 
@@ -147,8 +148,9 @@ export const WorkflowRunDiagramStepNode = ({
         runStatus={data.runStatus}
         onClick={handleClick}
         selected={selected}
+        targetHandleCount={data.targetHandleIds?.length}
       >
-        <WorkflowDiagramHandleTarget />
+        <WorkflowDiagramHandleTarget targetHandleIds={data.targetHandleIds} />
         <WorkflowNodeIconContainer>
           <WorkflowDiagramStepNodeIcon data={data} />
         </WorkflowNodeIconContainer>

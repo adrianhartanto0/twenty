@@ -1,3 +1,4 @@
+import { type RecordGqlFields } from 'twenty-shared/types';
 import { isNull, isUndefined } from '@sniptt/guards';
 
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
@@ -30,7 +31,7 @@ export const getRecordNodeFromRecord = <T extends ObjectRecord>({
     EnrichedObjectMetadataItem,
     'fields' | 'namePlural' | 'nameSingular'
   >;
-  recordGqlFields?: Record<string, any>;
+  recordGqlFields?: RecordGqlFields;
   computeReferences?: boolean;
   isRootLevel?: boolean;
   record: T | null;
@@ -50,7 +51,10 @@ export const getRecordNodeFromRecord = <T extends ObjectRecord>({
   const nestedRecord = Object.fromEntries(
     Object.entries(record)
       .map(([gqlField, value]) => {
-        if (isDefined(recordGqlFields) && !recordGqlFields[gqlField]) {
+        if (
+          isDefined(recordGqlFields) &&
+          !isDefined(recordGqlFields[gqlField])
+        ) {
           return undefined;
         }
 
@@ -195,6 +199,8 @@ export const getRecordNodeFromRecord = <T extends ObjectRecord>({
                   fieldName: field.name,
                 },
               }).map(
+                // Metadata and protocol identifiers must stay stable across locales.
+                // oxlint-disable-next-line lingui/no-unlocalized-strings
                 (possibleMorphRelationName) => `${possibleMorphRelationName}Id`,
               );
 
@@ -244,7 +250,23 @@ export const getRecordNodeFromRecord = <T extends ObjectRecord>({
               },
             ];
           }
-          case FieldMetadataType.LINKS:
+          case FieldMetadataType.LINKS: {
+            return [
+              gqlField,
+              {
+                ...value,
+                ...(Array.isArray(value?.secondaryLinks) && {
+                  secondaryLinks: value.secondaryLinks.map(
+                    (secondaryLink: object) => ({
+                      ...secondaryLink,
+                      __typename: 'SecondaryLink',
+                    }),
+                  ),
+                }),
+                __typename: pascalCase(field.type),
+              },
+            ];
+          }
           case FieldMetadataType.ADDRESS:
           case FieldMetadataType.FULL_NAME:
           case FieldMetadataType.CURRENCY: {

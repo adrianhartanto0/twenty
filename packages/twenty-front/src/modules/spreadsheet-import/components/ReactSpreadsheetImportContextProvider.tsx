@@ -1,7 +1,6 @@
 import { createContext } from 'react';
-
 import { type SpreadsheetImportDialogOptions } from '@/spreadsheet-import/types';
-import { isUndefinedOrNull } from '~/utils/isUndefinedOrNull';
+import { isDefined } from 'twenty-shared/utils';
 
 export const RsiContext = createContext({} as any);
 
@@ -14,7 +13,8 @@ export const ReactSpreadsheetImportContextProvider = ({
   children,
   values,
 }: ReactSpreadsheetImportContextProviderProps) => {
-  if (isUndefinedOrNull(values.spreadsheetImportFields)) {
+  if (!isDefined(values.spreadsheetImportFields)) {
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This missing configuration is a developer diagnostic.
     throw new Error('Fields must be provided to spreadsheet-import');
   }
 

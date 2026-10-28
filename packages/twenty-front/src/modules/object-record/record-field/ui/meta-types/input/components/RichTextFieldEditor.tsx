@@ -1,33 +1,34 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAtom, useStore } from 'jotai';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { useUploadAttachmentFile } from '@/activities/files/hooks/useUploadAttachmentFile';
+import { type Attachment } from '@/activities/files/types/Attachment';
+import { getActivityTargetObjectFieldIdName } from '@/activities/utils/getActivityTargetObjectFieldIdName';
 import { BLOCK_SCHEMA } from '@/blocknote-editor/blocks/Schema';
 import { BlockEditor } from '@/blocknote-editor/components/BlockEditor';
 import { BLOCK_EDITOR_GLOBAL_HOTKEYS_CONFIG } from '@/blocknote-editor/constants/BlockEditorGlobalHotkeysConfig';
 import { useAttachmentSync } from '@/blocknote-editor/hooks/useAttachmentSync';
 import { useReplaceBlockEditorContent } from '@/blocknote-editor/hooks/useReplaceBlockEditorContent';
 import { parseInitialBlocknote } from '@/blocknote-editor/utils/parseInitialBlocknote';
-import { prepareBodyWithSignedUrls } from '@/blocknote-editor/utils/prepareBodyWithSignedUrls';
-import { type Attachment } from '@/activities/files/types/Attachment';
-import { useUploadAttachmentFile } from '@/activities/files/hooks/useUploadAttachmentFile';
-import { getActivityTargetObjectFieldIdName } from '@/activities/utils/getActivityTargetObjectFieldIdName';
-import { useObjectMetadataItem } from '@/object-metadata/hooks/useObjectMetadataItem';
+import { stripImageUrlTokens } from '@/blocknote-editor/utils/stripImageUrlTokens';
 import { useApolloCoreClient } from '@/object-metadata/hooks/useApolloCoreClient';
-import { CoreObjectNameSingular } from 'twenty-shared/types';
+import { useObjectMetadataItem } from '@/object-metadata/hooks/useObjectMetadataItem';
 import { modifyRecordFromCache } from '@/object-record/cache/utils/modifyRecordFromCache';
 import { useFindManyRecords } from '@/object-record/hooks/useFindManyRecords';
 import { useUpdateOneRecord } from '@/object-record/hooks/useUpdateOneRecord';
-import { recordStoreFamilyState } from '@/object-record/record-store/states/recordStoreFamilyState';
 import { useIsRecordFieldReadOnly } from '@/object-record/read-only/hooks/useIsRecordFieldReadOnly';
+import { useRecordSeededDraft } from '@/object-record/record-seeded-draft/hooks/useRecordSeededDraft';
+import { recordStoreFamilyState } from '@/object-record/record-store/states/recordStoreFamilyState';
 import { usePushFocusItemToFocusStack } from '@/ui/utilities/focus/hooks/usePushFocusItemToFocusStack';
 import { useRemoveFocusItemFromFocusStackById } from '@/ui/utilities/focus/hooks/useRemoveFocusItemFromFocusStackById';
 import { FocusComponentType } from '@/ui/utilities/focus/types/FocusComponentType';
 import { useHotkeysOnFocusedElement } from '@/ui/utilities/hotkey/hooks/useHotkeysOnFocusedElement';
-import { t } from '@lingui/core/macro';
 import '@blocknote/mantine/style.css';
 import { useCreateBlockNote } from '@blocknote/react';
 import '@blocknote/react/style.css';
+import { t } from '@lingui/core/macro';
 import { Key } from 'ts-key-enum';
+import { CoreObjectNameSingular } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -79,8 +80,6 @@ export const RichTextFieldEditor = ({
 
   const focusId = `${recordId}-${fieldName}`;
 
-  const isEditorFocusedRef = useRef(false);
-
   const attachmentTargetFieldIdName = getActivityTargetObjectFieldIdName({
     nameSingular: objectNameSingular,
   });
@@ -111,83 +110,6 @@ export const RichTextFieldEditor = ({
     return attachmentAbsoluteURL;
   };
 
-  const persistBodyDebounced = useDebouncedCallback((blocknote: string) => {
-    if (isRecordFieldReadOnly === true) return;
-
-    if (onPersistBody) {
-      onPersistBody(blocknote);
-      return;
-    }
-
-    updateOneRecord({
-      idToUpdate: recordId,
-      objectNameSingular,
-      updateOneRecordInput: {
-        [fieldName]: {
-          blocknote,
-          markdown: null,
-        },
-      },
-    });
-  }, 300);
-
-  const handleBodyChange = useCallback(
-    async (newStringifiedBody: string) => {
-      const oldRecord = store.get(recordStoreFamilyState.atomFamily(recordId));
-
-      store.set(
-        recordStoreFamilyState.atomFamily(recordId),
-        (prev: typeof oldRecord) => ({
-          ...prev,
-          id: recordId,
-          [fieldName]: {
-            blocknote: newStringifiedBody,
-            markdown: null,
-          },
-          __typename: prev?.__typename ?? objectNameSingular,
-        }),
-      );
-
-      modifyRecordFromCache({
-        recordId,
-        fieldModifiers: {
-          [fieldName]: () => ({
-            blocknote: newStringifiedBody,
-            markdown: null,
-          }),
-        },
-        cache,
-        objectMetadataItem,
-      });
-
-      persistBodyDebounced(prepareBodyWithSignedUrls(newStringifiedBody));
-
-      const oldFieldValue = oldRecord?.[fieldName] as
-        | { blocknote?: string | null }
-        | undefined;
-
-      await syncAttachments(newStringifiedBody, oldFieldValue?.blocknote);
-    },
-    [
-      store,
-      recordId,
-      fieldName,
-      objectNameSingular,
-      cache,
-      objectMetadataItem,
-      persistBodyDebounced,
-      syncAttachments,
-    ],
-  );
-
-  const handleBodyChangeDebounced = useDebouncedCallback(handleBodyChange, 500);
-
-  const handleEditorChange = () => {
-    const newStringifiedBody = JSON.stringify(editor.document) ?? '';
-
-    handleBodyChangeDebounced(newStringifiedBody);
-  };
-
   const fieldValue = isDefined(recordInStore)
     ? (recordInStore as Record<string, { blocknote?: string | null }>)?.[
         fieldName
@@ -201,6 +123,8 @@ export const RichTextFieldEditor = ({
 
     return parseInitialBlocknote(
       fieldValue?.blocknote,
+      // Diagnostic text is used for locale-independent issue grouping.
+      // oxlint-disable-next-line lingui/no-unlocalized-strings
       `Failed to parse body for field ${fieldName} on record ${recordId}`,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -225,29 +149,112 @@ export const RichTextFieldEditor = ({
     fieldName,
   );
 
-  const [currentRecordId, setCurrentRecordId] = useState(recordId);
+  const { updateDraft, markDirty, flush, draftResyncKey } =
+    useRecordSeededDraft({
+      upstreamDraft: {
+        blocknote: stripImageUrlTokens(fieldValue?.blocknote ?? ''),
+      },
+      persistDebounceMs: 300,
+      resetKey: recordId,
+      onPersist: ({ blocknote }) => {
+        if (isRecordFieldReadOnly === true) return;
+
+        if (onPersistBody) {
+          onPersistBody(blocknote);
+          return;
+        }
+
+        updateOneRecord({
+          idToUpdate: recordId,
+          objectNameSingular,
+          updateOneRecordInput: {
+            [fieldName]: {
+              blocknote,
+              markdown: null,
+            },
+          },
+        });
+      },
+    });
+
+  // Replace the uncontrolled editor's content in place instead of remounting it.
+  const [lastAppliedResyncKey, setLastAppliedResyncKey] =
+    useState(draftResyncKey);
+
+  // Programmatic replacements fire the typing callback, so latch to keep them from echoing back as local edits.
+  // oxlint-disable-next-line twenty/no-state-useref
+  const isApplyingUpstreamBodyRef = useRef(false);
 
   useEffect(() => {
-    if (currentRecordId !== recordId) {
-      replaceBlockEditorContent(recordId);
-      setCurrentRecordId(recordId);
+    if (draftResyncKey === lastAppliedResyncKey) {
+      return;
     }
-  }, [recordId, currentRecordId, replaceBlockEditorContent]);
 
-  // Reseed the editor when SSE delivers an external update to this field
-  // (e.g. a workflow rewriting the body). The page-level
-  // RecordShowPageSSESubscribeEffect already pushes the new value into
-  // recordStoreFamilyState; we just react to it. Skipped while the editor is
-  // focused so we don't clobber the user's in-progress typing.
-  const externalBlocknote = fieldValue?.blocknote ?? null;
+    setLastAppliedResyncKey(draftResyncKey);
 
-  useEffect(() => {
-    if (currentRecordId !== recordId) return;
-    if (isEditorFocusedRef.current) return;
-    if (!isDefined(externalBlocknote)) return;
+    isApplyingUpstreamBodyRef.current = true;
+    try {
+      replaceBlockEditorContent(recordId);
+    } finally {
+      isApplyingUpstreamBodyRef.current = false;
+    }
+  }, [
+    draftResyncKey,
+    lastAppliedResyncKey,
+    replaceBlockEditorContent,
+    recordId,
+  ]);
 
-    replaceBlockEditorContent(recordId);
-  }, [externalBlocknote, recordId, currentRecordId, replaceBlockEditorContent]);
+  const handleBodyChange = async (newStringifiedBody: string) => {
+    const oldRecord = store.get(recordStoreFamilyState.atomFamily(recordId));
+
+    store.set(
+      recordStoreFamilyState.atomFamily(recordId),
+      (prev: typeof oldRecord) => ({
+        ...prev,
+        id: recordId,
+        [fieldName]: {
+          blocknote: newStringifiedBody,
+          markdown: null,
+        },
+        __typename: prev?.__typename ?? objectNameSingular,
+      }),
+    );
+
+    modifyRecordFromCache({
+      recordId,
+      fieldModifiers: {
+        [fieldName]: () => ({
+          blocknote: newStringifiedBody,
+          markdown: null,
+        }),
+      },
+      cache,
+      objectMetadataItem,
+    });
+
+    const oldFieldValue = oldRecord?.[fieldName] as
+      | { blocknote?: string | null }
+      | undefined;
+
+    // Only after capturing the pre-edit body: persisting rewrites the record, so the diff would miss removed attachments.
+    updateDraft({ blocknote: stripImageUrlTokens(newStringifiedBody) });
+
+    await syncAttachments(newStringifiedBody, oldFieldValue?.blocknote);
+  };
+
+  const handleBodyChangeDebounced = useDebouncedCallback(handleBodyChange, 500);
+
+  const handleEditorChange = () => {
+    if (isApplyingUpstreamBodyRef.current) {
+      return;
+    }
+
+    // Serialization is debounced, so mark dirty now or a remote adoption could replace in-progress typing.
+    markDirty();
+
+    handleBodyChangeDebounced(JSON.stringify(editor.document) ?? '');
+  };
 
   useHotkeysOnFocusedElement({
     keys: Key.Escape,
@@ -259,8 +266,6 @@ export const RichTextFieldEditor = ({
   });
 
   const handleBlockEditorFocus = useCallback(() => {
-    isEditorFocusedRef.current = true;
-
     if (onFocusOverride) {
       onFocusOverride();
       return;
@@ -276,8 +281,9 @@ export const RichTextFieldEditor = ({
     });
   }, [focusId, pushFocusItemToFocusStack, onFocusOverride]);
 
-  const handleBlockEditorBlur = useCallback(() => {
-    isEditorFocusedRef.current = false;
+  const handleBlockEditorBlur = () => {
+    handleBodyChangeDebounced.flush();
+    flush();
 
     if (onBlurOverride) {
       onBlurOverride();
@@ -285,7 +291,7 @@ export const RichTextFieldEditor = ({
     }
 
     removeFocusItemFromFocusStackById({ focusId });
-  }, [focusId, removeFocusItemFromFocusStackById, onBlurOverride]);
+  };
 
   return (
     <BlockEditor

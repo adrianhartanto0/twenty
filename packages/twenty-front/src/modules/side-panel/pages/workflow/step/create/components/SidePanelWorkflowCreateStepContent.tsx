@@ -6,8 +6,9 @@ import {
 import { sidePanelNavigationStackState } from '@/side-panel/states/sidePanelNavigationStackState';
 import { useAtomComponentState } from '@/ui/utilities/state/jotai/hooks/useAtomComponentState';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-import { useWorkflowWithCurrentVersion } from '@/workflow/hooks/useWorkflowWithCurrentVersion';
+import { flowComponentState } from '@/workflow/states/flowComponentState';
 import { workflowVisualizerWorkflowIdComponentState } from '@/workflow/states/workflowVisualizerWorkflowIdComponentState';
+import { getWorkflowStepDisplayName } from '@/workflow/utils/getWorkflowStepDisplayName';
 import {
   type WorkflowActionType,
   type WorkflowIfElseAction,
@@ -30,9 +31,7 @@ export const SidePanelWorkflowCreateStepContent = () => {
 
   const { createStep } = useCreateStep();
   const { updateStep } = useUpdateStep();
-  const workflowWithCurrentVersion = useWorkflowWithCurrentVersion(
-    workflowVisualizerWorkflowId,
-  );
+  const flow = useAtomComponentStateValue(flowComponentState);
 
   const { openWorkflowEditStepInSidePanel } = useSidePanelWorkflowNavigation();
   const { closeRightClickMenu } = useCloseRightClickMenu();
@@ -61,6 +60,7 @@ export const SidePanelWorkflowCreateStepContent = () => {
   const handleCreateStep = async (selection: WorkflowActionSelection) => {
     if (!isDefined(workflowVisualizerWorkflowId)) {
       throw new Error(
+        // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
         'Workflow ID must be configured for the edge when creating a step',
       );
     }
@@ -81,13 +81,16 @@ export const SidePanelWorkflowCreateStepContent = () => {
       return;
     }
 
-    const steps = workflowWithCurrentVersion?.currentVersion?.steps;
+    const steps = flow?.steps;
     const parentStep =
       isDefined(parentStepId) && isDefined(steps) && isDefined(position)
         ? steps.find((step) => step.id === parentStepId)
         : undefined;
 
-    if (parentStep?.type === 'IF_ELSE') {
+    if (
+      parentStep?.type === 'IF_ELSE' &&
+      connectionOptions?.connectedStepType !== 'IF_ELSE'
+    ) {
       await handleIfElseParentStep({
         parentStep,
         createdStepId: createdStep.id,
@@ -104,12 +107,15 @@ export const SidePanelWorkflowCreateStepContent = () => {
 
     setSidePanelNavigationStack([]);
 
-    openWorkflowEditStepInSidePanel(
-      workflowVisualizerWorkflowId,
-      createdStep.name,
-      getIcon(getActionIcon(createdStep.type as WorkflowActionType)),
-      createdStep.id,
-    );
+    openWorkflowEditStepInSidePanel({
+      workflowId: workflowVisualizerWorkflowId,
+      title: getWorkflowStepDisplayName({
+        name: createdStep.name,
+        type: createdStep.type as WorkflowActionType,
+      }),
+      icon: getIcon(getActionIcon(createdStep.type as WorkflowActionType)),
+      stepId: createdStep.id,
+    });
   };
 
   return <SidePanelWorkflowSelectAction onActionSelected={handleCreateStep} />;

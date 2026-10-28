@@ -25,11 +25,13 @@ type StreamDirective = {
 export class StreamingRestLink extends ApolloLink {
   private readonly baseUri: string;
   private readonly defaultHeaders: Record<string, string>;
+  private readonly credentials?: RequestCredentials;
 
   constructor(options: StreamingRestLinkOptions) {
     super();
     this.baseUri = options.uri;
     this.defaultHeaders = options.headers || {};
+    this.credentials = options.credentials;
   }
 
   public request(
@@ -62,6 +64,7 @@ export class StreamingRestLink extends ApolloLink {
       fetch(url, requestConfig)
         .then(async (response) => {
           if (!response.ok) {
+            // oxlint-disable-next-line lingui/no-unlocalized-strings -- HTTP status text is a stable transport diagnostic.
             throw new ServerError(`HTTP error! status: ${response.status}`, {
               response,
               bodyText: '',
@@ -69,6 +72,7 @@ export class StreamingRestLink extends ApolloLink {
           }
 
           if (!response.body) {
+            // oxlint-disable-next-line lingui/no-unlocalized-strings -- Keep stream diagnostics stable for issue grouping.
             throw new Error('Response body is null');
           }
 
@@ -184,6 +188,7 @@ export class StreamingRestLink extends ApolloLink {
       return `${this.baseUri}${path}`;
     }
 
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This is a developer-only request configuration diagnostic.
     throw new Error('No valid URL found');
   }
 
@@ -218,6 +223,7 @@ export class StreamingRestLink extends ApolloLink {
       },
       body,
       signal,
+      ...(isDefined(this.credentials) ? { credentials: this.credentials } : {}),
     };
   }
 }

@@ -4,9 +4,10 @@ import {
 } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 
-import { type RolePermissionConfig } from 'src/engine/twenty-orm/types/role-permission-config';
+import { type RolePermissionConfig } from 'src/engine/twenty-orm/types/role-permission-config.type';
+import { computePermissionIntersection } from 'src/engine/twenty-orm/utils/compute-permission-intersection.util';
+import { getRoleIdsToIntersect } from 'src/engine/twenty-orm/utils/get-role-ids-to-intersect.util';
 
-// Multi-role union/intersection is not ready — use the first assigned role only.
 export const getObjectsPermissionsFromRolePermissionConfig = ({
   rolesPermissions,
   rolePermissionConfig,
@@ -18,16 +19,17 @@ export const getObjectsPermissionsFromRolePermissionConfig = ({
     return {};
   }
 
-  const roleId =
-    'intersectionOf' in rolePermissionConfig
-      ? rolePermissionConfig.intersectionOf[0]
-      : 'unionOf' in rolePermissionConfig
-        ? rolePermissionConfig.unionOf[0]
-        : undefined;
+  const roleIds = getRoleIdsToIntersect(rolePermissionConfig.intersectionOf);
 
-  if (!isDefined(roleId)) {
+  if (!isDefined(roleIds)) {
     return {};
   }
 
-  return rolesPermissions[roleId] ?? {};
+  const permissionsPerRole = roleIds.map((roleId) => rolesPermissions[roleId]);
+
+  if (!permissionsPerRole.every(isDefined)) {
+    return {};
+  }
+
+  return computePermissionIntersection(permissionsPerRole);
 };

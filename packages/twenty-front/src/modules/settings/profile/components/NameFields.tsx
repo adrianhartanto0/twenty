@@ -7,17 +7,15 @@ import { currentUserState } from '@/auth/states/currentUserState';
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useCanEditProfileField } from '@/settings/profile/hooks/useCanEditProfileField';
-import { useUpdateWorkspaceMemberSettings } from '@/settings/profile/hooks/useUpdateWorkspaceMemberSettings';
+import { useUpdateWorkspaceMemberSettings } from '@/workspace-member/hooks/useUpdateWorkspaceMemberSettings';
 import { SettingsTextInput } from '@/ui/input/components/SettingsTextInput';
-import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { themeCssVariables } from 'twenty-ui/theme';
 import { logError } from '~/utils/logError';
 
 const StyledComboInputContainer = styled.div`
   display: flex;
   flex-direction: row;
-  > * + * {
-    margin-left: ${themeCssVariables.spacing[4]};
-  }
+  gap: ${themeCssVariables.spacing[4]};
 `;
 
 type NameFieldsProps = {
@@ -44,6 +42,7 @@ export const NameFields = ({ autoSave = true }: NameFieldsProps) => {
   const debouncedUpdate = useDebouncedCallback(async () => {
     try {
       if (!currentWorkspaceMember?.id) {
+        // oxlint-disable-next-line lingui/no-unlocalized-strings -- Keep this developer invariant stable for error grouping.
         throw new Error('User is not logged in');
       }
 

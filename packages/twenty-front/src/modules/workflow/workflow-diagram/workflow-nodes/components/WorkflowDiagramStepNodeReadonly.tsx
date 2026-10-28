@@ -63,6 +63,7 @@ export const WorkflowDiagramStepNodeReadonly = ({
       !isDefined(workflowVisualizerWorkflowId) ||
       !isDefined(workflowVisualizerWorkflowVersionId)
     ) {
+      // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
       throw new Error('Workflow ID and Version ID must be defined');
     }
 
@@ -94,8 +95,9 @@ export const WorkflowDiagramStepNodeReadonly = ({
         data-click-outside-id={WORKFLOW_DIAGRAM_STEP_NODE_BASE_CLICK_OUTSIDE_ID}
         onClick={handleClick}
         selected={selected}
+        targetHandleCount={data.targetHandleIds?.length}
       >
-        <WorkflowDiagramHandleTarget />
+        <WorkflowDiagramHandleTarget targetHandleIds={data.targetHandleIds} />
         <WorkflowNodeIconContainer>
           <WorkflowDiagramStepNodeIcon data={data} />
         </WorkflowNodeIconContainer>

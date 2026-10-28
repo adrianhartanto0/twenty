@@ -1,7 +1,5 @@
-import { useMemo } from 'react';
-
 import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
-import { getAvatarType } from '@/object-metadata/utils/getAvatarType';
+import { getAvatarShape } from '@/object-metadata/utils/getAvatarShape';
 import { searchRecordStoreFamilyState } from '@/object-record/record-picker/multiple-record-picker/states/searchRecordStoreComponentFamilyState';
 import { SingleRecordPickerComponentInstanceContext } from '@/object-record/record-picker/single-record-picker/states/contexts/SingleRecordPickerComponentInstanceContext';
 import { singleRecordPickerSearchableObjectMetadataItemsComponentState } from '@/object-record/record-picker/single-record-picker/states/singleRecordPickerSearchableObjectMetadataItemsComponentState';
@@ -12,11 +10,11 @@ import { isSelectedItemIdComponentFamilyState } from '@/ui/layout/selectable-lis
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
-// import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
-import { useStore } from 'jotai';
+import { useAtomFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomFamilyStateValue';
+import { useMemo } from 'react';
 import { capitalize, isDefined } from 'twenty-shared/utils';
-import { Avatar } from 'twenty-ui/data-display';
-import { MenuItemSelectAvatar } from 'twenty-ui/navigation';
+import { ListItemButton } from 'twenty-ui/components/navigation';
+import { Avatar } from 'twenty-ui/primitives/data-display';
 import { getAbsoluteImageUrl } from '~/utils/image/getAbsoluteImageUrl';
 
 type SingleRecordPickerMenuItemProps = {
@@ -30,12 +28,6 @@ export const SingleRecordPickerMenuItem = ({
   onMorphItemSelected,
   isRecordSelected,
 }: SingleRecordPickerMenuItemProps) => {
-  const store = useStore();
-
-  const searchRecordStore = store.get(
-    searchRecordStoreFamilyState.atomFamily(morphItem.recordId),
-  );
-
   const recordPickerComponentInstanceId =
     useAvailableComponentInstanceIdOrThrow(
       SingleRecordPickerComponentInstanceContext,
@@ -50,20 +42,17 @@ export const SingleRecordPickerMenuItem = ({
     selectableListComponentInstanceId,
   );
 
+  const searchRecordStore = useAtomFamilyStateValue(
+    searchRecordStoreFamilyState,
+    morphItem.recordId,
+  );
 
   const companyName = searchRecordStore?.record?.company?.name ? `- ${searchRecordStore?.record?.company?.name}`:''
-  const menuText = `${searchRecordStore?.label} ${companyName}`
-
-  // const searchRecordStore = useAtomFamilyStateValue(
-  //   searchRecordStoreFamilyState,
-  //   morphItem.recordId,
-  // );
+  // const menuText = `${searchRecordStore?.label} ${companyName}`
 
   // const searchRecordStore = store.get(
   //   searchRecordStoreFamilyState.atomFamily(morphItem.recordId),
   // );
-
-
   const singleRecordPickerSearchableObjectMetadataItems =
     useAtomComponentStateValue(
       singleRecordPickerSearchableObjectMetadataItemsComponentState,
@@ -97,27 +86,31 @@ export const SingleRecordPickerMenuItem = ({
         onMorphItemSelected(morphItem);
       }}
     >
-      <MenuItemSelectAvatar
-        testId="menu-item"
+      <ListItemButton
         onClick={() => onMorphItemSelected(morphItem)}
-        text={menuText}
-        selected={isRecordSelected}
         focused={isSelectedItemId}
-        avatar={
-          <Avatar
-            avatarUrl={getAbsoluteImageUrl(searchRecordStore.imageUrl)}
-            placeholderColorSeed={morphItem.recordId}
-            placeholder={searchRecordStore.label}
-            size="md"
-            type={getAvatarType(objectMetadataItem)}
-          />
-        }
-        contextualText={
+        role="option"
+        aria-selected={isRecordSelected}
+        selected={isRecordSelected}
+        indicator="check"
+        data-testid={'menu-item'}
+        description={
           showObjectName
             ? capitalize(searchRecordStore.objectLabelSingular)
             : undefined
         }
-      />
+        startIcon={
+          <Avatar
+            src={getAbsoluteImageUrl(searchRecordStore.imageUrl)}
+            colorSeed={morphItem.recordId}
+            name={searchRecordStore.label}
+            size="md"
+            shape={getAvatarShape(objectMetadataItem)}
+          />
+        }
+      >
+        {searchRecordStore.label}
+      </ListItemButton>
     </SelectableListItem>
   );
 };

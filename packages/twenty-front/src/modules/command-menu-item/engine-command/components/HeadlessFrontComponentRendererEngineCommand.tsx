@@ -20,6 +20,7 @@ export const HeadlessFrontComponentRendererEngineCommand = () => {
 
   if (!isHeadlessFrontComponentCommandContextApi(context)) {
     throw new Error(
+      // oxlint-disable-next-line lingui/no-unlocalized-strings -- This is an internal command precondition diagnostic.
       'Context is not a headless front component command context API',
     );
   }
@@ -32,6 +33,8 @@ export const HeadlessFrontComponentRendererEngineCommand = () => {
         frontComponentId={context.frontComponentId}
         commandMenuItemId={commandMenuItemId}
         selectedRecordIds={selectedRecordIds}
+        selectedRecordsFilter={context.graphqlFilter}
+        objectNameSingular={context.objectMetadataItem?.nameSingular}
       />
     </Suspense>
   );

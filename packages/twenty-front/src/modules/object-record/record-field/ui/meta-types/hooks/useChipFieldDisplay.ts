@@ -22,7 +22,6 @@ export const useChipFieldDisplay = () => {
     maxWidth,
     triggerEvent,
     onRecordChipClick,
-    isLabelIdentifierCompact,
   } = useContext(FieldContext);
 
   const { indexIdentifierUrl, labelIdentifierFieldMetadataItem } =
@@ -38,6 +37,8 @@ export const useChipFieldDisplay = () => {
   );
 
   if (!isDefined(chipGeneratorPerObjectPerField)) {
+    // Error text is used for locale-independent issue grouping.
+    // oxlint-disable-next-line lingui/no-unlocalized-strings
     throw new Error('Chip generator per object per field is not defined');
   }
 
@@ -53,6 +54,8 @@ export const useChipFieldDisplay = () => {
   const recordStore = useAtomFamilyStateValue(recordStoreFamilyState, recordId);
 
   if (!isNonEmptyString(objectNameSingular)) {
+    // Error text is used for locale-independent issue grouping.
+    // oxlint-disable-next-line lingui/no-unlocalized-strings
     throw new Error('Object metadata name singular is not a non-empty string');
   }
 
@@ -65,6 +68,5 @@ export const useChipFieldDisplay = () => {
     maxWidth,
     triggerEvent,
     onRecordChipClick,
-    isLabelIdentifierCompact,
   };
 };

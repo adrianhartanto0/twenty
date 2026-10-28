@@ -33,15 +33,9 @@ export const useOpenDropdown = () => {
         dropdownComponentInstanceIdFromContext;
 
       if (!isDefined(dropdownComponentInstanceId)) {
+        // oxlint-disable-next-line lingui/no-unlocalized-strings -- This missing component state is a developer invariant diagnostic.
         throw new Error('Dropdown component instance ID is not defined');
       }
-
-      store.set(
-        isDropdownOpenComponentState.atomFamily({
-          instanceId: dropdownComponentInstanceId,
-        }),
-        true,
-      );
 
       setActiveDropdownFocusIdAndMemorizePrevious(dropdownComponentInstanceId);
 
@@ -60,6 +54,13 @@ export const useOpenDropdown = () => {
             false,
         },
       });
+
+      store.set(
+        isDropdownOpenComponentState.atomFamily({
+          instanceId: dropdownComponentInstanceId,
+        }),
+        true,
+      );
     },
     [
       pushFocusItemToFocusStack,

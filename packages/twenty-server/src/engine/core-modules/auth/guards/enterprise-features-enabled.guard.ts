@@ -1,9 +1,9 @@
 /* @license Enterprise */
 
 import {
+  Injectable,
   type CanActivate,
   type ExecutionContext,
-  Injectable,
 } from '@nestjs/common';
 
 import { GuardRedirectService } from 'src/engine/core-modules/guard-redirect/services/guard-redirect.service';
@@ -15,14 +15,15 @@ export class EnterpriseFeaturesEnabledGuard implements CanActivate {
     // private readonly enterprisePlanService: EnterprisePlanService,
   ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+
     return true
 
     // try {
-    //   if (!this.twentyConfigService.get('ENTERPRISE_KEY')) {
+    //   if (!(await this.enterprisePlanService.isValidWithFreshToken())) {
     //     throw new AuthException(
-    //       'Enterprise key missing',
-    //       AuthExceptionCode.MISSING_ENVIRONMENT_VARIABLE,
+    //       'Enterprise features are not enabled',
+    //       AuthExceptionCode.ENTERPRISE_VALIDITY_TOKEN_NOT_VALID,
     //     );
     //   }
 

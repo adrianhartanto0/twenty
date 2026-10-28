@@ -1,7 +1,8 @@
+import { Dialog } from 'twenty-ui/primitives/surfaces';
+import { DialogInstance } from '@/ui/layout/dialog/components/DialogInstance';
 import { styled } from '@linaria/react';
 import { t } from '@lingui/core/macro';
 import { lazy, Suspense, useState } from 'react';
-import { createPortal } from 'react-dom';
 
 import { DropZone } from '@/activities/files/components/DropZone';
 import { useUploadAttachmentFile } from '@/activities/files/hooks/useUploadAttachmentFile';
@@ -9,9 +10,7 @@ import { type Attachment } from '@/activities/files/types/Attachment';
 import { downloadFile } from '@/activities/files/utils/downloadFile';
 import { type ActivityTargetableObject } from '@/activities/types/ActivityTargetableEntity';
 import { isAttachmentPreviewEnabledState } from '@/client-config/states/isAttachmentPreviewEnabledState';
-import { ModalStatefulWrapper } from '@/ui/layout/modal/components/ModalStatefulWrapper';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { ModalContent, ModalHeader } from 'twenty-ui/surfaces';
 
 import { ActivityList } from '@/activities/components/ActivityList';
 import {
@@ -20,12 +19,12 @@ import {
 } from '@/activities/files/utils/filterAttachmentsWithFile';
 import { getAttachmentUrl } from '@/activities/utils/getAttachmentUrl';
 import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
-import { useModal } from '@/ui/layout/modal/hooks/useModal';
+import { useDialog } from '@/ui/layout/dialog/hooks/useDialog';
 import { ScrollWrapper } from '@/ui/utilities/scroll/components/ScrollWrapper';
 import { isDefined } from 'twenty-shared/utils';
 import { IconDownload, IconX } from 'twenty-ui/icon';
-import { IconButton } from 'twenty-ui/input';
-import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { IconButton } from 'twenty-ui/components/input';
+import { themeCssVariables } from 'twenty-ui/theme';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 import { AttachmentRow } from './AttachmentRow';
 
@@ -44,17 +43,17 @@ const StyledContainer = styled.div`
   align-items: flex-start;
   align-self: stretch;
   display: flex;
+  flex: 1;
   flex-direction: column;
   height: 100%;
-  justify-content: center;
-  padding: ${themeCssVariables.spacing[4]} ${themeCssVariables.spacing[6]}
-    ${themeCssVariables.spacing[6]};
-  width: calc(100% - ${themeCssVariables.spacing[12]});
+  min-height: 0;
+  width: 100%;
 `;
 
 const StyledDropZoneContainer = styled.div`
+  flex: 1;
   height: 100%;
-  overflow: auto;
+  min-height: 0;
   width: 100%;
 `;
 
@@ -62,7 +61,7 @@ const StyledLoadingContainer = styled.div`
   align-items: center;
   background: ${themeCssVariables.background.primary};
   display: flex;
-  height: 80vh;
+  height: calc(80vh / var(--t-zoom, 1));
   justify-content: center;
   width: 100%;
 `;
@@ -73,9 +72,15 @@ const StyledLoadingText = styled.div`
   font-weight: ${themeCssVariables.font.weight.medium};
 `;
 
+const StyledPreviewPopup = styled(Dialog.Popup)`
+  gap: ${themeCssVariables.spacing[2]};
+  padding: ${themeCssVariables.spacing[2]};
+`;
+
 const StyledHeader = styled.div`
   align-items: center;
   display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
   min-height: 40px;
   width: 100%;
@@ -91,7 +96,13 @@ const StyledButtonContainer = styled.div`
   gap: ${themeCssVariables.spacing[1]};
 `;
 
-export const PREVIEW_MODAL_ID = 'preview-modal';
+const StyledPreviewContent = styled.div`
+  display: flex;
+  flex: 1 1 0%;
+  flex-direction: column;
+`;
+
+const PREVIEW_MODAL_ID = 'preview-modal';
 
 export const AttachmentList = ({
   targetableObject,
@@ -114,7 +125,7 @@ export const AttachmentList = ({
     PermissionFlagType.UPLOAD_FILE,
   );
 
-  const { openModal, closeModal } = useModal();
+  const { openDialog, closeDialog } = useDialog();
 
   const attachmentsWithFile = filterAttachmentsWithFile(attachments);
 
@@ -131,11 +142,11 @@ export const AttachmentList = ({
   const handlePreview = (attachment: AttachmentWithFile) => {
     if (!isAttachmentPreviewEnabled) return;
     setPreviewedAttachment(attachment);
-    openModal(PREVIEW_MODAL_ID);
+    openDialog(PREVIEW_MODAL_ID);
   };
 
   const handleClosePreview = () => {
-    closeModal(PREVIEW_MODAL_ID);
+    closeDialog(PREVIEW_MODAL_ID);
     setPreviewedAttachment(null);
   };
 
@@ -159,10 +170,11 @@ export const AttachmentList = ({
               />
             ) : (
               <ActivityList>
-                {attachmentsWithFile.map((attachment) => (
+                {attachmentsWithFile.map((attachment, index) => (
                   <AttachmentRow
                     key={attachment.id}
                     attachment={attachment}
+                    divider={index < attachmentsWithFile.length - 1}
                     onPreview={
                       isAttachmentPreviewEnabled ? handlePreview : undefined
                     }
@@ -173,62 +185,66 @@ export const AttachmentList = ({
           </StyledDropZoneContainer>
         </StyledContainer>
       )}
-      {previewedAttachment &&
-        isAttachmentPreviewEnabled &&
-        createPortal(
-          <ModalStatefulWrapper
-            modalInstanceId={PREVIEW_MODAL_ID}
-            size="large"
-            isClosable
-            onClose={handleClosePreview}
-            renderInDocumentBody
-            gap={2}
-            padding="small"
-          >
-            <ModalHeader noPadding autoHeight>
+      {previewedAttachment && isAttachmentPreviewEnabled && (
+        <DialogInstance
+          dialogId={PREVIEW_MODAL_ID}
+          dismissible
+          onClose={handleClosePreview}
+          renderInDocumentBody
+        >
+          {({ onKeyDown }) => (
+            <StyledPreviewPopup
+              aria-label={previewedAttachment.name}
+              onKeyDown={onKeyDown}
+              size="lg"
+            >
               <StyledHeader>
                 <StyledModalTitle>{previewedAttachment.name}</StyledModalTitle>
                 <StyledButtonContainer>
                   {hasDownloadPermission && (
                     <IconButton
-                      Icon={IconDownload}
+                      aria-label={t`Download attachment`}
                       onClick={handleDownload}
-                      size="small"
-                    />
+                      size="sm"
+                    >
+                      <IconDownload />
+                    </IconButton>
                   )}
                   <IconButton
-                    Icon={IconX}
+                    aria-label={t`Close preview`}
                     onClick={handleClosePreview}
-                    size="small"
-                  />
+                    size="sm"
+                  >
+                    <IconX />
+                  </IconButton>
                 </StyledButtonContainer>
               </StyledHeader>
-            </ModalHeader>
-            <ScrollWrapper
-              componentInstanceId={`preview-modal-${previewedAttachment.id}`}
-            >
-              <ModalContent noPadding>
-                <Suspense
-                  fallback={
-                    <StyledLoadingContainer>
-                      <StyledLoadingText>
-                        {t`Loading document viewer...`}
-                      </StyledLoadingText>
-                    </StyledLoadingContainer>
-                  }
-                >
-                  <DocumentViewer
-                    documentName={previewedAttachment.name}
-                    documentUrl={getAttachmentUrl({
-                      attachment: previewedAttachment,
-                    })}
-                  />
-                </Suspense>
-              </ModalContent>
-            </ScrollWrapper>
-          </ModalStatefulWrapper>,
-          document.body,
-        )}
+              <ScrollWrapper
+                componentInstanceId={`preview-modal-${previewedAttachment.id}`}
+              >
+                <StyledPreviewContent>
+                  <Suspense
+                    fallback={
+                      <StyledLoadingContainer>
+                        <StyledLoadingText>
+                          {t`Loading document viewer...`}
+                        </StyledLoadingText>
+                      </StyledLoadingContainer>
+                    }
+                  >
+                    <DocumentViewer
+                      documentName={previewedAttachment.name}
+                      documentUrl={getAttachmentUrl({
+                        attachment: previewedAttachment,
+                      })}
+                    />
+                  </Suspense>
+                </StyledPreviewContent>
+              </ScrollWrapper>
+            </StyledPreviewPopup>
+          )}
+        </DialogInstance>
+      )}
     </>
   );
 };

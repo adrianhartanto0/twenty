@@ -1,6 +1,6 @@
 import { ChartColorGradientOption } from '@/side-panel/pages/page-layout/components/dropdown-content/ChartColorGradientOption';
 import { ChartColorPaletteOption } from '@/side-panel/pages/page-layout/components/dropdown-content/ChartColorPaletteOption';
-import { usePageLayoutIdFromContextStore } from '@/side-panel/pages/page-layout/hooks/usePageLayoutIdFromContextStore';
+import { usePageLayoutSidePanelTarget } from '@/side-panel/pages/page-layout/hooks/usePageLayoutSidePanelTarget';
 import { useUpdateCurrentWidgetConfig } from '@/side-panel/pages/page-layout/hooks/useUpdateCurrentWidgetConfig';
 import { useWidgetInEditMode } from '@/side-panel/pages/page-layout/hooks/useWidgetInEditMode';
 import { type ChartConfiguration } from '@/side-panel/pages/page-layout/types/ChartConfiguration';
@@ -28,7 +28,7 @@ type ColorOption = {
 
 export const ChartColorSelectionDropdownContent = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const { pageLayoutId } = usePageLayoutIdFromContextStore();
+  const { pageLayoutId } = usePageLayoutSidePanelTarget();
   const { widgetInEditMode } = useWidgetInEditMode(pageLayoutId);
 
   const dropdownId = useAvailableComponentInstanceIdOrThrow(
@@ -55,6 +55,7 @@ export const ChartColorSelectionDropdownContent = () => {
       'IframeConfiguration',
     )
   ) {
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
     throw new Error('Invalid configuration type');
   }
 
@@ -77,7 +78,7 @@ export const ChartColorSelectionDropdownContent = () => {
   const colorOptions: ColorOption[] = [
     {
       id: 'auto',
-      name: 'Default palette',
+      name: t`Default palette`,
       colorName: 'auto',
     },
     ...MAIN_COLOR_NAMES.map((colorName) => ({

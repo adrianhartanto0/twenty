@@ -74,6 +74,8 @@ export const useRecordGroupActions = ({
     setNavigationMemorizedUrl(location.pathname + location.search);
 
     if (!isDefined(recordIndexGroupFieldMetadataItem)) {
+      // Error text is used for locale-independent issue grouping.
+      // oxlint-disable-next-line lingui/no-unlocalized-strings
       throw new Error('recordGroupFieldMetadata is not a non-empty string');
     }
 
@@ -115,6 +117,7 @@ export const useRecordGroupActions = ({
         !isCurrentRecordGroupNotFound &&
         currentIndex < visibleRecordGroupIds.length - 1,
       position: 1,
+      closeOnClick: false,
       callback: () =>
         reorderRecordGroups({
           fromIndex: currentIndex,
@@ -127,6 +130,7 @@ export const useRecordGroupActions = ({
       icon: IconArrowLeft,
       condition: !isCurrentRecordGroupNotFound && currentIndex > 0,
       position: 2,
+      closeOnClick: false,
       callback: () =>
         reorderRecordGroups({
           fromIndex: currentIndex,

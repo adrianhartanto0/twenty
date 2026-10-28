@@ -1,11 +1,11 @@
 import { usePushNotificationSubscription } from '@/push-notification/hooks/usePushNotificationSubscription';
-import { SettingsOptionCardContentToggle } from '@/settings/components/SettingsOptions/SettingsOptionCardContentToggle';
+import { SettingsOptionCardContentSwitch } from '@/settings/components/SettingsOptions/SettingsOptionCardContentSwitch';
 import { styled } from '@linaria/react';
 import { useLingui } from '@lingui/react/macro';
 import { IconBell, IconSend } from 'twenty-ui/icon';
-import { Button } from 'twenty-ui/input';
-import { Card } from 'twenty-ui/surfaces';
-import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { Button } from 'twenty-ui/primitives/input';
+import { Card } from 'twenty-ui/primitives/surfaces';
+import { themeCssVariables } from 'twenty-ui/theme';
 
 const StyledContainer = styled.div`
   display: flex;
@@ -79,8 +79,8 @@ export const PushNotificationSettings = () => {
 
   return (
     <StyledContainer>
-      <Card>
-        <SettingsOptionCardContentToggle
+      <Card.Root>
+        <SettingsOptionCardContentSwitch
           Icon={IconBell}
           title={t`Push notifications on this device`}
           description={getDescription()}
@@ -88,7 +88,7 @@ export const PushNotificationSettings = () => {
           disabled={isDisabled}
           onChange={handleToggle}
         />
-      </Card>
+      </Card.Root>
       {isSubscribed && (
         <div>
           <Button

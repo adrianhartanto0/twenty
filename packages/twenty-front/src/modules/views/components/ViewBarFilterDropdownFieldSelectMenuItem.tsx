@@ -1,7 +1,7 @@
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
-import { FILTER_FIELD_LIST_ID } from '@/object-record/object-filter-dropdown/constants/FilterFieldListId';
 import { useWorkspaceMemberRoles } from '@/settings/members/hooks/useWorkspaceMemberRoles';
+import { SelectOptionIcon } from '@/ui/input/components/SelectOptionIcon';
 import { SelectableListItem } from '@/ui/layout/selectable-list/components/SelectableListItem';
 import { useSelectableList } from '@/ui/layout/selectable-list/hooks/useSelectableList';
 import { isSelectedItemIdComponentFamilyState } from '@/ui/layout/selectable-list/states/isSelectedItemIdComponentFamilyState';
@@ -9,8 +9,8 @@ import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hoo
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useGetCurrentViewOnly } from '@/views/hooks/useGetCurrentViewOnly';
 import { useInitializeFilterOnFieldMetadataItemFromViewBarFilterDropdown } from '@/views/hooks/useInitializeFilterOnFieldMetadataItemFromViewBarFilterDropdown';
+import { ListItemButton } from 'twenty-ui/components/navigation';
 import { useIcons } from 'twenty-ui/icon';
-import { MenuItem } from 'twenty-ui/navigation';
 
 export type ViewBarFilterDropdownFieldSelectMenuItemProps = {
   fieldMetadataItemToSelect: FieldMetadataItem;
@@ -19,7 +19,7 @@ export type ViewBarFilterDropdownFieldSelectMenuItemProps = {
 export const ViewBarFilterDropdownFieldSelectMenuItem = ({
   fieldMetadataItemToSelect,
 }: ViewBarFilterDropdownFieldSelectMenuItemProps) => {
-  const { resetSelectedItem } = useSelectableList(FILTER_FIELD_LIST_ID);
+  const { resetSelectedItem } = useSelectableList();
 
   const isSelectedItemId = useAtomComponentFamilyStateValue(
     isSelectedItemIdComponentFamilyState,
@@ -77,12 +77,13 @@ export const ViewBarFilterDropdownFieldSelectMenuItem = ({
       itemId={fieldMetadataItemToSelect.id}
       onEnter={handleClick}
     >
-      <MenuItem
+      <ListItemButton
         focused={isSelectedItemId}
         onClick={handleClick}
-        LeftIcon={Icon}
-        text={fieldMetadataItemToSelect.label}
-      />
+        startIcon={<SelectOptionIcon Icon={Icon} />}
+      >
+        {fieldMetadataItemToSelect.label}
+      </ListItemButton>
     </SelectableListItem>
   );
 };

@@ -14,9 +14,8 @@ import { getCalendarEventStartDate } from '@/activities/calendar/utils/getCalend
 import { hasCalendarEventEnded } from '@/activities/calendar/utils/hasCalendarEventEnded';
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useOpenCalendarEventInSidePanel } from '@/side-panel/hooks/useOpenCalendarEventInSidePanel';
-import { useContext } from 'react';
 import { IconArrowRight } from 'twenty-ui/icon';
-import { ThemeContext, themeCssVariables } from 'twenty-ui/theme-constants';
+import { useTheme, themeCssVariables } from 'twenty-ui/theme';
 
 type CalendarEventRowProps = {
   calendarEvent: TimelineCalendarEvent;
@@ -75,7 +74,7 @@ export const CalendarEventRow = ({
   calendarEvent,
   className,
 }: CalendarEventRowProps) => {
-  const { theme } = useContext(ThemeContext);
+  const theme = useTheme();
   const currentWorkspaceMember = useAtomStateValue(currentWorkspaceMemberState);
   const { openCalendarEventInSidePanel } = useOpenCalendarEventInSidePanel();
 
@@ -85,7 +84,9 @@ export const CalendarEventRow = ({
 
   const startTimeLabel = calendarEvent.isFullDay
     ? t`All day`
-    : format(startsAt, 'HH:mm');
+    : // oxlint-disable-next-line lingui/no-unlocalized-strings -- This is a date format or time-zone identifier.
+      format(startsAt, 'HH:mm');
+  // oxlint-disable-next-line lingui/no-unlocalized-strings -- This is a date format or time-zone identifier.
   const endTimeLabel = calendarEvent.isFullDay ? '' : format(endsAt, 'HH:mm');
 
   const isCurrentWorkspaceMemberAttending = calendarEvent.participants?.some(

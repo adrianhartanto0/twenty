@@ -27,6 +27,10 @@ const getCategoryLabel = (category: ToolCategory): string => {
       return 'Navigation Menu Item Tools (sidebar entries, folders, and user favorites)';
     case ToolCategory.WEBHOOK:
       return 'Webhook Tools (outgoing webhooks)';
+    case ToolCategory.ROLE:
+      return 'Role Tools (manage roles and permissions)';
+    case ToolCategory.AGENT:
+      return 'Agent Tools (create/manage AI agents and their triggers)';
     default:
       return assertUnreachable(category);
   }

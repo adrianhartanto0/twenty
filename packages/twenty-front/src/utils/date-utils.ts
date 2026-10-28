@@ -29,6 +29,7 @@ export const parseDate = (dateToParse: Date | string | number): Date => {
 
   if (dateToParse === '' || dateToParse === 0) {
     throw new CustomError(
+      // oxlint-disable-next-line lingui/no-unlocalized-strings -- This is a diagnostic paired with the stable INVALID_DATE_FORMAT code.
       `Invalid date passed to formatPastDate: "${dateToParse}"`,
       'INVALID_DATE_FORMAT',
     );
@@ -42,6 +43,7 @@ export const parseDate = (dateToParse: Date | string | number): Date => {
 
   if (!formattedDate) {
     throw new CustomError(
+      // oxlint-disable-next-line lingui/no-unlocalized-strings -- This is a diagnostic paired with the stable INVALID_DATE_FORMAT code.
       `Invalid date passed to formatPastDate: "${dateToParse}"`,
       'INVALID_DATE_FORMAT',
     );
@@ -49,6 +51,7 @@ export const parseDate = (dateToParse: Date | string | number): Date => {
 
   if (!isValid(formattedDate)) {
     throw new CustomError(
+      // oxlint-disable-next-line lingui/no-unlocalized-strings -- This is a diagnostic paired with the stable INVALID_DATE_FORMAT code.
       `Invalid date passed to formatPastDate: "${dateToParse}"`,
       'INVALID_DATE_FORMAT',
     );
@@ -75,6 +78,7 @@ export const beautifyExactDateTime = (
 ) => {
   const parsedDate = parseDate(dateToBeautify);
   const isTodayDate = isToday(parsedDate);
+  // oxlint-disable-next-line lingui/no-unlocalized-strings -- These are date-fns format tokens.
   const dateFormat = isTodayDate ? 'HH:mm' : 'MMM d, yyyy · HH:mm';
   return formatDate(dateToBeautify, dateFormat);
 };
@@ -85,6 +89,7 @@ export const beautifyExactDate = (dateToBeautify: Date | string | number) => {
   if (isTodayDate) {
     return t`Today`;
   }
+  // oxlint-disable-next-line lingui/no-unlocalized-strings -- This is a date-fns format pattern.
   return formatDate(dateToBeautify, 'MMM d, yyyy');
 };
 
@@ -99,7 +104,6 @@ export const beautifyPastDateRelativeToNow = (
       (now.getTime() - parsedDate.getTime()) / 1000,
     );
 
-    // For very recent times (less than 30 seconds), show "now"
     if (diffInSeconds < 30) {
       return t`now`;
     }
@@ -169,19 +173,16 @@ export const beautifyDateDiff = (
   short = false,
   locale?: Locale,
 ) => {
-  // For simple cases, use date-fns which has excellent locale support
   if (!short && isDefined(locale)) {
     const fromDate = new Date(date);
     const toDate = dateToCompareWith ? new Date(dateToCompareWith) : new Date();
     return formatDistance(fromDate, toDate, { locale });
   }
 
-  // Manual implementation for complex cases or when locale is not available
   const fromDate = parseISO(date);
   const toDate = dateToCompareWith ? parseISO(dateToCompareWith) : new Date();
 
   const years = differenceInYears(fromDate, toDate);
-  // Calculate remaining days after accounting for full years
   const startDateForDayCalculation = new Date(toDate);
   startDateForDayCalculation.setFullYear(
     startDateForDayCalculation.getFullYear() + years,
@@ -221,6 +222,7 @@ export const formatToHumanReadableDate = (date: Date | string) => {
 };
 
 const getTimePattern = (timeFormat: TimeFormat) => {
+  // oxlint-disable-next-line lingui/no-unlocalized-strings -- These are date-fns format tokens.
   return timeFormat === TimeFormat.HOUR_12 ? 'hh:mm a' : 'HH:mm';
 };
 
@@ -239,6 +241,7 @@ export const getDateTimeFormatStringFoDatePickerInputMask = ({
       return `yyyy-MM-dd ${timePattern}`;
     case DateFormat.MONTH_FIRST:
     default:
+      // oxlint-disable-next-line lingui/no-unlocalized-strings -- This is a date-picker input mask pattern.
       return `MM/dd/yyyy ${timePattern}`;
   }
 };
@@ -253,6 +256,7 @@ export const getDateFormatStringForDatePickerInputMask = (
       return `yyyy-MM-dd`;
     case DateFormat.MONTH_FIRST:
     default:
+      // oxlint-disable-next-line lingui/no-unlocalized-strings -- This is a date-picker input mask pattern.
       return `MM/dd/yyyy`;
   }
 };

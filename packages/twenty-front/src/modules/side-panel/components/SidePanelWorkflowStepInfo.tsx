@@ -3,40 +3,44 @@ import { useLogicFunctionThirdPartyApplicationInformation } from '@/logic-functi
 import { useUpdateSidePanelPageInfo } from '@/side-panel/hooks/useUpdateSidePanelPageInfo';
 import { useSidePanelWorkflowIdOrThrow } from '@/side-panel/pages/workflow/hooks/useSidePanelWorkflowIdOrThrow';
 import { sidePanelWorkflowStepIdComponentState } from '@/side-panel/pages/workflow/states/sidePanelWorkflowStepIdComponentState';
-import { sidePanelPageState } from '@/side-panel/states/sidePanelPageState';
+import { sidePanelPageInfoSelector } from '@/side-panel/states/sidePanelPageInfoSelector';
 import { TitleInput } from '@/ui/input/components/TitleInput';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { useGetUpdatableWorkflowVersionOrThrow } from '@/workflow/hooks/useGetUpdatableWorkflowVersionOrThrow';
+import { flowComponentState } from '@/workflow/states/flowComponentState';
 import { useWorkflowWithCurrentVersion } from '@/workflow/hooks/useWorkflowWithCurrentVersion';
 import { getAgentIdFromStep } from '@/workflow/utils/getAgentIdFromStep';
 import { getStepDefinitionOrThrow } from '@/workflow/utils/getStepDefinitionOrThrow';
+import { getWorkflowStepDisplayName } from '@/workflow/utils/getWorkflowStepDisplayName';
 import { getWorkflowVisualizerComponentInstanceId } from '@/workflow/utils/getWorkflowVisualizerComponentInstanceId';
 import { useUpdateAgentLabel } from '@/workflow/workflow-steps/hooks/useUpdateAgentLabel';
 import { useUpdateWorkflowVersionStep } from '@/workflow/workflow-steps/hooks/useUpdateWorkflowVersionStep';
 import { useUpdateWorkflowVersionTrigger } from '@/workflow/workflow-trigger/hooks/useUpdateWorkflowVersionTrigger';
+import { useWorkflowVersionContent } from '@/workflow/workflow-version/hooks/useWorkflowVersionContent';
+import { getActionHeaderTypeOrThrow } from '@/workflow/workflow-steps/workflow-actions/utils/getActionHeaderTypeOrThrow';
 import { getActionIcon } from '@/workflow/workflow-steps/workflow-actions/utils/getActionIcon';
 import { getActionIconColorOrThrow } from '@/workflow/workflow-steps/workflow-actions/utils/getActionIconColorOrThrow';
 import { getTriggerIcon } from '@/workflow/workflow-trigger/utils/getTriggerIcon';
 import { getTriggerIconColor } from '@/workflow/workflow-trigger/utils/getTriggerIconColor';
 import { t } from '@lingui/core/macro';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { SidePanelPages } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
 import { TRIGGER_STEP_ID } from 'twenty-shared/workflow';
 import { useIcons } from 'twenty-ui/icon';
-import { SidePanelPageInfoLayout } from './SidePanelPageInfoLayout';
-import { ThemeContext } from 'twenty-ui/theme-constants';
+import { HeaderIdentifier } from '@/ui/layout/page/components/HeaderIdentifier';
+import { useTheme } from 'twenty-ui/theme';
 
 export const SidePanelWorkflowStepInfo = ({
   sidePanelPageInstanceId,
 }: {
   sidePanelPageInstanceId: string;
 }) => {
-  const { theme } = useContext(ThemeContext);
+  const theme = useTheme();
   const { getIcon } = useIcons();
 
-  const sidePanelPage = useAtomStateValue(sidePanelPageState);
+  const sidePanelPage = useAtomStateValue(sidePanelPageInfoSelector).page;
 
   const workflowId = useSidePanelWorkflowIdOrThrow();
 
@@ -63,15 +67,13 @@ export const SidePanelWorkflowStepInfo = ({
     useUpdateWorkflowVersionStep(instanceId);
   const { updateTrigger } = useUpdateWorkflowVersionTrigger(instanceId);
 
-  const {
-    trigger,
-    steps,
-    id: workflowVersionId,
-  } = workflowWithCurrentVersion?.currentVersion ?? {
-    trigger: null,
-    steps: null,
-    id: undefined,
-  };
+  const workflowVersionId = workflowWithCurrentVersion?.currentVersion?.id;
+
+  const flow = useAtomComponentStateValue(flowComponentState, instanceId);
+  const { content } = useWorkflowVersionContent(workflowVersionId);
+
+  const trigger = flow?.trigger ?? content?.trigger ?? null;
+  const steps = flow?.steps ?? content?.steps ?? null;
 
   const isTriggerStep = sidePanelWorkflowStepId === TRIGGER_STEP_ID;
 
@@ -109,10 +111,24 @@ export const SidePanelWorkflowStepInfo = ({
         : (stepDefinition.definition.name ?? t`Action`)
       : '';
 
+  const displayedStepName =
+    isReadonly &&
+    isDefined(stepDefinition) &&
+    isDefined(stepDefinition.definition) &&
+    isDefined(stepDefinition.definition.name)
+      ? getWorkflowStepDisplayName({
+          name: stepDefinition.definition.name,
+          type: stepDefinition.definition.type,
+        })
+      : stepName;
+
   const [editedTitle, setEditedTitle] = useState<string | null>(null);
 
   const title =
-    editedTitle ?? (isDefined(stepName) && stepName !== '' ? stepName : '');
+    editedTitle ??
+    (isDefined(displayedStepName) && displayedStepName !== ''
+      ? displayedStepName
+      : '');
 
   const handleTitleChange = (newTitle: string) => {
     setEditedTitle(newTitle);
@@ -136,7 +152,9 @@ export const SidePanelWorkflowStepInfo = ({
     ? getTriggerIconColor(stepDefinition.definition.type)
     : getActionIconColorOrThrow(stepDefinition.definition.type);
 
-  const headerType = isTrigger ? t`Trigger` : t`Action`;
+  const headerType = isTrigger
+    ? t`Trigger`
+    : t(getActionHeaderTypeOrThrow(stepDefinition.definition.type));
 
   const label = isDefined(thirdPartyApplicationInformation)
     ? thirdPartyApplicationInformation.name
@@ -177,7 +195,7 @@ export const SidePanelWorkflowStepInfo = ({
   };
 
   return (
-    <SidePanelPageInfoLayout
+    <HeaderIdentifier
       icon={
         isDefined(thirdPartyApplicationInformation) ? (
           <AppChip

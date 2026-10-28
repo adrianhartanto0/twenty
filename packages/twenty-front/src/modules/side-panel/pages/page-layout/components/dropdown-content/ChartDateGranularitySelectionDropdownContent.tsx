@@ -1,4 +1,4 @@
-import { usePageLayoutIdFromContextStore } from '@/side-panel/pages/page-layout/hooks/usePageLayoutIdFromContextStore';
+import { usePageLayoutSidePanelTarget } from '@/side-panel/pages/page-layout/hooks/usePageLayoutSidePanelTarget';
 import { useUpdateCurrentWidgetConfig } from '@/side-panel/pages/page-layout/hooks/useUpdateCurrentWidgetConfig';
 import { useWidgetInEditMode } from '@/side-panel/pages/page-layout/hooks/useWidgetInEditMode';
 import { type ChartConfiguration } from '@/side-panel/pages/page-layout/types/ChartConfiguration';
@@ -15,7 +15,7 @@ import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/com
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { ObjectRecordGroupByDateGranularity } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { MenuItemSelect } from 'twenty-ui/navigation';
+import { ListItemButton } from 'twenty-ui/components/navigation';
 import {
   type FieldsConfiguration,
   type WidgetConfiguration,
@@ -74,12 +74,13 @@ const isChartConfiguration = (
 export const ChartDateGranularitySelectionDropdownContent = ({
   axis,
 }: ChartDateGranularitySelectionDropdownContentProps) => {
-  const { pageLayoutId } = usePageLayoutIdFromContextStore();
+  const { pageLayoutId } = usePageLayoutSidePanelTarget();
   const { widgetInEditMode } = useWidgetInEditMode(pageLayoutId);
 
   const configuration = widgetInEditMode?.configuration;
 
   if (!isChartConfiguration(configuration)) {
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
     throw new Error('Invalid configuration type');
   }
 
@@ -92,10 +93,12 @@ export const ChartDateGranularitySelectionDropdownContent = ({
     isWidgetConfigurationOfType(configuration, 'LineChartConfiguration');
 
   if (!isDefined(axis) && !isPieChart) {
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
     throw new Error('Invalid configuration type');
   }
 
   if (isDefined(axis) && !isBarOrLineChart) {
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
     throw new Error('Invalid configuration type');
   }
 
@@ -160,14 +163,18 @@ export const ChartDateGranularitySelectionDropdownContent = ({
                 handleSelectDateGranularityOption(option);
               }}
             >
-              <MenuItemSelect
-                text={getDateGranularityLabel(option)}
-                selected={currentDateGranularity === option}
+              <ListItemButton
                 focused={selectedItemId === option}
                 onClick={() => {
                   handleSelectDateGranularityOption(option);
                 }}
-              />
+                role="option"
+                aria-selected={currentDateGranularity === option}
+                selected={currentDateGranularity === option}
+                indicator="check"
+              >
+                {getDateGranularityLabel(option)}
+              </ListItemButton>
             </SelectableListItem>
           ))}
         </SelectableList>

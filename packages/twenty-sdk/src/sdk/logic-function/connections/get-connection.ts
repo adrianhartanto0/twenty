@@ -9,11 +9,14 @@ const GET_APP_CONNECTION_QUERY = `
       providerName
       name
       handle
+      externalAccountId
       visibility
       userWorkspaceId
+      workspaceMemberId
       accessToken
       scopes
       authFailedAt
+      authFailedReason
     }
   }
 `;

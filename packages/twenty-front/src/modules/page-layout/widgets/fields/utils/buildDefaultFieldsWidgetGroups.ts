@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro';
 import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
 import { getIsMetadataItemCustom } from '@/object-metadata/utils/getIsMetadataItemCustom';
 import { type FieldsWidgetGroup } from '@/page-layout/widgets/fields/types/FieldsWidgetGroup';
@@ -40,7 +41,7 @@ export const buildDefaultFieldsWidgetGroups = ({
   if (nonCustomFields.length > 0) {
     groups.push({
       id: uuidv4(),
-      name: 'General',
+      name: t`General`,
       position: 0,
       isVisible: true,
       fields: nonCustomFields.map((field, index) => ({
@@ -55,7 +56,7 @@ export const buildDefaultFieldsWidgetGroups = ({
   if (customFields.length > 0) {
     groups.push({
       id: uuidv4(),
-      name: 'Other',
+      name: t`Other`,
       position: 1,
       isVisible: true,
       fields: customFields.map((field, index) => ({

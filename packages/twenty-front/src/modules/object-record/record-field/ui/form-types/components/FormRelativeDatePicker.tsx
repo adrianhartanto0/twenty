@@ -7,7 +7,7 @@ import { styled } from '@linaria/react';
 import { isNonEmptyString } from '@sniptt/guards';
 import { useId } from 'react';
 import { DEFAULT_RELATIVE_DATE_FILTER_VALUE } from 'twenty-shared/constants';
-import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { themeCssVariables } from 'twenty-ui/theme';
 
 import {
   type RelativeDateFilter,
@@ -64,6 +64,8 @@ export const FormRelativeDatePicker = ({
         instanceId={instanceId}
         onChange={handleValueChange}
         direction={valueParsed?.direction ?? 'THIS'}
+        // Date and time syntax must stay stable across locales.
+        // oxlint-disable-next-line lingui/no-unlocalized-strings
         unit={valueParsed?.unit ?? 'DAY'}
         amount={valueParsed?.amount ?? undefined}
         isFormField={true}

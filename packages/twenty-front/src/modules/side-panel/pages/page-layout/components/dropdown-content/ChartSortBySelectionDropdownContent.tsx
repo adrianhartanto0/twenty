@@ -1,16 +1,19 @@
+import { findFieldMetadataItemByFieldMetadataId } from '@/object-metadata/utils/findFieldMetadataItemByFieldMetadataId';
+import { SelectOptionIcon } from '@/ui/input/components/SelectOptionIcon';
 import { useState } from 'react';
+import { OverflowingTextWithTooltip } from 'twenty-ui/primitives/typography';
 
+import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { ChartManualSortSubMenuContent } from '@/side-panel/pages/page-layout/components/dropdown-content/ChartManualSortSubMenuContent';
 import { X_SORT_BY_OPTIONS } from '@/side-panel/pages/page-layout/constants/XSortByOptions';
 import { useGraphXSortOptionLabels } from '@/side-panel/pages/page-layout/hooks/useGraphXSortOptionLabels';
-import { usePageLayoutIdFromContextStore } from '@/side-panel/pages/page-layout/hooks/usePageLayoutIdFromContextStore';
+import { usePageLayoutSidePanelTarget } from '@/side-panel/pages/page-layout/hooks/usePageLayoutSidePanelTarget';
 import { useUpdateCurrentWidgetConfig } from '@/side-panel/pages/page-layout/hooks/useUpdateCurrentWidgetConfig';
 import { useWidgetInEditMode } from '@/side-panel/pages/page-layout/hooks/useWidgetInEditMode';
 import { filterSortOptionsByFieldType } from '@/side-panel/pages/page-layout/utils/filterSortOptionsByFieldType';
 import { getDefaultManualSortOrder } from '@/side-panel/pages/page-layout/utils/getDefaultManualSortOrder';
 import { getSortIconForFieldType } from '@/side-panel/pages/page-layout/utils/getSortIconForFieldType';
 import { isWidgetConfigurationOfType } from '@/side-panel/pages/page-layout/utils/isWidgetConfigurationOfType';
-import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
 import { DropdownMenuItemsContainer } from '@/ui/layout/dropdown/components/DropdownMenuItemsContainer';
 import { DropdownComponentInstanceContext } from '@/ui/layout/dropdown/contexts/DropdownComponentInstanceContext';
 import { useCloseDropdown } from '@/ui/layout/dropdown/hooks/useCloseDropdown';
@@ -21,7 +24,7 @@ import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/com
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { type CompositeFieldSubFieldName } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
-import { MenuItemSelect } from 'twenty-ui/navigation';
+import { ListItemButton } from 'twenty-ui/components/navigation';
 import {
   type BarChartConfiguration,
   GraphOrderBy,
@@ -30,7 +33,7 @@ import {
 
 export const ChartSortBySelectionDropdownContent = () => {
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
-  const { pageLayoutId } = usePageLayoutIdFromContextStore();
+  const { pageLayoutId } = usePageLayoutSidePanelTarget();
   const { widgetInEditMode } = useWidgetInEditMode(pageLayoutId);
   const { objectMetadataItems } = useObjectMetadataItems();
   const { updateCurrentWidgetConfig } =
@@ -62,10 +65,12 @@ export const ChartSortBySelectionDropdownContent = () => {
   );
 
   if (!isBarChart && !isLineChart && !isPieChart) {
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
     throw new Error('Invalid configuration type');
   }
 
   if (!isDefined(widgetInEditMode?.objectMetadataId)) {
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
     throw new Error('No data source in chart');
   }
 
@@ -97,9 +102,10 @@ export const ChartSortBySelectionDropdownContent = () => {
       barOrLineChartConfiguration.primaryAxisGroupBySubFieldName;
   }
 
-  const primaryAxisField = objectMetadataItem?.fields.find(
-    (field) => field.id === groupByFieldMetadataId,
-  );
+  const primaryAxisField = findFieldMetadataItemByFieldMetadataId({
+    fieldMetadataItems: objectMetadataItem?.fields,
+    fieldMetadataId: groupByFieldMetadataId,
+  });
 
   if (!isDefined(primaryAxisField)) {
     return null;
@@ -182,32 +188,42 @@ export const ChartSortBySelectionDropdownContent = () => {
                 handleSelect(sortOption.value);
               }}
             >
-              <MenuItemSelect
-                text={getXSortOptionLabel({
-                  graphOrderBy: sortOption.value,
-                  groupByFieldMetadataIdX: groupByFieldMetadataId ?? '',
-                  groupBySubFieldNameX: groupBySubFieldName as
-                    | CompositeFieldSubFieldName
-                    | undefined,
-                  aggregateFieldMetadataId:
-                    configuration.aggregateFieldMetadataId ?? undefined,
-                  aggregateOperation:
-                    configuration.aggregateOperation ?? undefined,
-                })}
-                selected={currentOrderBy === sortOption.value}
+              <ListItemButton
                 focused={selectedItemId === sortOption.value}
-                LeftIcon={
-                  sortOption.icon ??
-                  getSortIconForFieldType({
-                    fieldType: primaryAxisField?.type,
-                    orderBy: sortOption.value,
-                  })
-                }
-                hasSubMenu={isManualOption}
                 onClick={() => {
                   handleSelect(sortOption.value);
                 }}
-              />
+                role="option"
+                aria-selected={currentOrderBy === sortOption.value}
+                selected={currentOrderBy === sortOption.value}
+                indicator="check"
+                hasSubmenu={isManualOption}
+                startIcon={
+                  <SelectOptionIcon
+                    Icon={
+                      sortOption.icon ??
+                      getSortIconForFieldType({
+                        fieldType: primaryAxisField?.type,
+                        orderBy: sortOption.value,
+                      })
+                    }
+                  />
+                }
+              >
+                <OverflowingTextWithTooltip
+                  text={getXSortOptionLabel({
+                    graphOrderBy: sortOption.value,
+                    groupByFieldMetadataIdX: groupByFieldMetadataId ?? '',
+                    groupBySubFieldNameX: groupBySubFieldName as
+                      | CompositeFieldSubFieldName
+                      | undefined,
+                    aggregateFieldMetadataId:
+                      configuration.aggregateFieldMetadataId ?? undefined,
+                    aggregateOperation:
+                      configuration.aggregateOperation ?? undefined,
+                  })}
+                />
+              </ListItemButton>
             </SelectableListItem>
           );
         })}

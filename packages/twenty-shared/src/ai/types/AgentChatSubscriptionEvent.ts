@@ -1,11 +1,17 @@
-// `chunk` is typed as Record<string, unknown> rather than UIMessageChunk
-// to avoid importing the `ai` package in twenty-shared. The frontend casts
-// it back to UIMessageChunk when feeding it into readUIMessageStream.
+import { type AgentMessageReactionSummary } from '@/ai/types/AgentMessageReactionSummary';
+
+// Not UIMessageChunk, to keep the `ai` package out of twenty-shared.
 export type AgentChatSubscriptionEvent =
   | { type: 'stream-chunk'; chunk: Record<string, unknown>; seq?: number }
   | { type: 'message-persisted'; messageId: string }
   | { type: 'queue-updated' }
-  | { type: 'question-answered' }
+  | { type: 'tool-call-resolved'; toolCallId: string }
+  | {
+      type: 'message-reactions-updated';
+      messageId: string;
+      reactions: AgentMessageReactionSummary[];
+      revision: number;
+    }
   | { type: 'stream-error'; code: string; message: string }
   | { type: 'credits-exhausted' }
   | { type: 'keepalive' };

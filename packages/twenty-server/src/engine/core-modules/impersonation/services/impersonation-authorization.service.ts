@@ -80,6 +80,8 @@ export class ImpersonationAuthorizationService {
         userWorkspaceId: impersonatorUserWorkspace.id,
         setting: PermissionFlagType.IMPERSONATE,
         workspaceId: targetUserWorkspace.workspace.id,
+        applicationId: undefined,
+        agentId: undefined,
       });
 
     if (!hasWorkspaceLevelImpersonatePermission) {

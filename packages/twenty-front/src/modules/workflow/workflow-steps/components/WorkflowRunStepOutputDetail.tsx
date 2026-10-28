@@ -8,9 +8,8 @@ import { useLingui } from '@lingui/react/macro';
 import { isDefined } from 'twenty-shared/utils';
 import {
   type GetJsonNodeHighlighting,
-  isTwoFirstDepths,
   JsonTree,
-} from 'twenty-ui/json-visualizer';
+} from 'twenty-ui/components/data-display';
 import { useCopyToClipboard } from '~/hooks/useCopyToClipboard';
 
 export const WorkflowRunStepOutputDetail = ({ stepId }: { stepId: string }) => {
@@ -36,6 +35,7 @@ export const WorkflowRunStepOutputDetail = ({ stepId }: { stepId: string }) => {
     steps: workflowRun.state.flow.steps,
   });
   if (!isDefined(stepDefinition?.definition)) {
+    // oxlint-disable-next-line lingui/no-unlocalized-strings -- This message describes a developer-only invariant; keeping it stable preserves error reporting fingerprints.
     throw new Error('The step is expected to be properly shaped.');
   }
 
@@ -52,7 +52,6 @@ export const WorkflowRunStepOutputDetail = ({ stepId }: { stepId: string }) => {
       <WorkflowRunStepJsonContainer>
         <JsonTree
           value={stepInfoToDisplay ?? t`No output available`}
-          shouldExpandNodeInitially={isTwoFirstDepths}
           emptyArrayLabel={t`Empty Array`}
           emptyObjectLabel={t`Empty Object`}
           emptyStringLabel={t`[empty string]`}

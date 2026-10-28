@@ -1,7 +1,9 @@
+import { type ErrorLike } from '@apollo/client';
 import { useStore } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 
 import { useObjectMetadataItems } from '@/object-metadata/hooks/useObjectMetadataItems';
+import { getObjectPermissionsForObject } from '@/object-metadata/utils/getObjectPermissionsForObject';
 import { DEFAULT_SEARCH_REQUEST_LIMIT } from '@/object-record/constants/DefaultSearchRequestLimit';
 import { useObjectPermissions } from '@/object-record/hooks/useObjectPermissions';
 import { useObjectRecordSearchRecords } from '@/object-record/hooks/useObjectRecordSearchRecords';
@@ -9,8 +11,8 @@ import { usePerformCombinedFindManyRecords } from '@/object-record/multiple-obje
 import { searchRecordStoreFamilyState } from '@/object-record/record-picker/multiple-record-picker/states/searchRecordStoreComponentFamilyState';
 import { SingleRecordPickerComponentInstanceContext } from '@/object-record/record-picker/single-record-picker/states/contexts/SingleRecordPickerComponentInstanceContext';
 import { singleRecordPickerSearchableObjectMetadataItemsComponentState } from '@/object-record/record-picker/single-record-picker/states/singleRecordPickerSearchableObjectMetadataItemsComponentState';
+import { type ObjectRecord } from '@/object-record/types/ObjectRecord';
 import { type RecordPickerPickableMorphItem } from '@/object-record/record-picker/types/RecordPickerPickableMorphItem';
-import { getObjectPermissionsFromMapByObjectMetadataId } from '@/settings/roles/role-permissions/objects-permissions/utils/getObjectPermissionsFromMapByObjectMetadataId';
 import { useAvailableComponentInstanceIdOrThrow } from '@/ui/utilities/state/component-state/hooks/useAvailableComponentInstanceIdOrThrow';
 import { CustomError, isDefined } from 'twenty-shared/utils';
 
@@ -29,6 +31,9 @@ export const useSingleRecordPickerPerformSearch = ({
 }): {
   pickableMorphItems: RecordPickerPickableMorphItem[];
   loading: boolean;
+  selectedRecordsError: ErrorLike | undefined;
+  filteredSelectedRecordsError: ErrorLike | undefined;
+  recordsToSelectError: ErrorLike | undefined;
 } => {
   const store = useStore();
   const singleRecordPickerInstanceId = useAvailableComponentInstanceIdOrThrow(
@@ -52,10 +57,10 @@ export const useSingleRecordPickerPerformSearch = ({
       }
 
       return (
-        getObjectPermissionsFromMapByObjectMetadataId({
+        getObjectPermissionsForObject(
           objectPermissionsByObjectMetadataId,
-          objectMetadataId: objectMetadataItem.id,
-        }).canReadObjectRecords === true
+          objectMetadataItem.id,
+        ).canReadObjectRecords === true
       );
     },
   );
@@ -65,17 +70,21 @@ export const useSingleRecordPickerPerformSearch = ({
     ? { id: { in: selectedIds } }
     : undefined;
 
-  const { loading: selectedRecordsLoading, searchRecords: selectedRecords } =
-    useObjectRecordSearchRecords({
-      objectNameSingulars: readableObjectNameSingulars,
-      filter: selectedIdsFilter,
-      skip: !hasSelectedIds,
-      searchInput: '',
-    });
+  const {
+    loading: selectedRecordsLoading,
+    searchRecords: selectedRecords,
+    error: selectedRecordsError,
+  } = useObjectRecordSearchRecords({
+    objectNameSingulars: readableObjectNameSingulars,
+    filter: selectedIdsFilter,
+    skip: !hasSelectedIds,
+    searchInput: '',
+  });
 
   const {
     loading: filteredSelectedRecordsLoading,
     searchRecords: filteredSelectedRecords,
+    error: filteredSelectedRecordsError,
   } = useObjectRecordSearchRecords({
     objectNameSingulars: readableObjectNameSingulars,
     filter: selectedIdsFilter,
@@ -87,26 +96,29 @@ export const useSingleRecordPickerPerformSearch = ({
   const notFilter = notFilterIds.length
     ? { not: { id: { in: notFilterIds } } }
     : undefined;
-  const { loading: recordsToSelectLoading, searchRecords: recordsToSelect } =
-    useObjectRecordSearchRecords({
-      objectNameSingulars: readableObjectNameSingulars,
-      filter: notFilter,
-      limit: limit ?? DEFAULT_SEARCH_REQUEST_LIMIT,
-      searchInput: searchFilter,
-      fetchPolicy: 'cache-and-network',
-    });
+  const {
+    loading: recordsToSelectLoading,
+    searchRecords: recordsToSelect,
+    error: recordsToSelectError,
+  } = useObjectRecordSearchRecords({
+    objectNameSingulars: readableObjectNameSingulars,
+    filter: notFilter,
+    limit: limit ?? DEFAULT_SEARCH_REQUEST_LIMIT,
+    searchInput: searchFilter,
+    fetchPolicy: 'cache-and-network',
+  });
 
   const allSearchRecords = useMemo(
     () => [...selectedRecords, ...filteredSelectedRecords, ...recordsToSelect],
     [selectedRecords, filteredSelectedRecords, recordsToSelect],
   );
 
-  const [companyMap, setCompanyMap] = useState({});
+  const [companyMap, setCompanyMap] = useState<Record<string, ObjectRecord>>(
+    {},
+  );
 
   // Fetch records when search results change
   useEffect(() => {
-    console.log(allSearchRecords)
-
     if (allSearchRecords.length === 0) {
       setCompanyMap({});
       return;
@@ -122,10 +134,15 @@ export const useSingleRecordPickerPerformSearch = ({
         }
       }],
     }).then((res) => {
-      const companyName = res.result.people?.reduce((acc, item) => ({
-        ...acc,
-        [item.id]: { company: { name: item.company?.name} }
-      }), {});
+      const companyName = (res.result.people ?? []).reduce<
+        Record<string, ObjectRecord>
+      >(
+        (acc, item) => ({
+          ...acc,
+          [item.id]: item,
+        }),
+        {},
+      );
 
       setCompanyMap(companyName);
     });
@@ -140,7 +157,7 @@ export const useSingleRecordPickerPerformSearch = ({
         searchRecordStoreFamilyState.atomFamily(searchRecord.recordId),
         {
           ...searchRecord,
-          record: companyMap ? companyMap[searchRecord.recordId] : undefined,
+          record: companyMap[searchRecord.recordId],
         },
       );
     });
@@ -172,6 +189,8 @@ export const useSingleRecordPickerPerformSearch = ({
 
       if (!isDefined(objectMetadataItem)) {
         throw new CustomError(
+          // Error text is used for locale-independent issue grouping.
+          // oxlint-disable-next-line lingui/no-unlocalized-strings
           'Object metadata item not found for object name singular: ' +
             record.objectNameSingular,
           'OBJECT_METADATA_ITEM_NOT_FOUND',
@@ -197,6 +216,9 @@ export const useSingleRecordPickerPerformSearch = ({
     });
 
   return {
+    selectedRecordsError,
+    filteredSelectedRecordsError,
+    recordsToSelectError,
     pickableMorphItems,
     loading:
       recordsToSelectLoading ||

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import { isDefined } from 'twenty-shared/utils';
 import { IsNull } from 'typeorm';
 
 import { ApplicationService } from 'src/engine/core-modules/application/application.service';
@@ -7,9 +8,12 @@ import { WorkspaceManyOrAllFlatEntityMapsCacheService } from 'src/engine/metadat
 import { findFlatEntityByIdInFlatEntityMapsOrThrow } from 'src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-id-in-flat-entity-maps-or-throw.util';
 import { findFlatEntityByUniversalIdentifierOrThrow } from 'src/engine/metadata-modules/flat-entity/utils/find-flat-entity-by-universal-identifier-or-throw.util';
 import { fromCreateViewFilterInputToFlatViewFilterToCreate } from 'src/engine/metadata-modules/flat-view-filter/utils/from-create-view-filter-input-to-flat-view-filter-to-create.util';
-import { fromDeleteViewFilterInputToFlatViewFilterOrThrow } from 'src/engine/metadata-modules/flat-view-filter/utils/from-delete-view-filter-input-to-flat-view-filter-or-throw.util';
 import { fromDestroyViewFilterInputToFlatViewFilterOrThrow } from 'src/engine/metadata-modules/flat-view-filter/utils/from-destroy-view-filter-input-to-flat-view-filter-or-throw.util';
 import { fromUpdateViewFilterInputToFlatViewFilterToUpdateOrThrow } from 'src/engine/metadata-modules/flat-view-filter/utils/from-update-view-filter-input-to-flat-view-filter-to-update-or-throw.util';
+import { MorphRelationReferenceVisibilityService } from 'src/engine/metadata-modules/morph-relation-head/services/morph-relation-reference-visibility.service';
+import { type MetadataCursorPage } from 'src/engine/metadata-modules/pagination/types/metadata-cursor-page.type';
+import { type MetadataCursorPagination } from 'src/engine/metadata-modules/pagination/types/metadata-cursor-pagination.type';
+import { paginateMetadataOrderedItems } from 'src/engine/metadata-modules/pagination/utils/paginate-metadata-ordered-items.util';
 import { CreateViewFilterInput } from 'src/engine/metadata-modules/view-filter/dtos/inputs/create-view-filter.input';
 import { DeleteViewFilterInput } from 'src/engine/metadata-modules/view-filter/dtos/inputs/delete-view-filter.input';
 import { DestroyViewFilterInput } from 'src/engine/metadata-modules/view-filter/dtos/inputs/destroy-view-filter.input';
@@ -30,6 +34,7 @@ export class ViewFilterService {
     private readonly workspaceMigrationValidateBuildAndRunService: WorkspaceMigrationValidateBuildAndRunService,
     private readonly flatEntityMapsCacheService: WorkspaceManyOrAllFlatEntityMapsCacheService,
     private readonly applicationService: ApplicationService,
+    private readonly morphRelationReferenceVisibilityService: MorphRelationReferenceVisibilityService,
   ) {}
 
   async createOne({
@@ -192,68 +197,10 @@ export class ViewFilterService {
     deleteViewFilterInput: DeleteViewFilterInput;
     workspaceId: string;
   }): Promise<ViewFilterDTO> {
-    const { workspaceCustomFlatApplication } =
-      await this.applicationService.findWorkspaceTwentyStandardAndCustomApplicationOrThrow(
-        {
-          workspaceId,
-        },
-      );
-
-    const { flatViewFilterMaps: existingFlatViewFilterMaps } =
-      await this.flatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
-        {
-          workspaceId,
-          flatMapsKeys: ['flatViewFilterMaps'],
-        },
-      );
-
-    const optimisticallyUpdatedFlatViewFilterWithDeletedAt =
-      fromDeleteViewFilterInputToFlatViewFilterOrThrow({
-        flatViewFilterMaps: existingFlatViewFilterMaps,
-        deleteViewFilterInput,
-      });
-
-    const validateAndBuildResult =
-      await this.workspaceMigrationValidateBuildAndRunService.validateBuildAndRunWorkspaceMigration(
-        {
-          allFlatEntityOperationByMetadataName: {
-            viewFilter: {
-              flatEntityToCreate: [],
-              flatEntityToDelete: [],
-              flatEntityToUpdate: [
-                optimisticallyUpdatedFlatViewFilterWithDeletedAt,
-              ],
-            },
-          },
-          workspaceId,
-          isSystemBuild: false,
-          applicationUniversalIdentifier:
-            workspaceCustomFlatApplication.universalIdentifier,
-        },
-      );
-
-    if (validateAndBuildResult.status === 'fail') {
-      throw new WorkspaceMigrationBuilderException(
-        validateAndBuildResult,
-        'Multiple validation errors occurred while deleting view filter',
-      );
-    }
-
-    const { flatViewFilterMaps: recomputedExistingFlatViewFilterMaps } =
-      await this.flatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
-        {
-          workspaceId,
-          flatMapsKeys: ['flatViewFilterMaps'],
-        },
-      );
-
-    return fromFlatViewFilterToViewFilterDto(
-      findFlatEntityByUniversalIdentifierOrThrow({
-        universalIdentifier:
-          optimisticallyUpdatedFlatViewFilterWithDeletedAt.universalIdentifier,
-        flatEntityMaps: recomputedExistingFlatViewFilterMaps,
-      }),
-    );
+    return this.destroyOne({
+      destroyViewFilterInput: deleteViewFilterInput,
+      workspaceId,
+    });
   }
 
   async destroyOne({
@@ -320,27 +267,105 @@ export class ViewFilterService {
   }
 
   async findByWorkspaceId(workspaceId: string): Promise<ViewFilterEntity[]> {
-    return this.viewFilterRepository.find(workspaceId, {
+    const viewFilters = await this.viewFilterRepository.find(workspaceId, {
       where: {
         deletedAt: IsNull(),
       },
-      order: { positionInViewFilterGroup: 'ASC' },
+      order: { positionInViewFilterGroup: 'ASC', id: 'ASC' },
       relations: ['workspace', 'view', 'viewFilterGroup'],
     });
+
+    return this.filterVisibleViewFilters({ workspaceId, viewFilters });
+  }
+
+  async findManyPaginated({
+    workspaceId,
+    viewId,
+    pagination,
+  }: {
+    workspaceId: string;
+    viewId?: string;
+    pagination: MetadataCursorPagination;
+  }): Promise<MetadataCursorPage<ViewFilterDTO> & { totalCount: number }> {
+    const { flatViewFilterMaps } =
+      await this.flatEntityMapsCacheService.getOrRecomputeManyOrAllFlatEntityMaps(
+        {
+          workspaceId,
+          flatMapsKeys: ['flatViewFilterMaps'],
+        },
+      );
+    const flatViewFilters = (
+      await this.filterVisibleViewFilters({
+        workspaceId,
+        viewFilters: Object.values(
+          flatViewFilterMaps.byUniversalIdentifier,
+        ).filter(isDefined),
+      })
+    )
+      .filter(
+        (flatViewFilter) =>
+          flatViewFilter.workspaceId === workspaceId &&
+          flatViewFilter.deletedAt === null &&
+          (!isDefined(viewId) || flatViewFilter.viewId === viewId),
+      )
+      .sort(
+        (first, second) =>
+          (first.positionInViewFilterGroup ?? Number.POSITIVE_INFINITY) -
+            (second.positionInViewFilterGroup ?? Number.POSITIVE_INFINITY) ||
+          first.id.localeCompare(second.id),
+      );
+    const page = paginateMetadataOrderedItems({
+      items: flatViewFilters,
+      pagination,
+    });
+
+    return {
+      ...page,
+      items: page.items.map(fromFlatViewFilterToViewFilterDto),
+      totalCount: flatViewFilters.length,
+    };
   }
 
   async findByViewId(
     workspaceId: string,
     viewId: string,
   ): Promise<ViewFilterEntity[]> {
-    return this.viewFilterRepository.find(workspaceId, {
+    const viewFilters = await this.viewFilterRepository.find(workspaceId, {
       where: {
         viewId,
         deletedAt: IsNull(),
       },
-      order: { positionInViewFilterGroup: 'ASC' },
+      order: { positionInViewFilterGroup: 'ASC', id: 'ASC' },
       relations: ['workspace', 'view', 'viewFilterGroup'],
     });
+
+    return this.filterVisibleViewFilters({ workspaceId, viewFilters });
+  }
+
+  private async filterVisibleViewFilters<
+    TViewFilter extends Pick<
+      ViewFilterEntity,
+      'fieldMetadataId' | 'relationTargetFieldMetadataId'
+    >,
+  >({
+    workspaceId,
+    viewFilters,
+  }: {
+    workspaceId: string;
+    viewFilters: TViewFilter[];
+  }): Promise<TViewFilter[]> {
+    const isMorphRelationReferenceVisible =
+      await this.morphRelationReferenceVisibilityService.getIsMorphRelationReferenceVisible(
+        workspaceId,
+      );
+
+    return viewFilters.filter(
+      (viewFilter) =>
+        isMorphRelationReferenceVisible(viewFilter.fieldMetadataId) &&
+        isMorphRelationReferenceVisible(
+          viewFilter.relationTargetFieldMetadataId,
+        ),
+    );
   }
 
   async findById(

@@ -5,15 +5,17 @@ import { useUpsertRecordField } from '@/object-record/record-field/hooks/useUpse
 import { currentRecordFieldsComponentState } from '@/object-record/record-field/states/currentRecordFieldsComponentState';
 import { type RecordField } from '@/object-record/record-field/types/RecordField';
 import { useHasPermissionFlag } from '@/settings/roles/hooks/useHasPermissionFlag';
-import { DropdownContent } from '@/ui/layout/dropdown/components/DropdownContent';
+import { SelectOptionIcon } from '@/ui/input/components/SelectOptionIcon';
 import { DropdownMenuHeader } from '@/ui/layout/dropdown/components/DropdownMenuHeader/DropdownMenuHeader';
 import { DropdownMenuHeaderLeftComponent } from '@/ui/layout/dropdown/components/DropdownMenuHeader/internal/DropdownMenuHeaderLeftComponent';
 import { DropdownMenuItemsContainer } from '@/ui/layout/dropdown/components/DropdownMenuItemsContainer';
+import { LegacyDropdownContent } from '@/ui/layout/dropdown/components/LegacyDropdownContent';
 import { useAtomComponentStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentStateValue';
 import { t } from '@lingui/core/macro';
 import { isDefined } from 'twenty-shared/utils';
+import { LightIconButton } from 'twenty-ui/components/input';
 import { IconChevronLeft, IconEye, useIcons } from 'twenty-ui/icon';
-import { MenuItem } from 'twenty-ui/navigation';
+import { ListItem } from 'twenty-ui/primitives/navigation';
 import { v4 } from 'uuid';
 import { PermissionFlagType } from '~/generated-metadata/graphql';
 import { sortByProperty } from '~/utils/array/sortByProperty';
@@ -98,7 +100,7 @@ export const RecordTableFieldsDropdownHiddenFieldsContent = ({
   }
 
   return (
-    <DropdownContent>
+    <LegacyDropdownContent>
       <DropdownMenuHeader
         StartComponent={
           <DropdownMenuHeaderLeftComponent
@@ -111,19 +113,24 @@ export const RecordTableFieldsDropdownHiddenFieldsContent = ({
       </DropdownMenuHeader>
       <DropdownMenuItemsContainer>
         {hiddenFieldMetadataItems.map((fieldMetadataItem) => (
-          <MenuItem
+          <ListItem
             key={fieldMetadataItem.id}
-            LeftIcon={getIcon(fieldMetadataItem.icon)}
-            iconButtons={[
-              {
-                Icon: IconEye,
-                onClick: () => handleShowField(fieldMetadataItem.id),
-              },
-            ]}
-            text={fieldMetadataItem.label}
-          />
+            startIcon={
+              <SelectOptionIcon Icon={getIcon(fieldMetadataItem.icon)} />
+            }
+            actions={
+              <LightIconButton
+                aria-label={t`Show field`}
+                onClick={() => handleShowField(fieldMetadataItem.id)}
+              >
+                <IconEye />
+              </LightIconButton>
+            }
+          >
+            {fieldMetadataItem.label}
+          </ListItem>
         ))}
       </DropdownMenuItemsContainer>
-    </DropdownContent>
+    </LegacyDropdownContent>
   );
 };

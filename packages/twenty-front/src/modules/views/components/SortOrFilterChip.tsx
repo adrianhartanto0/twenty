@@ -1,13 +1,12 @@
 import { styled } from '@linaria/react';
-import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { isDefined } from 'twenty-shared/utils';
 import { IconX, type IconComponent } from 'twenty-ui/icon';
-import { ThemeContext, themeCssVariables } from 'twenty-ui/theme-constants';
+import { themeCssVariables, useTheme } from 'twenty-ui/theme';
 
 import { currentWorkspaceMemberState } from '@/auth/states/currentWorkspaceMemberState';
 import { useWorkspaceMemberRoles } from '@/settings/members/hooks/useWorkspaceMemberRoles';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
-import { useStore } from 'jotai';
 
 const StyledChip = styled.div<{ variant: SortOrFilterChipVariant }>`
   align-items: center;
@@ -67,6 +66,7 @@ const StyledDelete = styled.button<{ variant: SortOrFilterChipVariant }>`
   border: none;
   box-sizing: border-box;
   color: inherit;
+  corner-shape: round;
   cursor: pointer;
   display: flex;
   font-size: ${themeCssVariables.font.size.sm};
@@ -87,7 +87,7 @@ const StyledDelete = styled.button<{ variant: SortOrFilterChipVariant }>`
           return themeCssVariables.accent.secondary;
       }
     }};
-    border-radius: ${themeCssVariables.border.radius.sm};
+    border-radius: ${themeCssVariables.border.radius.smRound};
   }
 `;
 
@@ -144,10 +144,8 @@ export const SortOrFilterChip = ({
   onClick,
   type,
 }: SortOrFilterChipProps) => {
-  const { theme } = useContext(ThemeContext);
-  const store = useStore();
-
   const [hasMeFilter, setHasMeFilter] = useState(false)
+  const theme = useTheme();
 
   const handleDeleteClick = (e: React.MouseEvent) => {
     e.stopPropagation();

@@ -16,11 +16,17 @@ export class AppConnectionObjectDto implements AppConnection {
   @Field()
   handle: string;
 
+  @Field(() => String, { nullable: true })
+  externalAccountId: string | null;
+
   @Field(() => String)
   visibility: 'user' | 'workspace';
 
   @Field()
   userWorkspaceId: string;
+
+  @Field(() => String, { nullable: true })
+  workspaceMemberId: string | null;
 
   @Field()
   accessToken: string;
@@ -30,4 +36,7 @@ export class AppConnectionObjectDto implements AppConnection {
 
   @Field(() => String, { nullable: true })
   authFailedAt: string | null;
+
+  @Field(() => String, { nullable: true })
+  authFailedReason: string | null;
 }

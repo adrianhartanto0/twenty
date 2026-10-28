@@ -1,41 +1,21 @@
-import { CoreObjectNamePlural } from '@/object-metadata/types/CoreObjectNamePlural';
 import {
-  CoreObjectNameSingular,
   FieldMetadataType,
   RelationType,
+  type RecordGqlFields,
 } from 'twenty-shared/types';
-import { type FieldMetadataItem } from '@/object-metadata/types/FieldMetadataItem';
-import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/EnrichedObjectMetadataItem';
-import { type RecordGqlFields } from '@/object-record/graphql/record-gql-fields/types/RecordGqlFields';
+import { t } from '@lingui/core/macro';
+import { type GenerateDepthRecordGqlFieldsFromFields } from '@/object-record/graphql/record-gql-fields/types/GenerateDepthRecordGqlFieldsFromFields';
 import { buildIdentifierGqlFields } from '@/object-record/graphql/record-gql-fields/utils/buildIdentifierGqlFields';
-import { generateActivityTargetGqlFields } from '@/object-record/graphql/record-gql-fields/utils/generateActivityTargetGqlFields';
 import { generateJunctionRelationGqlFields } from '@/object-record/graphql/record-gql-fields/utils/generateJunctionRelationGqlFields';
-import { isJunctionRelationField } from '@/object-record/record-field/ui/utils/junction/isJunctionRelationField';
+import { resolveJunctionConfig } from '@/object-record/record-field/ui/utils/junction/resolveJunctionConfig';
 import {
   computeMorphRelationGqlFieldName,
   isDefined,
 } from 'twenty-shared/utils';
 
-export type GenerateDepthRecordGqlFieldsFromFields = {
-  objectMetadataItems: Pick<
-    EnrichedObjectMetadataItem,
-    | 'id'
-    | 'fields'
-    | 'labelIdentifierFieldMetadataId'
-    | 'imageIdentifierFieldMetadataId'
-    | 'nameSingular'
-    | 'namePlural'
-  >[];
-  fields: Pick<
-    FieldMetadataItem,
-    'id' | 'name' | 'type' | 'settings' | 'morphRelations' | 'relation'
-  >[];
-  depth: 0 | 1;
-  shouldOnlyLoadRelationIdentifiers?: boolean;
-};
-
 export const generateDepthRecordGqlFieldsFromFields = ({
   objectMetadataItems,
+  sourceObjectMetadataItem,
   fields,
   depth,
   shouldOnlyLoadRelationIdentifiers = true,
@@ -58,44 +38,35 @@ export const generateDepthRecordGqlFieldsFromFields = ({
 
         if (!targetObjectMetadataItem) {
           throw new Error(
+            // Error text is used for locale-independent issue grouping.
+            // oxlint-disable-next-line lingui/no-unlocalized-strings
             `Target object metadata item not found for ${fieldMetadata.name}`,
           );
         }
 
-        const isActivityTargetField =
-          fieldMetadata.name === CoreObjectNamePlural.NoteTarget ||
-          fieldMetadata.name === CoreObjectNamePlural.TaskTarget;
+        const junctionConfig = resolveJunctionConfig({
+          settings: fieldMetadata.settings,
+          relationObjectMetadataId: targetObjectMetadataItem.id,
+          relationTargetFieldMetadataId:
+            fieldMetadata.relation?.targetFieldMetadata.id,
+          sourceObjectMetadataId:
+            sourceObjectMetadataItem?.id ??
+            fieldMetadata.relation?.sourceObjectMetadata.id,
+          objectMetadataItems,
+        });
 
-        if (isActivityTargetField && depth === 1) {
-          const activityTargetObjectNameSingular =
-            fieldMetadata.name === CoreObjectNamePlural.NoteTarget
-              ? CoreObjectNameSingular.Note
-              : CoreObjectNameSingular.Task;
-
-          const activityTargetGqlFields = generateActivityTargetGqlFields({
-            activityObjectNameSingular: activityTargetObjectNameSingular,
-            objectMetadataItems,
-            loadRelations: 'activity',
-          });
-
-          return {
-            ...recordGqlFields,
-            [fieldMetadata.name]: activityTargetGqlFields,
-          };
+        if (isDefined(junctionConfig) && !junctionConfig.isValid) {
+          return recordGqlFields;
         }
 
-        if (isJunctionRelationField(fieldMetadata)) {
-          const junctionGqlFields = generateJunctionRelationGqlFields({
-            fieldMetadataItem: fieldMetadata,
-            objectMetadataItems,
-          });
-
-          if (isDefined(junctionGqlFields) && depth === 1) {
-            return {
-              ...recordGqlFields,
-              [fieldMetadata.name]: junctionGqlFields,
-            };
-          }
+        if (junctionConfig?.isValid === true && depth === 1) {
+          return {
+            ...recordGqlFields,
+            [fieldMetadata.name]: generateJunctionRelationGqlFields({
+              junctionConfig,
+              objectMetadataItems,
+            }),
+          };
         }
 
         const relationIdentifierSubGqlFields = buildIdentifierGqlFields(
@@ -103,6 +74,8 @@ export const generateDepthRecordGqlFieldsFromFields = ({
         );
 
         const manyToOneGqlFields = {
+          // Generated GraphQL syntax must stay stable across locales.
+          // oxlint-disable-next-line lingui/no-unlocalized-strings
           [`${fieldMetadata.name}Id`]: true,
         };
 
@@ -123,7 +96,7 @@ export const generateDepthRecordGqlFieldsFromFields = ({
       if (isMorphRelation) {
         if (!isDefined(fieldMetadata.morphRelations)) {
           throw new Error(
-            `Field ${fieldMetadata.name} is missing, please refresh the page. If the problem persists, please contact support.`,
+            t`Field ${fieldMetadata.name} is missing, please refresh the page. If the problem persists, please contact support.`,
           );
         }
 
@@ -136,6 +109,8 @@ export const generateDepthRecordGqlFieldsFromFields = ({
 
             if (!morphTargetObjectMetadataItem) {
               throw new Error(
+                // Error text is used for locale-independent issue grouping.
+                // oxlint-disable-next-line lingui/no-unlocalized-strings
                 `Target object metadata item not found for ${fieldMetadata.name} (morph target ${morphRelation.targetObjectMetadata.nameSingular})`,
               );
             }
@@ -172,7 +147,9 @@ export const generateDepthRecordGqlFieldsFromFields = ({
                 ? { [`${morphGqlField.gqlField}`]: true }
                 : {}),
               ...(relationType === RelationType.MANY_TO_ONE
-                ? { [`${morphGqlField.gqlField}Id`]: true }
+                ? // Generated GraphQL syntax must stay stable across locales.
+                  // oxlint-disable-next-line lingui/no-unlocalized-strings
+                  { [`${morphGqlField.gqlField}Id`]: true }
                 : {}),
             }),
             {},

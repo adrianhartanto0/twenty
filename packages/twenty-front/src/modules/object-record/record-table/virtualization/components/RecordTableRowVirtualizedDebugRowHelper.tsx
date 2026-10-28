@@ -12,7 +12,7 @@ import { useAtomComponentFamilySelectorValue } from '@/ui/utilities/state/jotai/
 import { useAtomComponentFamilyStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomComponentFamilyStateValue';
 import { styled } from '@linaria/react';
 import { isDefined } from 'twenty-shared/utils';
-import { themeCssVariables } from 'twenty-ui/theme-constants';
+import { themeCssVariables } from 'twenty-ui/theme';
 
 const StyledDebugRow = styled.div`
   background-color: ${themeCssVariables.color.gray3};
@@ -83,6 +83,8 @@ export const RecordTableRowVirtualizedDebugRowHelper = ({
 
   const position = recordStore?.position;
 
+  // The row overlay exposes internal virtualization state to developers.
+  // oxlint-disable lingui/no-unlocalized-strings
   return (
     <StyledDebugRow>
       <StyledDebugColumn width={70}>virtual :{virtualIndex}</StyledDebugColumn>
@@ -106,4 +108,5 @@ export const RecordTableRowVirtualizedDebugRowHelper = ({
       </StyledDebugColumn>
     </StyledDebugRow>
   );
+  // oxlint-enable lingui/no-unlocalized-strings
 };

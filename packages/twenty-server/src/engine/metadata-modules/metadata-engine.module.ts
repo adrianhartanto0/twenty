@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER } from '@nestjs/core';
+import { RecordPermissionsModule } from 'src/engine/metadata-modules/record-permissions/record-permissions.module';
 
 import { ApplicationJobModule } from 'src/engine/core-modules/application/application-job/application-job.module';
 import { ApplicationKeyValueModule } from 'src/engine/core-modules/application/application-key-value/application-key-value.module';
 import { ApplicationConnectionsModule } from 'src/engine/core-modules/application/connection-provider/connections/application-connections.module';
 import { PushNotificationModule } from 'src/engine/core-modules/push-notification/push-notification.module';
 import { ServerRouteTriggerModule } from 'src/engine/core-modules/server-route-trigger/server-route-trigger.module';
-import { AiAgentMonitorModule } from 'src/engine/metadata-modules/ai/ai-agent-monitor/ai-agent-monitor.module';
+import { AiAgentRunsModule } from 'src/engine/metadata-modules/ai/ai-agent-runs/ai-agent-runs.module';
 import { AiAgentModule } from 'src/engine/metadata-modules/ai/ai-agent/ai-agent.module';
 import { AiChatModule } from 'src/engine/metadata-modules/ai/ai-chat/ai-chat.module';
 import { AiGenerateTextModule } from 'src/engine/metadata-modules/ai/ai-generate-text/ai-generate-text.module';
@@ -21,6 +22,7 @@ import { LogicFunctionLayerModule } from 'src/engine/metadata-modules/logic-func
 import { LogicFunctionModule } from 'src/engine/metadata-modules/logic-function/logic-function.module';
 import { MessageChannelMetadataModule } from 'src/engine/metadata-modules/message-channel/message-channel-metadata.module';
 import { MessageFolderMetadataModule } from 'src/engine/metadata-modules/message-folder/message-folder-metadata.module';
+import { MetadataTranslationModule } from 'src/engine/metadata-modules/metadata-translation/metadata-translation.module';
 import { MinimalMetadataModule } from 'src/engine/metadata-modules/minimal-metadata/minimal-metadata.module';
 import { NavigationMenuItemModule } from 'src/engine/metadata-modules/navigation-menu-item/navigation-menu-item.module';
 import { ObjectMetadataModule } from 'src/engine/metadata-modules/object-metadata/object-metadata.module';
@@ -30,13 +32,17 @@ import { PermissionsGraphqlApiExceptionFilter } from 'src/engine/metadata-module
 import { RoleModule } from 'src/engine/metadata-modules/role/role.module';
 import { RouteTriggerModule } from 'src/engine/metadata-modules/route-trigger/route-trigger.module';
 import { SearchFieldMetadataModule } from 'src/engine/metadata-modules/search-field-metadata/search-field-metadata.module';
+import { SettingsMenuItemModule } from 'src/engine/metadata-modules/settings-menu-item/settings-menu-item.module';
 import { SkillModule } from 'src/engine/metadata-modules/skill/skill.module';
+import { TimelineActivityTypeModule } from 'src/engine/metadata-modules/timeline-activity-type/timeline-activity-type.module';
+import { ValidationRuleModule } from 'src/engine/metadata-modules/validation-rule/validation-rule.module';
 import { ViewModule } from 'src/engine/metadata-modules/view/view.module';
 import { WebhookModule } from 'src/engine/metadata-modules/webhook/webhook.module';
 import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/workspace-metadata-version/workspace-metadata-version.module';
 
 @Module({
   imports: [
+    RecordPermissionsModule,
     FieldMetadataModule,
     FrontComponentModule,
     ObjectMetadataModule,
@@ -45,9 +51,13 @@ import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/work
     LogicFunctionLayerModule,
     SkillModule,
     CommandMenuItemModule,
+    MetadataTranslationModule,
     NavigationMenuItemModule,
+    SettingsMenuItemModule,
+    TimelineActivityTypeModule,
+    ValidationRuleModule,
     AiAgentModule,
-    AiAgentMonitorModule,
+    AiAgentRunsModule,
     AiChatModule,
     AiGenerateTextModule,
     AiWorkspaceStatsModule,
@@ -79,27 +89,6 @@ import { WorkspaceMetadataVersionModule } from 'src/engine/metadata-modules/work
       useClass: PermissionsGraphqlApiExceptionFilter,
     },
   ],
-  exports: [
-    FieldMetadataModule,
-    FrontComponentModule,
-    ObjectMetadataModule,
-    SearchFieldMetadataModule,
-    LogicFunctionModule,
-    SkillModule,
-    CommandMenuItemModule,
-    NavigationMenuItemModule,
-    AiAgentModule,
-    AiChatModule,
-    MinimalMetadataModule,
-    ViewModule,
-    RoleModule,
-    PermissionsModule,
-    PermissionFlagModule,
-    WebhookModule,
-    ConnectedAccountMetadataModule,
-    MessageChannelMetadataModule,
-    CalendarChannelMetadataModule,
-    MessageFolderMetadataModule,
-  ],
+  exports: [AiAgentModule, ViewModule],
 })
 export class MetadataEngineModule {}
