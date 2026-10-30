@@ -5,7 +5,14 @@ if [ -z "$REACT_APP_SERVER_BASE_URL" ]; then
   exit 1
 fi
 
-echo "Injecting runtime environment variables into index.html..."
+INDEX_HTML="${1:-build/index.html}"
+
+if [ ! -f "$INDEX_HTML" ]; then
+  echo "Error: $INDEX_HTML not found."
+  exit 1
+fi
+
+echo "Injecting runtime environment variables into $INDEX_HTML..."
 
 CONFIG_BLOCK=$(cat << EOF
     <script id="twenty-env-config">
@@ -26,5 +33,5 @@ echo "$CONFIG_BLOCK" | sed -i.bak '
     /<!-- BEGIN: Twenty Config -->/r /dev/stdin
     /<!-- END: Twenty Config -->/d
   }
-' build/index.html
-rm -f build/index.html.bak
+' "$INDEX_HTML"
+rm -f "$INDEX_HTML.bak"

@@ -23,6 +23,7 @@ import { useViewPickerMode } from '@/views/view-picker/hooks/useViewPickerMode';
 import { viewPickerReferenceViewIdComponentState } from '@/views/view-picker/states/viewPickerReferenceViewIdComponentState';
 import { computeViewPickerVisibleViews } from '@/views/view-picker/utils/computeViewPickerVisibleViews';
 import { useLingui } from '@lingui/react/macro';
+import { ListItemButton } from 'twenty-ui/components/navigation';
 import { IconPlus } from 'twenty-ui/icon';
 import { themeCssVariables } from 'twenty-ui/theme';
 import { PermissionFlagType, ViewVisibility } from '~/generated-metadata/graphql';

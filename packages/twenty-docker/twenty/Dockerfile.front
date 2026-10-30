@@ -16,6 +16,7 @@ COPY ./packages/twenty-front/package.json /app/packages/twenty-front/
 COPY ./packages/twenty-sdk/package.json /app/packages/twenty-sdk/
 COPY ./packages/twenty-client-sdk/package.json /app/packages/twenty-client-sdk/
 COPY ./packages/twenty-front-component-renderer/package.json /app/packages/twenty-front-component-renderer/
+COPY ./packages/twenty-oxlint-rules/package.json /app/packages/twenty-oxlint-rules/
 
 RUN yarn && yarn cache clean && npx nx reset
 
@@ -38,10 +39,17 @@ RUN npx nx build twenty-front
 # Final stage: Serve the frontend
 FROM caddy:2-alpine AS twenty-front
 
+RUN apk add --no-cache sed
+
 COPY --from=twenty-front-build /app/packages/twenty-front/build /srv
+COPY --from=twenty-front-build /app/packages/twenty-front/scripts/inject-runtime-env.sh /usr/local/bin/inject-runtime-env.sh
 COPY ./Caddyfile /etc/caddy/Caddyfile
 
+RUN chmod +x /usr/local/bin/inject-runtime-env.sh
+
 EXPOSE 80
+
+CMD ["sh", "-c", "inject-runtime-env.sh /srv/index.html && exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile"]
 
 # WORKDIR /app
 # COPY --from=twenty-front-build /app /app
