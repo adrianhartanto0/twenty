@@ -6,7 +6,6 @@ import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
 import { billingState } from '@/client-config/states/billingState';
 import { isClickHouseConfiguredState } from '@/client-config/states/isClickHouseConfiguredState';
 import { useNumberFormat } from '@/localization/hooks/useNumberFormat';
-import { SettingsEmptyPlaceholder } from '@/settings/components/SettingsEmptyPlaceholder';
 import { SettingsOptionCardContentButton } from '@/settings/components/SettingsOptions/SettingsOptionCardContentButton';
 import { EventLogFilters } from '@/settings/event-logs/components/EventLogFilters';
 import { EventLogResultsTable } from '@/settings/event-logs/components/EventLogResultsTable';
@@ -18,6 +17,7 @@ import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomState
 import { checkIfBillingEntitlementIsEnabledOnWorkspace } from '@/workspace/utils/checkIfBillingEntitlementIsEnabledOnWorkspace';
 import { SettingsPath } from 'twenty-shared/types';
 import { isDefined } from 'twenty-shared/utils';
+import { IconButton } from 'twenty-ui/components/input';
 import {
   IconArrowUp,
   IconLock,
@@ -25,7 +25,6 @@ import {
   IconPlayerPlay,
 } from 'twenty-ui/icon';
 import { Button } from 'twenty-ui/primitives/input';
-import { IconButton } from 'twenty-ui/components/input';
 import { Card } from 'twenty-ui/primitives/surfaces';
 import { themeCssVariables } from 'twenty-ui/theme';
 
@@ -34,7 +33,6 @@ import {
   EventLogTable,
 } from '~/generated-metadata/graphql';
 import { useNavigateSettings } from '~/hooks/useNavigateSettings';
-import { isGraphqlErrorOfType } from '~/utils/is-graphql-error-of-type.util';
 
 const StyledRoot = styled.div`
   box-sizing: border-box;
@@ -114,8 +112,8 @@ export const SettingsLogs = () => {
     selectedTable === EventLogTable.APPLICATION_LOG ||
     selectedTable === EventLogTable.OBJECT_EVENT;
   const canQuery =
-    isClickHouseConfigured &&
-    (isAvailableOnEveryPlan || hasAuditLogsEntitlement);
+    isClickHouseConfigured;
+    // (isAvailableOnEveryPlan || hasAuditLogsEntitlement);
 
   const { records, totalCount, hasNextPage, loading, error, loadMore } =
     useEventLogs(
@@ -191,29 +189,29 @@ export const SettingsLogs = () => {
   );
 
   const renderResults = () => {
-    if (!isAvailableOnEveryPlan && !hasAuditLogsEntitlement) {
-      return renderUpgradeCard();
-    }
+    // if (!isAvailableOnEveryPlan && !hasAuditLogsEntitlement) {
+    //   return renderUpgradeCard();
+    // }
 
-    if (!isClickHouseConfigured) {
-      return (
-        <SettingsEmptyPlaceholder>
-          {t`Logs require ClickHouse to be configured. Please contact your administrator.`}
-        </SettingsEmptyPlaceholder>
-      );
-    }
+    // if (!isClickHouseConfigured) {
+    //   return (
+    //     <SettingsEmptyPlaceholder>
+    //       {t`Logs require ClickHouse to be configured. Please contact your administrator.`}
+    //     </SettingsEmptyPlaceholder>
+    //   );
+    // }
 
-    if (isDefined(error)) {
-      if (isGraphqlErrorOfType(error, 'NO_ENTITLEMENT')) {
-        return renderUpgradeCard();
-      }
+    // if (isDefined(error)) {
+    //   if (isGraphqlErrorOfType(error, 'NO_ENTITLEMENT')) {
+    //     return renderUpgradeCard();
+    //   }
 
-      return (
-        <SettingsEmptyPlaceholder>
-          {t`Something went wrong while loading logs. Please try again.`}
-        </SettingsEmptyPlaceholder>
-      );
-    }
+    //   return (
+    //     <SettingsEmptyPlaceholder>
+    //       {t`Something went wrong while loading logs. Please try again.`}
+    //     </SettingsEmptyPlaceholder>
+    //   );
+    // }
 
     return (
       <StyledResults>
