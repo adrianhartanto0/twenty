@@ -103,6 +103,53 @@ describe('useRecordSeededDraft', () => {
     expect(result.current.draftResyncKey).not.toBe(resyncKeyAfterEcho);
   });
 
+  it('should ignore a stale echo of an earlier persist arriving after newer typing was persisted', () => {
+    const { result, rerender } = renderDraftHook({ subject: '' });
+
+    act(() => {
+      result.current.updateDraft({ subject: 'First' });
+    });
+    act(() => {
+      jest.runOnlyPendingTimers();
+    });
+
+    act(() => {
+      result.current.updateDraft({ subject: 'First and second' });
+    });
+    act(() => {
+      jest.runOnlyPendingTimers();
+    });
+
+    rerender({ subject: 'First and second' });
+
+    const resyncKeyBeforeStaleEcho = result.current.draftResyncKey;
+
+    rerender({ subject: 'First' });
+
+    expect(result.current.draft.subject).toBe('First and second');
+    expect(result.current.draftResyncKey).toBe(resyncKeyBeforeStaleEcho);
+  });
+
+  it('should still adopt a body this hook never persisted', () => {
+    const { result, rerender } = renderDraftHook({ subject: '' });
+
+    act(() => {
+      result.current.updateDraft({ subject: 'Typed locally' });
+    });
+    act(() => {
+      jest.runOnlyPendingTimers();
+    });
+
+    rerender({ subject: 'Typed locally' });
+
+    const resyncKeyBeforeRemote = result.current.draftResyncKey;
+
+    rerender({ subject: 'Written remotely' });
+
+    expect(result.current.draft.subject).toBe('Written remotely');
+    expect(result.current.draftResyncKey).not.toBe(resyncKeyBeforeRemote);
+  });
+
   it('should flush the pending persist on unmount', () => {
     const { result, unmount } = renderDraftHook({ subject: '' });
 

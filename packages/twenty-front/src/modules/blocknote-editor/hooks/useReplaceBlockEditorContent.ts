@@ -25,6 +25,15 @@ export const useReplaceBlockEditorContent = (
       ];
 
       if (!isDeeplyEqual(editor.document, content as typeof editor.document)) {
+        // eslint-disable-next-line no-console
+        console.log('[blocknote-resync-debug] replaceBlocks', {
+          recordId,
+          fieldName,
+          isFocused: editor.isFocused(),
+          cursor: editor.getTextCursorPosition().block.id,
+          editorDocument: JSON.stringify(editor.document),
+          incomingContent: JSON.stringify(content),
+        });
         editor.replaceBlocks(
           editor.document,
           content as typeof editor.document,

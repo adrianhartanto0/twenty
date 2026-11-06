@@ -192,6 +192,14 @@ export const RichTextFieldEditor = ({
 
     setLastAppliedResyncKey(draftResyncKey);
 
+    // eslint-disable-next-line no-console
+    console.log('[blocknote-resync-debug] resync triggered', {
+      draftResyncKey,
+      lastAppliedResyncKey,
+      recordId,
+      at: new Date().toISOString(),
+    });
+
     isApplyingUpstreamBodyRef.current = true;
     try {
       replaceBlockEditorContent(recordId);

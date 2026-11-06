@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDebouncedCallback } from 'use-debounce';
 
 import { isDeeplyEqual } from '~/utils/isDeeplyEqual';
 
 const PERSIST_DEBOUNCE_MS = 500;
+const PERSISTED_DRAFTS_HISTORY_SIZE = 10;
 
 type UseRecordSeededDraftArgs<TDraft extends object> = {
   upstreamDraft: TDraft;
@@ -16,6 +17,11 @@ type UseRecordSeededDraftArgs<TDraft extends object> = {
 type ScheduledPersist<TDraft> = {
   draftToPersist: TDraft;
   scheduledResetGeneration: number;
+};
+
+type PersistedDraft<TDraft> = {
+  draft: TDraft;
+  resetGeneration: number;
 };
 
 // Remote changes reach a pristine draft at once; a dirty draft wins on its debounced persist (last write wins).
@@ -35,6 +41,10 @@ export const useRecordSeededDraft = <TDraft extends object>({
   const [resetGeneration, setResetGeneration] = useState(0);
   const [hasUncommittedEdit, setHasUncommittedEdit] = useState(false);
 
+  // A slow response can echo an older persist after newer typing; matching it here keeps it from reading as a remote edit.
+  // oxlint-disable-next-line twenty/no-state-useref
+  const persistedDraftsRef = useRef<PersistedDraft<TDraft>[]>([]);
+
   // Cancelling the timer during render is unsafe, so each persist carries its reset generation and is dropped once stale.
   // A counter rather than the key, so going A to B back to A still drops A's first pending persist.
   const persistDebounced = useDebouncedCallback(
@@ -45,6 +55,11 @@ export const useRecordSeededDraft = <TDraft extends object>({
       if (scheduledResetGeneration !== resetGeneration) {
         return;
       }
+
+      persistedDraftsRef.current = [
+        ...persistedDraftsRef.current,
+        { draft: draftToPersist, resetGeneration: scheduledResetGeneration },
+      ].slice(-PERSISTED_DRAFTS_HISTORY_SIZE);
 
       onPersist(draftToPersist);
     },
@@ -64,9 +79,15 @@ export const useRecordSeededDraft = <TDraft extends object>({
       !persistDebounced.isPending() &&
       isDeeplyEqual(draft, lastUpstreamDraft);
 
+    const isOwnPersistedEcho = persistedDraftsRef.current.some(
+      (persistedDraft) =>
+        persistedDraft.resetGeneration === resetGeneration &&
+        isDeeplyEqual(persistedDraft.draft, upstreamDraft),
+    );
+
     setLastUpstreamDraft(upstreamDraft);
 
-    if (isDraftPristine) {
+    if (isDraftPristine && !isOwnPersistedEcho) {
       setDraft(upstreamDraft);
       setResyncCount((count) => count + 1);
     }
